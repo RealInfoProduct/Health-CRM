@@ -1,0 +1,15 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-t-32 p-b-32 m-b-8">
+    <mat-card-subtitle class="mat-body-1 p-b-4">Projects</mat-card-subtitle>
+    <h5 class="mat-subtitle-1 m-t-4 f-w-600">78,298</h5>
+  </mat-card-content>
+  <apx-chart
+    [series]="productChart.series"
+    [chart]="productChart.chart"
+    [plotOptions]="productChart.plotOptions"
+    [tooltip]="productChart.tooltip"
+    [stroke]="productChart.stroke"
+    [markers]="productChart.markers"
+    [fill]="productChart.fill"
+  ></apx-chart>
+</mat-card>

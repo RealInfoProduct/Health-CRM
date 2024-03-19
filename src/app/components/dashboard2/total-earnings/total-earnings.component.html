@@ -1,0 +1,20 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-y-30">
+    <mat-card-subtitle class="mat-body-1 p-b-4"
+      >Total Earning</mat-card-subtitle
+    >
+    <h5 class="mat-subtitle-1 m-t-4 f-w-600 m-b-30">$78,298</h5>
+    <apx-chart
+      [series]="totalEarnChart.series"
+      [chart]="totalEarnChart.chart"
+      [plotOptions]="totalEarnChart.plotOptions"
+      [tooltip]="totalEarnChart.tooltip"
+      [stroke]="totalEarnChart.stroke"
+      [fill]="totalEarnChart.fill"
+      [colors]="totalEarnChart.colors"
+      [xaxis]="totalEarnChart.xaxis"
+      [yaxis]="totalEarnChart.yaxis"
+      [dataLabels]="totalEarnChart.dataLabels"
+    ></apx-chart>
+  </mat-card-content>
+</mat-card>

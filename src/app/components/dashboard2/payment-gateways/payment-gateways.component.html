@@ -1,0 +1,30 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-y-30">
+    <mat-card-title>Payment Gateways</mat-card-title>
+    <mat-card-subtitle class="mat-body-1 p-b-16"
+      >Platform For Income</mat-card-subtitle
+    >
+
+    <div *ngFor="let stat of stats" class="m-t-32">
+      <div class="d-flex align-items-center m-b-24">
+        <span
+          class="text-{{ stat.color }} bg-light-{{
+            stat.color
+          }} rounded icon-40 d-flex align-items-center justify-content-center"
+        >
+          <img [src]="stat.img" alt="icon" />
+        </span>
+
+        <div class="m-l-16 m-r-auto">
+          <h6 class="mat-subtitle-1 f-s-16 f-w-600">{{ stat.title }}</h6>
+          <span class="mat-body-1">{{ stat.subtitle }}</span>
+        </div>
+        <span class="f-w-600 f-s-14"> +${{ stat.percent }} </span>
+      </div>
+    </div>
+
+    <button mat-stroked-button color="primary" class="w-100 m-t-8">
+      View all Transctions
+    </button>
+  </mat-card-content>
+</mat-card>
