@@ -1,8 +1,6 @@
-import { DatePipe } from '@angular/common';
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AppEmployeeDialogContentComponent, Employee } from '../../employee/employee.component';
 
 @Component({
   selector: 'app-addlaboratorydialog',
@@ -16,10 +14,9 @@ export class AddlaboratorydialogComponent implements OnInit {
   
   constructor(
     private fb: FormBuilder,
-    public datePipe: DatePipe,
-    public dialogRef: MatDialogRef<AppEmployeeDialogContentComponent>,
-
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: Employee,
+    public dialogRef: MatDialogRef<AddlaboratorydialogComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
+    
   ) {
 
     this.local_data = { ...data };

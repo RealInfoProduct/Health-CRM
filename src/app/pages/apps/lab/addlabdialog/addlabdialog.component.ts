@@ -1,9 +1,6 @@
-import { DatePipe } from '@angular/common';
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AppEmployeeDialogContentComponent, Employee } from '../../employee/employee.component';
-import { findIndex } from 'rxjs';
 
 @Component({
   selector: 'app-addlabdialog',
@@ -14,23 +11,15 @@ export class AddlabdialogComponent implements OnInit {
   addlabForm: FormGroup;
   action: string;
   local_data: any;
-  joiningDate: any = '';
 
   constructor(
     private fb: FormBuilder,
-    public datePipe: DatePipe,
-    public dialogRef: MatDialogRef<AppEmployeeDialogContentComponent>,
+    public dialogRef: MatDialogRef<AddlabdialogComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
 
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: Employee,
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
-    if (this.local_data.DateOfJoining !== undefined) {
-      this.joiningDate = this.datePipe.transform(
-        new Date(this.local_data.DateOfJoining),
-        'yyyy-MM-dd',
-      );
-    }
   }
   
   ngOnInit(): void {
@@ -69,16 +58,6 @@ export class AddlabdialogComponent implements OnInit {
     this.dialogRef.close({ event: 'Cancel' });
   }
 
-  selectFile(event: any): void {
-    if (!event.target.files[0] || event.target.files[0].length === 0) {
-      return;
-    }
-    const mimeType = event.target.files[0].type;
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-    reader.onload = (_event) => {
-    };
-  }
 }
 
 
