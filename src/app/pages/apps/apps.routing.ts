@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { AppChatComponent } from './chat/chat.component';
+// import { AppChatComponent } from './chat/chat.component';
 import { AppNotesComponent } from './notes/notes.component';
 import { AppTodoComponent } from './todo/todo.component';
 import { AppPermissionComponent } from './permission/permission.component';
@@ -19,6 +19,12 @@ import { AppInvoiceViewComponent } from './invoice/invoice-view/invoice-view.com
 import { AppEditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
 import { AppBlogsComponent } from './blogs/blogs.component';
 import { AppBlogDetailsComponent } from './blogs/details/details.component';
+import { MedicalComponent } from './medical/medical.component';
+import { LaboratoryComponent } from './laboratory/laboratory.component';
+import { LabComponent } from './lab/lab.component';
+import { MyReportComponent } from './my-report/my-report.component';
+import { AppChatComponent } from './chat/chat.component';
+import { PatientComponent } from './patient/patient.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -101,6 +107,61 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Todo App' },
+          ],
+        },
+      },
+      {
+        path: 'medical',
+        component: MedicalComponent,
+        data: {
+          title: 'Medical',
+          urls: [
+            { title: 'Dashboard', url: '/apps/medical' },
+            { title: 'Medical' },
+          ],
+        },
+      },
+      {
+        path: 'laboratory',
+        component: LaboratoryComponent,
+        data: {
+          title: 'Laboratory',
+          urls: [
+            { title: 'Dashboard', url:'/apps/laboratory' },
+            { title: 'Laboratory' },
+          ],
+        },
+      },
+      {
+        path: 'lab',
+        component: LabComponent,
+        data: {
+          title: 'Lab',
+          urls: [
+            { title: 'Dashboard', url:'/apps/lab' },
+            { title: 'Lab' },
+          ],
+        },
+      },
+      {
+        path: 'report',
+        component: MyReportComponent,
+        data: {
+          title: 'My Report',
+          urls: [
+            { title: 'Dashboard', url:'/apps/report' },
+            { title: 'My Report' },
+          ],
+        },
+      },
+      {
+        path: 'patient',
+        component: PatientComponent,
+        data: {
+          title: 'Patient',
+          urls: [
+            { title: 'Dashboard', url:'/apps/patient' },
+            { title: 'Patient' },
           ],
         },
       },

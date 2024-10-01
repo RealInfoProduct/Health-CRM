@@ -1,0 +1,110 @@
+<h2 class="f-w-500 p-b-20 b-b-1" mat-dialog-title><strong>{{action}} Medical</strong></h2>
+<mat-dialog-content class="p-t-20" *ngIf="action !== 'Delete'; else elseTemplate">
+    <form [formGroup]="addmedicalForm">
+        <div class="row">
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Medical Name</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" formControlName="medicalName" placeholder="Medical Name" matInput require />
+                    <mat-error
+                        *ngIf="addmedicalForm.get('medicalName')?.invalid && addmedicalForm.get('medicalName')?.touched">
+                        Medical Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Mobile Number</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="number" formControlName="mobileNumber" placeholder="Mobile Number" matInput required
+                        onKeyPress="if(this.value.length==10) return false;" matInput min="0" />
+                    <mat-error
+                        *ngIf="addmedicalForm.get('mobileNumber').errors && addmedicalForm.get('mobileNumber').errors['required']">
+                        Mobile Number is required
+                    </mat-error>
+                    <mat-error
+                        *ngIf="addmedicalForm.get('mobileNumber').errors && addmedicalForm.get('mobileNumber').errors['pattern']">
+                        Please enter a valid 10-digit mobile number.
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">First Name </mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" formControlName="firstName" placeholder="First Name" matInput requir />
+                    <mat-error
+                        *ngIf="addmedicalForm.get('firstName')?.invalid && addmedicalForm.get('firstName')?.touched">
+                        First Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-4">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Middle Name</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" formControlName="middleName" placeholder="Middle Name" matInput requir />
+                    <mat-error
+                        *ngIf="addmedicalForm.get('middleName')?.invalid && addmedicalForm.get('middleName')?.touched">
+                        Middle Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-4">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Last Name</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" formControlName="lastName" placeholder="Last Name" matInput requir />
+                    <mat-error
+                        *ngIf="addmedicalForm.get('lastName')?.invalid && addmedicalForm.get('lastName')?.touched">
+                        Last Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Medical Email</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" formControlName="middleEmail" placeholder="Medical Email" matInput require />
+                    <mat-error
+                        *ngIf="addmedicalForm.get('middleEmail')?.invalid && addmedicalForm.get('middleEmail')?.touched">
+                        Medical Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Address</mat-label>
+                <mat-form-field class="example-full-width w-100 ">
+                    <mat-label>Enter Address</mat-label>
+                    <textarea formControlName="address" matInput placeholder=""></textarea>
+                    <mat-error *ngIf="addmedicalForm.get('address')?.invalid && addmedicalForm.get('address')?.touched">
+                        Address is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+        <mat-dialog-actions class="m-t-10 justify-content-end">
+            <button mat-flat-button (click)="doAction()" mat-flat-button color="primary"
+                [disabled]="!addmedicalForm.valid">
+                {{action}}
+            </button>
+            <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">
+                Cancel
+            </button>
+        </mat-dialog-actions>
+    </form>
+</mat-dialog-content>
+<ng-template #elseTemplate>
+    <div class="p-x-24">
+        <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
+    </div>
+    <mat-divider></mat-divider>
+    <div mat-dialog-actions class="p-x-24 p-b-24 m-t-10 justify-content-end">
+        <button mat-button (click)="doAction()" mat-flat-button color="warn">
+            {{action}}
+        </button>
+        <button mat-stroked-button color="warn" (click)="closeDialog()" class="m-l-8">Cancel</button>
+    </div>
+</ng-template>

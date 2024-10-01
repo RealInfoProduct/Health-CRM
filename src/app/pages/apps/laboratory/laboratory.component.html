@@ -1,0 +1,90 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-24">
+    <div class="row justify-content-between">
+      <div class="col-lg-4">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
+          <input matInput placeholder="Search  Laboratory" (keyup)="applyFilter($any($event.target).value)" />
+          <mat-icon matSuffix>
+            <i-tabler name="search" class="icon-20"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+      <div class="col-lg-4 d-flex align-items-center justify-content-end">
+        <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
+          Add Laboratory
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-24">
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" class="w-100">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">No.</th>
+          <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+        </ng-container>
+        <ng-container matColumnDef="laboratorylName">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Laboratoryl Name
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.laboratorylName }}</td>
+        </ng-container>
+        <ng-container matColumnDef="ownerName">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Owner Name
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.firstName }} {{ element.lastName }}</td>
+        </ng-container>
+        <ng-container matColumnDef="mobileNumber">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Mobile Number
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.mobileNumber }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="laboratorylEmail">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Laboratoryl Email
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.laboratorylEmail }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Address
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.address }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Action
+          </th>
+          <td mat-cell *matCellDef="let element" class="action-link">
+            <a (click)="openDialog('Update', element)" class="m-r-10 cursor-pointer"><i-tabler name="edit"
+                class="icon-18"></i-tabler></a>
+            <a (click)="openDialog('Delete', element )" class="m-r-10 cursor-pointer">
+              <i-tabler name="trash" class="icon-18"></i-tabler>
+            </a>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="laboratoryColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: laboratoryColumns"></tr>
+        <tr class="mat-row" style="text-align: center;" *matNoDataRow>
+          <td class="mat-cell" [attr.colspan]="laboratoryColumns.length">
+            No record found
+          </td>
+        </tr>
+        
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>

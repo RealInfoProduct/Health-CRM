@@ -17,7 +17,7 @@ export class AppSideLoginComponent {
   constructor(private settings: CoreService, private router: Router) {}
 
   form = new FormGroup({
-    uname: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    uname: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
   });
 
@@ -26,7 +26,7 @@ export class AppSideLoginComponent {
   }
 
   submit() {
-    // console.log(this.form.value);
+    console.log('sidelogin=====>>>>>',this.form.value);
     this.router.navigate(['/dashboards/dashboard1']);
   }
 }

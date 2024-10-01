@@ -1,0 +1,118 @@
+<h2 class="f-w-500 p-b-20 b-b-1" mat-dialog-title><strong>{{action}} Laboratory</strong></h2>
+<mat-dialog-content class="p-t-20" *ngIf="action !== 'Delete'; else elseTemplate">
+    <form [formGroup]="addlaboratoryForm">
+        <div class="row">
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Laboratory Name</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" formControlName="laboratorylName" placeholder="Laboratory Name" matInput
+                        require />
+                    <mat-error
+                        *ngIf="addlaboratoryForm.get('laboratorylName')?.invalid && addlaboratoryForm.get('laboratorylName')?.touched">
+                        Laboratory Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Laboratory Mobile Number</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="number" formControlName="mobileNumber" placeholder="Laboratory Mobile Number" matInput
+                        required onKeyPress="if(this.value.length==10) return false;" matInput min="0" />
+                    <mat-error
+                        *ngIf="addlaboratoryForm.get('mobileNumber').errors && addlaboratoryForm.get('mobileNumber').errors['required']">
+                        Mobile Number is required
+                    </mat-error>
+                    <mat-error
+                        *ngIf="addlaboratoryForm.get('mobileNumber').errors && addlaboratoryForm.get('mobileNumber').errors['pattern']">
+                        Please enter a valid 10-digit mobile number.
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">First Name </mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" formControlName="firstName" placeholder="First Name" matInput requir />
+                    <mat-error
+                        *ngIf="addlaboratoryForm.get('firstName')?.invalid && addlaboratoryForm.get('firstName')?.touched">
+                        First Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-4">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Middle Name</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" formControlName="middleName" placeholder="Middle Name" matInput requir />
+                    <mat-error
+                        *ngIf="addlaboratoryForm.get('middleName')?.invalid && addlaboratoryForm.get('middleName')?.touched">
+                        Middle Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-4">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Last Name</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" formControlName="lastName" placeholder="Last Name" matInput requir />
+                    <mat-error
+                        *ngIf="addlaboratoryForm.get('lastName')?.invalid && addlaboratoryForm.get('lastName')?.touched">
+                        Last Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Laboratory Email</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" formControlName="laboratorylEmail" placeholder="Laboratory Email" matInput
+                        require />
+                    <mat-error
+                        *ngIf="addlaboratoryForm.get('laboratorylEmail')?.invalid && addlaboratoryForm.get('laboratorylEmail')?.touched">
+                        Laboratory Email is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Address</mat-label>
+                <mat-form-field class="example-full-width w-100 ">
+                    <mat-label>Enter Address</mat-label>
+                    <textarea formControlName="address" matInput placeholder=""></textarea>
+                    <mat-error
+                        *ngIf="addlaboratoryForm.get('address')?.invalid && addlaboratoryForm.get('address')?.touched">
+                        Address is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+        <mat-dialog-actions class="m-t-10 justify-content-end">
+
+            <button mat-flat-button (click)="doAction()" mat-flat-button color="primary"
+                [disabled]="!addlaboratoryForm.valid">
+                {{action}}
+            </button>
+            <button mat-stroked-button color="warn" class="m-l-8" mat-dialog-close>
+                Cancel
+            </button>
+        </mat-dialog-actions>
+
+    </form>
+</mat-dialog-content>
+<ng-template #elseTemplate>
+
+    <div class="p-x-24">
+        <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
+    </div>
+    <mat-divider></mat-divider>
+    <div mat-dialog-actions class="p-x-24 p-b-24 m-t-10 justify-content-end">
+        <button mat-button (click)="doAction()" mat-flat-button color="warn">
+            {{action}}
+        </button>
+        <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">
+            Cancel
+        </button>
+    </div>
+</ng-template>

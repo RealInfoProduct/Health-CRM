@@ -74,6 +74,16 @@ import { AddedDialogComponent } from './invoice/add-invoice/added-dialog/added-d
 // blog
 import { AppBlogsComponent } from './blogs/blogs.component';
 import { AppBlogDetailsComponent } from './blogs/details/details.component';
+import { MedicalComponent } from './medical/medical.component';
+import { AddmedicaldialogComponent } from './medical/addmedicaldialog/addmedicaldialog.component';
+import { LaboratoryComponent } from './laboratory/laboratory.component';
+import { AddlaboratorydialogComponent } from './laboratory/addlaboratorydialog/addlaboratorydialog.component';
+import { LabComponent } from './lab/lab.component';
+import { AddlabdialogComponent } from './lab/addlabdialog/addlabdialog.component';
+import { MyReportComponent } from './my-report/my-report.component';
+import { PatientDialogComponent } from './patient/patient-dialog/patient-dialog.component';
+import { PatientComponent } from './patient/patient.component';
+
 
 
 @NgModule({
@@ -131,6 +141,16 @@ import { AppBlogDetailsComponent } from './blogs/details/details.component';
     OkDialogComponent,
     AppBlogsComponent,
     AppBlogDetailsComponent,
+    MedicalComponent,
+    AddmedicaldialogComponent,
+    LaboratoryComponent,
+    AddlaboratorydialogComponent,
+    LabComponent,
+    AddlabdialogComponent,
+    MyReportComponent,
+    PatientComponent,
+    PatientDialogComponent,
+
   ],
   providers: [DatePipe],
 })

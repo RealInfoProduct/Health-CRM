@@ -1,0 +1,70 @@
+<h2 class="f-w-500 p-b-20 b-b-1" mat-dialog-title><strong>{{action}} Lab</strong></h2>
+<mat-dialog-content class="p-t-20" *ngIf="action !== 'Delete'; else elseTemplate">
+    <form [formGroup]="addlabForm">
+        <div class="row">
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Report Type</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" formControlName="reportType" placeholder="Report Type" matInput require />
+                    <mat-error *ngIf="addlabForm.get('reportType')?.invalid && addlabForm.get('reportType')?.touched">
+                        Report Type is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Report Name</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" formControlName="reportName" placeholder="Report Name" matInput required />
+                    <mat-error
+                        *ngIf="addlabForm.get('reportName').errors && addlabForm.get('reportName').errors['required']">
+                        Report Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Report Fee</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="number" formControlName="reportFee" placeholder="Report Fee" matInput require />
+                    <mat-error *ngIf="addlabForm.get('reportFee')?.invalid && addlabForm.get('reportFee')?.touched">
+                        Report Fee is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Disease</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" formControlName="disease" placeholder="Disease" matInput require />
+                    <mat-error *ngIf="addlabForm.get('disease')?.invalid && addlabForm.get('disease')?.touched">
+                        Disease is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+        <mat-dialog-actions class="m-t-10 justify-content-end">
+            <button mat-flat-button (click)="doAction()" mat-flat-button color="primary" [disabled]="!addlabForm.valid">
+                {{action}}
+            </button>
+            <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">
+                Cancel
+            </button>
+        </mat-dialog-actions>
+    </form>
+</mat-dialog-content>
+<ng-template #elseTemplate>
+    <div class="p-x-24">
+        <p>Are you sure you want to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
+    </div>
+    <mat-divider></mat-divider>
+
+    <div mat-dialog-actions class="p-x-24 p-b-24 m-t-10 justify-content-end">
+        <button mat-button (click)="doAction()" mat-flat-button color="warn">
+            {{action}}
+        </button>
+        <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">
+            Cancel
+        </button>
+    </div>
+</ng-template>

@@ -1,0 +1,107 @@
+<h2 class="f-w-500 p-b-20 b-b-1" mat-dialog-title><strong>{{action}} Patient</strong></h2>
+<mat-dialog-content class="p-t-20" *ngIf="action !== 'Delete'; else elseTemplate">
+    <form [formGroup]="PatientForm">
+        <div class="row">
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">First Name</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" placeholder="First Name" formControlName="firstName" matInput />
+                    <mat-error *ngIf="PatientForm.get('firstName')?.invalid && PatientForm.get('firstName')?.touched">
+                        First Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Last Name</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" placeholder="Last Name" formControlName="lastName" matInput />
+                    <mat-error *ngIf="PatientForm.get('lastName')?.invalid && PatientForm.get('lastName')?.touched">
+                        Last Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Mobile Number</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="number" placeholder="Mobile Number" formControlName="mobileNumber"
+                        onKeyPress="if(this.value.length==10) return false;" matInput min="0" />
+                    <mat-error
+                        *ngIf="PatientForm.get('mobileNumber').errors && PatientForm.get('mobileNumber').errors['required']">
+                        Mobile Number is required
+                    </mat-error>
+                    <mat-error
+                        *ngIf="PatientForm.get('mobileNumber').errors && PatientForm.get('mobileNumber').errors['pattern']">
+                        Please enter a valid 10-digit
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Address</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" placeholder="Address" formControlName="address" matInput />
+                    <mat-error *ngIf="PatientForm.get('address')?.invalid && PatientForm.get('address')?.touched">
+                        Address is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Blood Group</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" placeholder="Blood Group" formControlName="bloodGroup" matInput />
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">DOB</mat-label>
+                <mat-form-field class="w-100" appearance="outline">
+                    <input matInput [matDatepicker]="touchpic" placeholder="DOB" formControlName="dob" />
+                    <mat-datepicker-toggle matIconSuffix [for]="touchpic"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #touchpic></mat-datepicker>
+                    <mat-error *ngIf="PatientForm.get('dob')?.invalid && PatientForm.get('dob')?.touched">
+                        DOB is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Age</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="number" placeholder="Age" formControlName="age" matInput />
+                    <mat-error *ngIf="PatientForm.get('age')?.invalid && PatientForm.get('age')?.touched">
+                        Age is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Gender</mat-label>
+                <mat-radio-group aria-label="Select an option" formControlName="gender">
+                    <mat-radio-button value="male">Male </mat-radio-button>
+                    <mat-radio-button value="female">Female </mat-radio-button>
+                    <mat-error *ngIf="PatientForm.get('gender')?.invalid && PatientForm.get('gender')?.touched">
+                        Gender is required
+                    </mat-error>
+                </mat-radio-group>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+        <mat-dialog-actions class="m-t-10 justify-content-end">
+            <button mat-flat-button mat-flat-button color="primary" (click)="Adddata();"
+                [disabled]="action !== 'Delete' && PatientForm.invalid">
+                {{action}}
+            </button>
+            <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">
+                Cancel
+            </button>
+        </mat-dialog-actions>
+    </form>
+</mat-dialog-content>
+<ng-template #elseTemplate>
+    <div class="p-x-24">
+        <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
+    </div>
+    <mat-divider></mat-divider>
+    <div mat-dialog-actions class="p-x-24 p-b-24 m-t-10 justify-content-end">
+        <button mat-button (click)="Adddata();" mat-flat-button color="warn">
+            {{action}}
+        </button>
+        <button mat-stroked-button color="warn" (click)="closeDialog()" class="m-l-8">Cancel</button>
+    </div>
+</ng-template>
