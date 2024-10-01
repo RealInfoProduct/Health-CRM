@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } 
 import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { NgIf } from '@angular/common';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-side-login',
@@ -14,7 +15,7 @@ import { NgIf } from '@angular/common';
 export class AppSideLoginComponent {
   options = this.settings.getOptions();
 
-  constructor(private settings: CoreService, private router: Router) {}
+  constructor(private settings: CoreService, private router: Router ,private authService:AuthService) {}
 
   form = new FormGroup({
     uname: new FormControl('', [Validators.required]),
@@ -26,7 +27,6 @@ export class AppSideLoginComponent {
   }
 
   submit() {
-    console.log('sidelogin=====>>>>>',this.form.value);
-    this.router.navigate(['/dashboards/dashboard1']);
+    this.authService.signIn(this.form.value.uname , this.form.value.password)
   }
 }

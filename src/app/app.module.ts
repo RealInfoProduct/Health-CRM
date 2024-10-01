@@ -24,6 +24,8 @@ import { FilterPipe } from './pipe/filter.pipe';
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 
 export function HttpLoaderFactory(http: HttpClient): any {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
@@ -49,6 +51,16 @@ export function HttpLoaderFactory(http: HttpClient): any {
     }),
     NgScrollbarModule,
     FullComponent,
+    AngularFireModule.initializeApp({
+      apiKey: "AIzaSyAkNzu76D86FNI8NgTYkHxlsSdSxW7S0r0",
+      authDomain: "health-clinic-5fc15.firebaseapp.com",
+      projectId: "health-clinic-5fc15",
+      storageBucket: "health-clinic-5fc15.appspot.com",
+      messagingSenderId: "106169864035",
+      appId: "1:106169864035:web:f23f353c7e5ad15c9d0d56",
+      measurementId: "G-TQYX0WG2JW"
+    }), // Initialize Firebase
+    AngularFirestoreModule // Import Firestore if needed
   ],
   exports: [TablerIconsModule],
   bootstrap: [AppComponent],

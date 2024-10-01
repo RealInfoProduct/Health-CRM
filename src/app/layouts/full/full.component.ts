@@ -182,7 +182,7 @@ export class FullComponent implements OnInit {
       link: '/theme-pages/treeview',
     },
   ];
-
+//  userEmail:any = localStorage.getItem('userEmail')?.split('@')[0]
   constructor(
     private settings: CoreService,
     private mediaMatcher: MediaMatcher,

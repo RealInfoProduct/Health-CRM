@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } 
 import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { NgIf } from '@angular/common';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-side-register',
@@ -14,7 +15,7 @@ import { NgIf } from '@angular/common';
 export class AppSideRegisterComponent {
   options = this.settings.getOptions();
 
-  constructor(private settings: CoreService, private router: Router) {}
+  constructor(private settings: CoreService, private router: Router, private authService:AuthService) {}
 
   form = new FormGroup({
     firstName: new FormControl('', [Validators.required]),
@@ -31,7 +32,18 @@ export class AppSideRegisterComponent {
   }
 
   submit() {
-    console.log('side register ====>>>>>',this.form.value);
-    this.router.navigate(['/dashboards/dashboard1']);
+    const registerUserData = {
+    firstName: this.form.value.firstName,
+    lastName: this.form.value.lastName,
+    mobileNumber: this.form.value.mobileNumber,
+    clinicName: this.form.value.clinicName,
+    address: this.form.value.address,
+    email: this.form.value.email,
+    password: this.form.value.password,
+    }
+    const registerSuccess:any = this.authService.signUp(registerUserData)
+    if(registerSuccess){
+      this.form.reset()
+    }
   }
 }
