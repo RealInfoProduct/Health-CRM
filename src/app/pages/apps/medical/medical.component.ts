@@ -3,16 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddmedicaldialogComponent } from './addmedicaldialog/addmedicaldialog.component';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { DatePipe } from '@angular/common';
-
-export interface Employee {
-  id: number;
-  Name: string;
-  ownerName: string;
-  mobileNumber: number;
-  middleEmail: string;
-  address: string;
-}
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 export interface medicaldata {
   id: number,
@@ -29,7 +20,7 @@ export interface medicaldata {
   templateUrl: './medical.component.html',
   styleUrls: ['./medical.component.scss']
 })
-export class MedicalComponent implements OnInit {
+export class MedicalComponent {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   searchText: any;
 
@@ -43,30 +34,37 @@ export class MedicalComponent implements OnInit {
     'action'
   ];
 
-  medicallist = [
-    {
-      id: 1,
-      firstName: "ravi",
-      middleName: "ravi",
-      lastName: "patel",
-      medicalName: "Abacavir",
-      mobileNumber: 9876543485,
-      middleEmail: 'Abacavir@gmail.com',
-      address: "Vip Road Surat"
-    }
-  ]
+  medicallist:any = []
   
   dataSource = new MatTableDataSource(this.medicallist);
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(public dialog: MatDialog, public datePipe: DatePipe) { }
+  constructor(
+    public dialog: MatDialog,
+    private firebaseCollectionService : FirebaseCollectionService) { }
 
-  ngOnInit(): void {}
+  
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.getMedicalData()
   }
+
+  getMedicalData() {
+    this.firebaseCollectionService.getDocuments('ClinicList', 'medicallist').then((medical) => {
+      this.medicallist = medical
+      if (medical && medical.length > 0) {
+        this.dataSource = new MatTableDataSource(this.medicallist);
+      } else {
+        this.medicallist = [];
+        this.dataSource = new MatTableDataSource(this.medicallist);
+      }
+    }).catch((error) => {
+      console.error('Error fetching medical:', error);
+    });
+  }
+  
 
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -79,52 +77,22 @@ export class MedicalComponent implements OnInit {
       width: action === 'Delete' ? '25%' : '50%'
     });
     dialogRef.afterClosed().subscribe((result) => {
-      if (result.event === 'Add') {
-        this.addRowData(result.data);
-      } else if (result.event === 'Update') {
-        this.updateRowData(result.data);
-      } else if (result.event === 'Delete') {
-        this.deleteRowData(result.data);
+      if (result?.event === 'Add') {
+        this.firebaseCollectionService.addDocument('ClinicList', result.data, 'medicallist');
+        this.getMedicalData()
+      }
+      if (result?.event === 'Update') {
+        this.medicallist.forEach((element: any) => {
+          if (obj.id === element.id) {
+            this.firebaseCollectionService.updateDocument('ClinicList', obj.id, result.data, 'medicallist');
+            this.getMedicalData()
+          }
+        });
+      }
+      if (result?.event === 'Delete') {
+        this.firebaseCollectionService.deleteDocument('ClinicList', obj.id, 'medicallist');
+        this.getMedicalData()
       }
     });
   }
-
-  addRowData(row_obj: medicaldata): void {
-    this.medicallist.push(
-      {
-        id: this.medicallist.length + 1,
-        firstName: row_obj.firstName,
-        middleName: row_obj.middleName,
-        lastName: row_obj.lastName,
-        medicalName: row_obj.medicalName,
-        mobileNumber: row_obj.mobileNumber,
-        middleEmail: row_obj.middleEmail,
-        address: row_obj.address
-      });
-    this.dataSource = new MatTableDataSource(this.medicallist);
-    this.table.renderRows();
-  }
-
-  updateRowData(row_obj: medicaldata): boolean | any {
-    this.dataSource.data = this.dataSource.data.filter((value: any) => {
-      if (value.id === row_obj.id) {
-        value.firstName = row_obj.firstName;
-        value.middleName = row_obj.middleName;
-        value.lastName = row_obj.lastName;
-        value.medicalName = row_obj.medicalName;
-        value.mobileNumber = row_obj.mobileNumber;
-        value.middleEmail = row_obj.middleEmail;
-        value.address = row_obj.address;
-      }
-      return true;
-    });
-  }
-
-  deleteRowData(row_obj: medicaldata): boolean | any {
-    const allMedicallistData = this.medicallist
-    this.medicallist = allMedicallistData.filter((id: any) => id.id !== row_obj.id)
-    this.dataSource = new MatTableDataSource(this.medicallist)
-  }
-
-
 }

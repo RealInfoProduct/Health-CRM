@@ -29,9 +29,9 @@ export class AddlaboratorydialogComponent implements OnInit {
       this.addlaboratoryForm.controls['firstName'].setValue(this.local_data.firstName)
       this.addlaboratoryForm.controls['middleName'].setValue(this.local_data.middleName)
       this.addlaboratoryForm.controls['lastName'].setValue(this.local_data.lastName)
-      this.addlaboratoryForm.controls['laboratorylName'].setValue(this.local_data.laboratorylName)
+      this.addlaboratoryForm.controls['laboratoryName'].setValue(this.local_data.laboratoryName)
       this.addlaboratoryForm.controls['mobileNumber'].setValue(this.local_data.mobileNumber)
-      this.addlaboratoryForm.controls['laboratorylEmail'].setValue(this.local_data.laboratorylEmail)
+      this.addlaboratoryForm.controls['laboratoryEmail'].setValue(this.local_data.laboratoryEmail)
       this.addlaboratoryForm.controls['address'].setValue(this.local_data.address)
     }
   }
@@ -42,22 +42,21 @@ export class AddlaboratorydialogComponent implements OnInit {
       firstName: ['', Validators.required],
       middleName: ['', Validators.required],
       lastName: ['', Validators.required],
-      laboratorylName: ['', Validators.required],
+      laboratoryName: ['', Validators.required],
       mobileNumber: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
-      laboratorylEmail: ['', Validators.required],
+      laboratoryEmail: ['', Validators.required],
       address: ['', Validators.required]
     })
   }
 
   doAction(): void {
     const payload = {
-      id: this.local_data.id ? this.local_data.id : '',
       firstName: this.addlaboratoryForm.value.firstName,
       middleName: this.addlaboratoryForm.value.middleName,
       lastName: this.addlaboratoryForm.value.lastName,
-      laboratorylName: this.addlaboratoryForm.value.laboratorylName,
+      laboratoryName: this.addlaboratoryForm.value.laboratoryName,
       mobileNumber: this.addlaboratoryForm.value.mobileNumber,
-      laboratorylEmail: this.addlaboratoryForm.value.laboratorylEmail,
+      laboratoryEmail: this.addlaboratoryForm.value.laboratoryEmail,
       address: this.addlaboratoryForm.value.address,
     }
     console.log('Addlaboratorydialog======>>>>>',payload);

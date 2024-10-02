@@ -60,7 +60,7 @@ export function HttpLoaderFactory(http: HttpClient): any {
       appId: "1:106169864035:web:f23f353c7e5ad15c9d0d56",
       measurementId: "G-TQYX0WG2JW"
     }), // Initialize Firebase
-    AngularFirestoreModule // Import Firestore if needed
+    AngularFirestoreModule 
   ],
   exports: [TablerIconsModule],
   bootstrap: [AppComponent],

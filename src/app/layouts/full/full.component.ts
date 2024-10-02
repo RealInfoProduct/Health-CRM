@@ -20,6 +20,7 @@ import { AppHorizontalHeaderComponent } from './horizontal/header/header.compone
 import { AppHorizontalSidebarComponent } from './horizontal/sidebar/sidebar.component';
 import { AppBreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
 import { CustomizerComponent } from './shared/customizer/customizer.component';
+import { SpinnerComponent } from 'src/app/spinner/spinner.component';
 
 const MOBILE_VIEW = 'screen and (max-width: 768px)';
 const TABLET_VIEW = 'screen and (min-width: 769px) and (max-width: 1024px)';
@@ -55,7 +56,8 @@ interface quicklinks {
     AppHorizontalHeaderComponent,
     AppHorizontalSidebarComponent,
     AppBreadcrumbComponent,
-    CustomizerComponent
+    CustomizerComponent,
+    SpinnerComponent
   ],
   templateUrl: './full.component.html',
   styleUrls: [],

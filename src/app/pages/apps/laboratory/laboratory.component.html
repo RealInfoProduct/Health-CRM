@@ -24,13 +24,13 @@
       <table mat-table [dataSource]="dataSource" class="w-100">
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">No.</th>
-          <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+          <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
         </ng-container>
-        <ng-container matColumnDef="laboratorylName">
+        <ng-container matColumnDef="laboratoryName">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Laboratoryl Name
+            Laboratory Name
           </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.laboratorylName }}</td>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.laboratoryName }}</td>
         </ng-container>
         <ng-container matColumnDef="ownerName">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
@@ -46,12 +46,12 @@
             {{ element.mobileNumber }}
           </td>
         </ng-container>
-        <ng-container matColumnDef="laboratorylEmail">
+        <ng-container matColumnDef="laboratoryEmail">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Laboratoryl Email
+            Laboratory Email
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.laboratorylEmail }}
+            {{ element.laboratoryEmail }}
           </td>
         </ng-container>
         <ng-container matColumnDef="address">

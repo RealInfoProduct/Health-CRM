@@ -5,10 +5,10 @@
             <div class="col-lg-6">
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Laboratory Name</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
-                    <input type="text" formControlName="laboratorylName" placeholder="Laboratory Name" matInput
+                    <input type="text" formControlName="laboratoryName" placeholder="Laboratory Name" matInput
                         require />
                     <mat-error
-                        *ngIf="addlaboratoryForm.get('laboratorylName')?.invalid && addlaboratoryForm.get('laboratorylName')?.touched">
+                        *ngIf="addlaboratoryForm.get('laboratoryName')?.invalid && addlaboratoryForm.get('laboratoryName')?.touched">
                         Laboratory Name is required
                     </mat-error>
                 </mat-form-field>
@@ -65,10 +65,10 @@
             <div class="col-lg-6">
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Laboratory Email</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
-                    <input type="text" formControlName="laboratorylEmail" placeholder="Laboratory Email" matInput
+                    <input type="text" formControlName="laboratoryEmail" placeholder="Laboratory Email" matInput
                         require />
                     <mat-error
-                        *ngIf="addlaboratoryForm.get('laboratorylEmail')?.invalid && addlaboratoryForm.get('laboratorylEmail')?.touched">
+                        *ngIf="addlaboratoryForm.get('laboratoryEmail')?.invalid && addlaboratoryForm.get('laboratoryEmail')?.touched">
                         Laboratory Email is required
                     </mat-error>
                 </mat-form-field>

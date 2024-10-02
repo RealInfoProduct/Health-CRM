@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { AddlaboratorydialogComponent } from './addlaboratorydialog/addlaboratorydialog.component';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 export interface laboratorydata {
   id: number,
@@ -26,37 +27,44 @@ export class LaboratoryComponent implements OnInit {
 
   laboratoryColumns: string[] = [
     'id',
-    'laboratorylName',
+    'laboratoryName',
     'ownerName',
     'mobileNumber',
-    'laboratorylEmail',
+    'laboratoryEmail',
     'address',
     'action'
   ];
 
-  laboratorylist = [
-    {
-      id: 1,
-      firstName: "ravi",
-      middleName: "ravi",
-      lastName: "patel",
-      laboratorylName: "Abacavir",
-      mobileNumber: 9876543485,
-      laboratorylEmail: 'Abacavir@gmail.com',
-      address: "Vip Road Surat"
-    }
-  ]
+  laboratorylist:any = []
 
   dataSource = new MatTableDataSource(this.laboratorylist)
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
 
-  constructor(public dialog: MatDialog, public datePipe: DatePipe) { }
+  constructor(
+    public dialog: MatDialog,
+    private firebaseCollectionService : FirebaseCollectionService
+  ) { }
 
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.getlaboratoryData()
+  }
+
+  getlaboratoryData(){
+    this.firebaseCollectionService.getDocuments('ClinicList', 'laboratorylist').then((laboratory) => {
+      this.laboratorylist = laboratory
+      if (laboratory && laboratory.length > 0) {
+        this.dataSource = new MatTableDataSource(this.laboratorylist);
+      } else {
+        this.laboratorylist = [];
+        this.dataSource = new MatTableDataSource(this.laboratorylist);
+      }
+    }).catch((error) => {
+      console.error('Error fetching laboratory:', error);
+    });
   }
 
   applyFilter(filterValue: string): void {
@@ -70,52 +78,23 @@ export class LaboratoryComponent implements OnInit {
       width: action === 'Delete' ? '25%' : '50%'
     });
     dialogRef.afterClosed().subscribe((result) => {
-
-      if (result.event === 'Add') {
-        this.addRowData(result.data);
-      } else if (result.event === 'Update') {
-        this.updateRowData(result.data);
-      } else if (result.event === 'Delete') {
-        this.deleteRowData(result.data);
+      if (result?.event === 'Add') {
+        this.firebaseCollectionService.addDocument('ClinicList', result.data, 'laboratorylist');
+        this.getlaboratoryData()
+      }
+      if (result?.event === 'Update') {
+        this.laboratorylist.forEach((element: any) => {
+          if (obj.id === element.id) {
+            this.firebaseCollectionService.updateDocument('ClinicList', obj.id, result.data, 'laboratorylist');
+            this.getlaboratoryData()
+          }
+        });
+      }
+      if (result?.event === 'Delete') {
+        this.firebaseCollectionService.deleteDocument('ClinicList', obj.id, 'laboratorylist');
+        this.getlaboratoryData()
       }
     });
-  }
-
-  addRowData(row_obj: laboratorydata): void {
-    this.laboratorylist.push(
-      {
-        id: this.laboratorylist.length + 1,
-        firstName: row_obj.firstName,
-        middleName: row_obj.middleName,
-        lastName: row_obj.lastName,
-        laboratorylName: row_obj.laboratorylName,
-        mobileNumber: row_obj.mobileNumber,
-        laboratorylEmail: row_obj.laboratorylEmail,
-        address: row_obj.address
-      });
-    this.dataSource = new MatTableDataSource(this.laboratorylist);
-    this.table.renderRows();
-  }
-
-  updateRowData(row_obj: laboratorydata): boolean | any {
-    this.dataSource.data = this.dataSource.data.filter((value: any) => {
-      if (value.id === row_obj.id) {
-        value.firstName = row_obj.firstName;
-        value.middleName = row_obj.middleName;
-        value.lastName = row_obj.lastName;
-        value.laboratorylName = row_obj.laboratorylName;
-        value.mobileNumber = row_obj.mobileNumber;
-        value.laboratorylEmail = row_obj.laboratorylEmail;
-        value.address = row_obj.address;
-      }
-      return true;
-    });
-  }
-
-  deleteRowData(row_obj: laboratorydata): boolean | any {
-    const allLaboratorylistData = this.laboratorylist
-    this.laboratorylist = allLaboratorylistData.filter((id: any) => id.id !== row_obj.id)
-    this.dataSource = new MatTableDataSource(this.laboratorylist)
   }
 
 }

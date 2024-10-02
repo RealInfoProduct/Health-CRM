@@ -51,7 +51,6 @@ export class AddmedicaldialogComponent implements OnInit {
 
   doAction(): void {
     const payload = {
-      id: this.local_data.id ? this.local_data.id : '',
       firstName: this.addmedicalForm.value.firstName,
       middleName: this.addmedicalForm.value.middleName,
       lastName: this.addmedicalForm.value.lastName,
