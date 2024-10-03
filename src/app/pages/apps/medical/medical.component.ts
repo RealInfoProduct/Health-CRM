@@ -5,16 +5,6 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
-export interface medicaldata {
-  id: number,
-  firstName: string,
-  middleName: string,
-  lastName: string,
-  medicalName: string,
-  mobileNumber: number,
-  middleEmail: string,
-  address: string
-}
 @Component({
   selector: 'app-medical',
   templateUrl: './medical.component.html',
@@ -34,17 +24,17 @@ export class MedicalComponent {
     'action'
   ];
 
-  medicallist:any = []
-  
+  medicallist: any = []
+
   dataSource = new MatTableDataSource(this.medicallist);
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(
     public dialog: MatDialog,
-    private firebaseCollectionService : FirebaseCollectionService) { }
+    private firebaseCollectionService: FirebaseCollectionService) { }
 
-  
+
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
@@ -56,15 +46,17 @@ export class MedicalComponent {
       this.medicallist = medical
       if (medical && medical.length > 0) {
         this.dataSource = new MatTableDataSource(this.medicallist);
+        this.dataSource.paginator = this.paginator;
       } else {
         this.medicallist = [];
         this.dataSource = new MatTableDataSource(this.medicallist);
+        this.dataSource.paginator = this.paginator;
       }
     }).catch((error) => {
       console.error('Error fetching medical:', error);
     });
   }
-  
+
 
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();

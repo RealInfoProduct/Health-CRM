@@ -1,0 +1,70 @@
+<h2 class="f-w-500 p-b-20 b-b-1" mat-dialog-title><strong>{{action}} Medicine</strong></h2>
+<mat-dialog-content class="p-t-20" *ngIf="action !== 'Delete'; else elseTemplate">
+    <form [formGroup]="addmedicineForm">
+        <div class="row">
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Medicine Name</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" formControlName="medicineName" placeholder="Medicine Name" matInput require />
+                    <mat-error
+                        *ngIf="addmedicineForm.get('medicineName')?.invalid && addmedicineForm.get('medicineName')?.touched">
+                        Medicine Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Company Name</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" formControlName="companyName" placeholder="Company Name" matInput require />
+                    <mat-error
+                        *ngIf="addmedicineForm.get('companyName')?.invalid && addmedicineForm.get('companyName')?.touched">
+                        Company Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Dosage</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" formControlName="dosage" placeholder="Dosage" matInput require />
+                    <mat-error
+                        *ngIf="addmedicineForm.get('dosage')?.invalid && addmedicineForm.get('dosage')?.touched">
+                        Dosage is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Price</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="number" formControlName="price" placeholder="Price" matInput require min="0" />
+                    <mat-error
+                        *ngIf="addmedicineForm.get('price')?.invalid && addmedicineForm.get('price')?.touched">
+                        Price is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+        </div>
+        <mat-divider></mat-divider>
+        <mat-dialog-actions class="m-t-10 justify-content-end">
+            <button mat-flat-button (click)="doAction()" mat-flat-button color="primary"
+                [disabled]="!addmedicineForm.valid">
+                {{action}}
+            </button>
+            <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">
+                Cancel
+            </button>
+        </mat-dialog-actions>
+    </form>
+</mat-dialog-content>
+<ng-template #elseTemplate>
+    <div class="p-x-24">
+        <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
+    </div>
+    <mat-divider></mat-divider>
+    <div mat-dialog-actions class="p-x-24 p-b-24 m-t-10 justify-content-end">
+        <button mat-button (click)="doAction()" mat-flat-button color="warn">
+            {{action}}
+        </button>
+        <button mat-stroked-button color="warn" (click)="closeDialog()" class="m-l-8">Cancel</button>
+    </div>
+</ng-template>

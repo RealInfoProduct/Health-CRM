@@ -60,7 +60,7 @@ export class PatientDialogComponent implements OnInit {
       age: this.PatientForm.value.age,
       gender: this.PatientForm.value.gender
     }
-    console.log('PatientDialog======>>>>>>',payload);
+    console.log('PatientDialog======>>>>>>', payload);
     this.dialogRef.close({ event: this.action, data: payload });
 
   }

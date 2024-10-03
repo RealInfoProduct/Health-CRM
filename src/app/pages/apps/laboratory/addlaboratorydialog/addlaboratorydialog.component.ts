@@ -11,12 +11,12 @@ export class AddlaboratorydialogComponent implements OnInit {
   addlaboratoryForm: FormGroup;
   action: string;
   local_data: any;
-  
+
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<AddlaboratorydialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any
-    
+
   ) {
 
     this.local_data = { ...data };
@@ -59,7 +59,7 @@ export class AddlaboratorydialogComponent implements OnInit {
       laboratoryEmail: this.addlaboratoryForm.value.laboratoryEmail,
       address: this.addlaboratoryForm.value.address,
     }
-    console.log('Addlaboratorydialog======>>>>>',payload);
+    console.log('Addlaboratorydialog======>>>>>', payload);
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

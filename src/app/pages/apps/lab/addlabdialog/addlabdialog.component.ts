@@ -21,7 +21,7 @@ export class AddlabdialogComponent implements OnInit {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
-  
+
   ngOnInit(): void {
     this.addmedicallist()
     if (this.action === 'Update') {
@@ -50,7 +50,7 @@ export class AddlabdialogComponent implements OnInit {
       reportFee: this.addlabForm.value.reportFee,
       disease: this.addlabForm.value.disease
     }
-    console.log('Addlabdialog=====>>>>>',payload);
+    console.log('Addlabdialog=====>>>>>', payload);
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

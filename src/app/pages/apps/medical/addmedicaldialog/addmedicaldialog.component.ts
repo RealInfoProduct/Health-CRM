@@ -22,7 +22,7 @@ export class AddmedicaldialogComponent implements OnInit {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
-  
+
   ngOnInit(): void {
     this.addmedicallist()
     if (this.action === 'Update') {
@@ -38,7 +38,6 @@ export class AddmedicaldialogComponent implements OnInit {
 
   addmedicallist() {
     this.addmedicalForm = this.fb.group({
-      id: [''],
       firstName: ['', Validators.required],
       middleName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -59,7 +58,7 @@ export class AddmedicaldialogComponent implements OnInit {
       middleEmail: this.addmedicalForm.value.middleEmail,
       address: this.addmedicalForm.value.address,
     }
-    console.log('Addmedicaldialog=====>>>>>',payload);
+    console.log('Addmedicaldialog=====>>>>>', payload);
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

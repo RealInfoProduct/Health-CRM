@@ -25,6 +25,7 @@ import { LabComponent } from './lab/lab.component';
 import { MyReportComponent } from './my-report/my-report.component';
 import { AppChatComponent } from './chat/chat.component';
 import { PatientComponent } from './patient/patient.component';
+import { MedicineComponent } from './medicine/medicine.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -162,6 +163,17 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url:'/apps/patient' },
             { title: 'Patient' },
+          ],
+        },
+      },
+      {
+        path: 'medicine',
+        component: MedicineComponent,
+        data: {
+          title: 'Medicine',
+          urls: [
+            { title: 'Dashboard', url:'/apps/medicine' },
+            { title: 'Medicine' },
           ],
         },
       },

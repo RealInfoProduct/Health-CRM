@@ -83,6 +83,8 @@ import { AddlabdialogComponent } from './lab/addlabdialog/addlabdialog.component
 import { MyReportComponent } from './my-report/my-report.component';
 import { PatientDialogComponent } from './patient/patient-dialog/patient-dialog.component';
 import { PatientComponent } from './patient/patient.component';
+import { MedicineComponent } from './medicine/medicine.component';
+import { MedicineDialogComponent } from './medicine/medicine-dialog/medicine-dialog.component';
 
 
 
@@ -150,6 +152,8 @@ import { PatientComponent } from './patient/patient.component';
     MyReportComponent,
     PatientComponent,
     PatientDialogComponent,
+    MedicineComponent,
+    MedicineDialogComponent,
 
   ],
   providers: [DatePipe],

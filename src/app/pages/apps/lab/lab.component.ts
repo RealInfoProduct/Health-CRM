@@ -2,10 +2,8 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddlabdialogComponent } from './addlabdialog/addlabdialog.component';
-import { CdkTableDataSourceInput } from '@angular/cdk/table';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { OkAppTaskComponent } from '../taskboard/ok-task/ok-task.component';
 
 export interface laboratorydata {
   id: number,
@@ -73,7 +71,7 @@ export class LabComponent implements OnInit {
       }
     });
   }
-  
+
   addRowData(row_obj: laboratorydata): void {
     this.lablist.push(
       {

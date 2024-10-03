@@ -1,21 +1,9 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { AddlaboratorydialogComponent } from './addlaboratorydialog/addlaboratorydialog.component';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
-
-export interface laboratorydata {
-  id: number,
-  firstName: string,
-  middleName: string,
-  lastName: string,
-  laboratorylName: string,
-  mobileNumber: number,
-  laboratorylEmail: string,
-  address: string
-}
 
 @Component({
   selector: 'app-laboratory',
@@ -35,7 +23,7 @@ export class LaboratoryComponent implements OnInit {
     'action'
   ];
 
-  laboratorylist:any = []
+  laboratorylist: any = []
 
   dataSource = new MatTableDataSource(this.laboratorylist)
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -43,24 +31,26 @@ export class LaboratoryComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    private firebaseCollectionService : FirebaseCollectionService
+    private firebaseCollectionService: FirebaseCollectionService
   ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.getlaboratoryData()
   }
 
-  getlaboratoryData(){
+  getlaboratoryData() {
     this.firebaseCollectionService.getDocuments('ClinicList', 'laboratorylist').then((laboratory) => {
       this.laboratorylist = laboratory
       if (laboratory && laboratory.length > 0) {
         this.dataSource = new MatTableDataSource(this.laboratorylist);
+        this.dataSource.paginator = this.paginator;
       } else {
         this.laboratorylist = [];
         this.dataSource = new MatTableDataSource(this.laboratorylist);
+        this.dataSource.paginator = this.paginator;
       }
     }).catch((error) => {
       console.error('Error fetching laboratory:', error);

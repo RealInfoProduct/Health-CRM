@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MyReportComponent implements OnInit {
 
-  constructor(){}
-  ngOnInit(): void {}
- 
+  constructor() { }
+  ngOnInit(): void { }
+
 }
