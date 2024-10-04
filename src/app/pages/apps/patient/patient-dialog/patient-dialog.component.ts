@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-patient-dialog',
@@ -23,20 +24,28 @@ export class PatientDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.PatientFormlist()
-    if (this.action === 'Edit') {
+    if (this.action === 'Update') {
       this.PatientForm.controls['firstName'].setValue(this.local_data.firstName)
       this.PatientForm.controls['lastName'].setValue(this.local_data.lastName)
       this.PatientForm.controls['mobileNumber'].setValue(this.local_data.mobileNumber)
       this.PatientForm.controls['address'].setValue(this.local_data.address)
       this.PatientForm.controls['bloodGroup'].setValue(this.local_data.bloodGroup)
-      this.PatientForm.controls['dob'].setValue(this.local_data.dob)
+      this.PatientForm.controls['dob'].setValue(this.convertTimestamp(this.local_data.dob))
       this.PatientForm.controls['age'].setValue(this.local_data.age)
       this.PatientForm.controls['gender'].setValue(this.local_data.gender)
     }
   }
 
+  convertTimestamp(element : any): Date | null {
+    if(element instanceof Timestamp){
+      return element.toDate();
+    }
+    return null;
+      }
+
   PatientFormlist() {
     this.PatientForm = this.fb.group({
+      id: [''],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       mobileNumber: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
@@ -50,7 +59,6 @@ export class PatientDialogComponent implements OnInit {
 
   Adddata() {
     const payload = {
-      id: this.local_data.id ? this.local_data.id : '',
       firstName: this.PatientForm.value.firstName,
       lastName: this.PatientForm.value.lastName,
       mobileNumber: this.PatientForm.value.mobileNumber,

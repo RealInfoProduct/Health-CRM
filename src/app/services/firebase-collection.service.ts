@@ -14,10 +14,10 @@ export class FirebaseCollectionService {
   // Generic method to add a document to any collection
   async addDocument(collectionName: string, documentData: any, subCollectionName?: string) {
     this.spinnerService.setSpinner(true);
-    const companyId: any = localStorage.getItem('uid');
+    const clinicId: any = localStorage.getItem('uid');
     try {
-      let collectionRef:any = this.firestore.collection(collectionName).doc(companyId);
-      
+      let collectionRef: any = this.firestore.collection(collectionName).doc(clinicId);
+
       if (subCollectionName) {
         collectionRef = collectionRef.collection(subCollectionName);
       }
@@ -43,10 +43,10 @@ export class FirebaseCollectionService {
   // Generic method to update a document in any collection
   async updateDocument(collectionName: string, documentId: string, documentData: any, subCollectionName?: string) {
     this.spinnerService.setSpinner(true);
-    const companyId: any = localStorage.getItem('uid');
+    const clinicId: any = localStorage.getItem('uid');
     try {
-      let collectionRef = this.firestore.collection(collectionName).doc(companyId);
-      
+      let collectionRef = this.firestore.collection(collectionName).doc(clinicId);
+
       if (subCollectionName) {
         collectionRef = collectionRef.collection(subCollectionName).doc(documentId);
       } else {
@@ -74,9 +74,9 @@ export class FirebaseCollectionService {
   // Generic method to delete a document from any collection
   async deleteDocument(collectionName: string, documentId: string, subCollectionName?: string) {
     this.spinnerService.setSpinner(true);
-    const companyId: any = localStorage.getItem('uid');
+    const clinicId: any = localStorage.getItem('uid');
     try {
-      let collectionRef = this.firestore.collection(collectionName).doc(companyId);
+      let collectionRef = this.firestore.collection(collectionName).doc(clinicId);
 
       if (subCollectionName) {
         collectionRef = collectionRef.collection(subCollectionName).doc(documentId);
@@ -105,10 +105,10 @@ export class FirebaseCollectionService {
   // Generic method to get all documents from any collection
   async getDocuments(collectionName: string, subCollectionName?: string) {
     this.spinnerService.setSpinner(true);
-    const companyId: any = localStorage.getItem('uid');
+    const clinicId: any = localStorage.getItem('uid');
     try {
-      let collectionRef:any = this.firestore.collection(collectionName).doc(companyId);
-      
+      let collectionRef: any = this.firestore.collection(collectionName).doc(clinicId);
+
       if (subCollectionName) {
         collectionRef = collectionRef.collection(subCollectionName);
       }
