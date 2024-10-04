@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddlabdialogComponent } from './addlabdialog/addlabdialog.component';
@@ -42,7 +41,7 @@ export class LabComponent implements OnInit {
   dataSource = new MatTableDataSource(this.lablist)
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(public dialog: MatDialog, public datePipe: DatePipe) { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void { }
 
