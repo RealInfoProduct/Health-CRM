@@ -25,6 +25,9 @@ export class AddlabdialogComponent implements OnInit {
   ngOnInit(): void {
     this.addmedicallist()
     if (this.action === 'Update') {
+      this.addlabForm.controls['patientName'].setValue(this.local_data.patientName)
+      this.addlabForm.controls['mobileNumber'].setValue(this.local_data.mobileNumber)
+      this.addlabForm.controls['age'].setValue(this.local_data.age)
       this.addlabForm.controls['reportType'].setValue(this.local_data.reportType)
       this.addlabForm.controls['reportName'].setValue(this.local_data.reportName)
       this.addlabForm.controls['reportFee'].setValue(this.local_data.reportFee)
@@ -35,6 +38,9 @@ export class AddlabdialogComponent implements OnInit {
   addmedicallist() {
     this.addlabForm = this.fb.group({
       id: [''],
+      patientName:['',Validators.required],
+      mobileNumber:['',Validators.required],
+      age:['',Validators.required],
       reportType: ['', Validators.required],
       reportName: ['', Validators.required],
       reportFee: ['', Validators.required],
@@ -45,6 +51,9 @@ export class AddlabdialogComponent implements OnInit {
   doAction(): void {
     const payload = {
       id: this.local_data.id ? this.local_data.id : '',
+      patientName:this.addlabForm.value.patientName,
+      mobileNumber:this.addlabForm.value.mobileNumber,
+      age:this.addlabForm.value.age,
       reportType: this.addlabForm.value.reportType,
       reportName: this.addlabForm.value.reportName,
       reportFee: this.addlabForm.value.reportFee,

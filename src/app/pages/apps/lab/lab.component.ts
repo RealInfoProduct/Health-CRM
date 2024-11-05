@@ -6,6 +6,9 @@ import { MatPaginator } from '@angular/material/paginator';
 
 export interface laboratorydata {
   id: number,
+  patientName:string,
+  mobileNumber:number,
+  age:number,
   reportType: string,
   reportName: string,
   reportFee: number,
@@ -21,6 +24,9 @@ export class LabComponent implements OnInit {
 
   labColumns: string[] = [
     'id',
+    'patientName',
+    'mobileNumber',
+    'age',
     'reportType',
     'reportName',
     'reportFee',
@@ -31,6 +37,9 @@ export class LabComponent implements OnInit {
   lablist = [
     {
       id: 1,
+      patientName:"aa",
+      mobileNumber:1234567890,
+      age:12,
       reportType: "aa",
       reportName: "aa",
       reportFee: 150,
@@ -75,6 +84,9 @@ export class LabComponent implements OnInit {
     this.lablist.push(
       {
         id: this.lablist.length + 1,
+        patientName:row_obj.patientName,
+        mobileNumber:row_obj.mobileNumber,
+        age:row_obj.age,
         reportType: row_obj.reportType,
         reportName: row_obj.reportName,
         reportFee: row_obj.reportFee,
@@ -82,12 +94,14 @@ export class LabComponent implements OnInit {
       });
     this.dataSource = new MatTableDataSource(this.lablist);
     this.table.renderRows();
-    // this.dialog.open(OkAppTaskComponent);
   }
 
   updateRowData(row_obj: laboratorydata): boolean | any {
     this.dataSource.data = this.dataSource.data.filter((value: any) => {
       if (value.id === row_obj.id) {
+        value.patientName = row_obj.patientName;
+        value.mobileNumber = row_obj.mobileNumber;
+        value.age = row_obj.age;
         value.reportType = row_obj.reportType;
         value.reportName = row_obj.reportName;
         value.reportFee = row_obj.reportFee;
