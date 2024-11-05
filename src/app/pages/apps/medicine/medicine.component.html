@@ -3,7 +3,7 @@
     <div class="row justify-content-between">
       <div class="col-lg-4">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <input matInput placeholder="Search  Medicine" />
+          <input matInput placeholder="Search  Medicine" (keyup)="applyFilter($any($event.target).value)" />
           <mat-icon matSuffix>
             <i-tabler name="search" class="icon-20"></i-tabler>
           </mat-icon>
@@ -38,14 +38,39 @@
           <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.companyName }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="dosage">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Dosage </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.dosage }}</td>
+        <ng-container matColumnDef="pack">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Pack </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.pack }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="price">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Price </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.price }}</td>
+        <ng-container matColumnDef="qty">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Qty </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.qty }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="rate">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Rate </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.rate }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Amount </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.amount }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="disc">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Disc% </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.discount }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="gst">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> GST% </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.gst }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="netamt">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> NetAmt </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.netamount }}</td>
         </ng-container>
 
         <ng-container matColumnDef="action">

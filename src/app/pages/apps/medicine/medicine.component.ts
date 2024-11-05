@@ -2,6 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MedicineDialogComponent } from './medicine-dialog/medicine-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-medicine',
@@ -11,20 +13,56 @@ import { MatDialog } from '@angular/material/dialog';
 export class MedicineComponent {
 
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
-
+  searchText: any;
+  
   medicineColumns: string[] = [
     'id',
     'medicineName',
     'companyName',
-    'dosage',
-    'price',
+    'pack',
+    'qty',
+    'rate',
+    'amount',
+    'disc',
+    'gst',
+    'netamt',
     'action'
   ];
 
   medicinelist: any = []
 
   dataSource = new MatTableDataSource(this.medicinelist);
-  constructor(public dialog: MatDialog) { }
+
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+
+  constructor(
+    public dialog: MatDialog,
+    private firebaseCollectionService:FirebaseCollectionService) { }
+
+    ngAfterViewInit(){
+      this.dataSource.paginator = this.paginator
+      this.getmedicineData()
+    }
+
+   getmedicineData(){
+    this.firebaseCollectionService.getDocuments('ClinicList','medicinelist').then((medicine) =>{
+      this.medicinelist = medicine
+      if(medicine && medicine.length > 0){
+        this.dataSource = new MatTableDataSource(this.medicinelist)
+        this.dataSource.paginator = this.paginator 
+      } else {
+        this.medicinelist = [];
+        this.dataSource = new MatTableDataSource(this.medicinelist);
+        this.dataSource.paginator = this.paginator;
+      }
+    }).catch((error) => {
+      console.error('Error fetching medical:', error);
+    });
+   } 
+
+   applyFilter(filterValue: string): void {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 
   openDialog(action: string, obj: any): void {
     obj.action = action;
@@ -34,31 +72,21 @@ export class MedicineComponent {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.medicinelist.push({
-          id: this.medicinelist.length + 1,
-          medicineName: result.data.medicineName,
-          companyName: result.data.companyName,
-          dosage: result.data.dosage,
-          price: result.data.price
-        })
-        this.dataSource = new MatTableDataSource(this.medicinelist)
+        this.firebaseCollectionService.addDocument('ClinicList', result.data ,'medicinelist')
+        this.getmedicineData()
       }
       if (result.event === 'Update') {
         this.medicinelist.forEach((element: any) => {
           if (element.id === result.data.id) {
-            element.id = result.data.id
-            element.medicineName = result.data.medicineName
-            element.companyName = result.data.companyName
-            element.dosage = result.data.dosage
-            element.price = result.data.price
+            this.firebaseCollectionService.updateDocument('ClinicList', obj.id, result.data, 'medicinelist')
+            this.getmedicineData()
           }
         })
         this.dataSource = new MatTableDataSource(this.medicinelist)
       }
       if (result.event === 'Delete') {
-        const allMedicinelist = this.medicinelist
-        this.medicinelist = allMedicinelist.filter((id: any) => id.id !== result.data.id)
-        this.dataSource = new MatTableDataSource(this.medicinelist);
+        this.firebaseCollectionService.deleteDocument('ClinicList', obj.id, 'medicinelist')
+        this.getmedicineData()
       }
     });
   }

@@ -27,9 +27,13 @@ export class MedicineDialogComponent implements OnInit {
     if (this.action === 'Update') {
       this.addmedicineForm.controls['medicineName'].setValue(this.local_data.medicineName)
       this.addmedicineForm.controls['companyName'].setValue(this.local_data.companyName)
-      this.addmedicineForm.controls['dosage'].setValue(this.local_data.dosage)
-      this.addmedicineForm.controls['price'].setValue(this.local_data.price)
-
+      this.addmedicineForm.controls['pack'].setValue(this.local_data.pack)
+      this.addmedicineForm.controls['qty'].setValue(this.local_data.qty)
+      this.addmedicineForm.controls['rate'].setValue(this.local_data.rate)
+      this.addmedicineForm.controls['amount'].setValue(this.local_data.amount)
+      this.addmedicineForm.controls['discount'].setValue(this.local_data.discount)
+      this.addmedicineForm.controls['gst'].setValue(this.local_data.gst)
+      this.addmedicineForm.controls['netamount'].setValue(this.local_data.netamount)
     }
   }
 
@@ -37,20 +41,53 @@ export class MedicineDialogComponent implements OnInit {
     this.addmedicineForm = this.fb.group({
       medicineName: ['', Validators.required],
       companyName: ['', Validators.required],
-      dosage: ['', Validators.required],
-      price: ['', Validators.required],
-
+      pack: ['', Validators.required],
+      qty: ['', Validators.required],
+      rate: ['', Validators.required],
+      amount: ['', Validators.required],
+      discount: [0, Validators.required],
+      gst: [12, Validators.required],
+      netamount: ['', Validators.required],
     })
+    this.addmedicineForm.get('qty')?.valueChanges.subscribe(() => this.updateAmount());
+    this.addmedicineForm.get('rate')?.valueChanges.subscribe(() => this.updateAmount());
+    this.addmedicineForm.get('discount')?.valueChanges.subscribe(() => this.updateAmount());
+    this.addmedicineForm.get('gst')?.valueChanges.subscribe(() => this.updateAmount());
+
+  }
+
+  updateAmount(): void {
+    const qty = this.addmedicineForm.get('qty')?.value;
+    const rate = this.addmedicineForm.get('rate')?.value;
+    const discount = this.addmedicineForm.get('discount')?.value;
+    const gst = this.addmedicineForm.get('gst')?.value;
+  
+    if (qty != null && rate != null ) {
+
+      const amount = qty * rate;
+
+      this.addmedicineForm.get('amount')?.setValue(parseFloat(amount.toFixed(2)), { emitEvent: false });
+
+      const discountedAmount = amount - (amount * discount / 100);
+  
+      const netAmount = discountedAmount + (discountedAmount * gst / 100);
+  
+      this.addmedicineForm.get('netamount')?.setValue(parseFloat(netAmount.toFixed(2)), { emitEvent: false });
+  
+    }
   }
 
   doAction(): void {
     const payload = {
-      id: this.local_data.id ? this.local_data.id : '',
       medicineName: this.addmedicineForm.value.medicineName,
       companyName: this.addmedicineForm.value.companyName,
-      dosage: this.addmedicineForm.value.dosage,
-      price: this.addmedicineForm.value.price,
-
+      pack: this.addmedicineForm.value.pack,
+      qty: this.addmedicineForm.value.qty,
+      rate: this.addmedicineForm.value.rate,
+      amount: this.addmedicineForm.value.amount,
+      discount: this.addmedicineForm.value.discount,
+      gst: this.addmedicineForm.value.gst,
+      netamount: this.addmedicineForm.value.netamount,
     }
     console.log('Addmedicinedialog=====>>>>>', payload);
     this.dialogRef.close({ event: this.action, data: payload });
