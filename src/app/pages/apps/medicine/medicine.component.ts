@@ -77,7 +77,7 @@ export class MedicineComponent {
       }
       if (result.event === 'Update') {
         this.medicinelist.forEach((element: any) => {
-          if (element.id === result.data.id) {
+          if (obj.id === element.id) {
             this.firebaseCollectionService.updateDocument('ClinicList', obj.id, result.data, 'medicinelist')
             this.getmedicineData()
           }
