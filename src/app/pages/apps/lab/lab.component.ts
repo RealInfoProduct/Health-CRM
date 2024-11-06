@@ -3,30 +3,24 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddlabdialogComponent } from './addlabdialog/addlabdialog.component';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
-export interface laboratorydata {
-  id: number,
-  patientName:string,
-  mobileNumber:number,
-  age:number,
-  reportType: string,
-  reportName: string,
-  reportFee: number,
-  disease: string,
-}
 @Component({
   selector: 'app-lab',
   templateUrl: './lab.component.html',
   styleUrls: ['./lab.component.scss']
 })
-export class LabComponent implements OnInit {
+
+export class LabComponent  {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
+  searchText: any;
 
   labColumns: string[] = [
     'id',
     'patientName',
     'mobileNumber',
     'age',
+    'gender',
     'reportType',
     'reportName',
     'reportFee',
@@ -34,29 +28,33 @@ export class LabComponent implements OnInit {
     'action'
   ];
 
-  lablist = [
-    {
-      id: 1,
-      patientName:"aa",
-      mobileNumber:1234567890,
-      age:12,
-      reportType: "aa",
-      reportName: "aa",
-      reportFee: 150,
-      disease: "Fever"
-    }
-  ]
+  lablist:any = []
 
   dataSource = new MatTableDataSource(this.lablist)
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(public dialog: MatDialog) { }
-
-  ngOnInit(): void { }
+  constructor(
+    public dialog: MatDialog,
+    private firebaseCollectionService:FirebaseCollectionService
+  ) { }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.getlabdata()
+  }
 
+  getlabdata(){
+    this.firebaseCollectionService.getDocuments('ClinicList','lablist').then((lab) =>{
+      this.lablist = lab
+      if(lab && lab.length > 0){
+        this.dataSource = new MatTableDataSource(this.lablist)
+        this.dataSource.paginator = this.paginator
+      }else{
+        this.lablist = []
+        this.dataSource = new MatTableDataSource(this.lablist)
+        this.dataSource.paginator = this.paginator
+      }
+    })
   }
 
   applyFilter(filterValue: string): void {
@@ -71,49 +69,20 @@ export class LabComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.addRowData(result.data);
+        this.firebaseCollectionService.addDocument('ClinicList', result.data, 'lablist');
+        this.getlabdata()
       } else if (result.event === 'Update') {
-        this.updateRowData(result.data);
+        this.lablist.forEach((element: any) => {
+          if (obj.id === element.id) {
+            this.firebaseCollectionService.updateDocument('ClinicList', obj.id, result.data, 'lablist');
+            this.getlabdata()
+          }
+        });
       } else if (result.event === 'Delete') {
-        this.deleteRowData(result.data);
+        this.firebaseCollectionService.deleteDocument('ClinicList', obj.id, 'lablist');
+        this.getlabdata()
       }
     });
   }
 
-  addRowData(row_obj: laboratorydata): void {
-    this.lablist.push(
-      {
-        id: this.lablist.length + 1,
-        patientName:row_obj.patientName,
-        mobileNumber:row_obj.mobileNumber,
-        age:row_obj.age,
-        reportType: row_obj.reportType,
-        reportName: row_obj.reportName,
-        reportFee: row_obj.reportFee,
-        disease: row_obj.disease,
-      });
-    this.dataSource = new MatTableDataSource(this.lablist);
-    this.table.renderRows();
-  }
-
-  updateRowData(row_obj: laboratorydata): boolean | any {
-    this.dataSource.data = this.dataSource.data.filter((value: any) => {
-      if (value.id === row_obj.id) {
-        value.patientName = row_obj.patientName;
-        value.mobileNumber = row_obj.mobileNumber;
-        value.age = row_obj.age;
-        value.reportType = row_obj.reportType;
-        value.reportName = row_obj.reportName;
-        value.reportFee = row_obj.reportFee;
-        value.disease = row_obj.disease;
-      }
-      return true;
-    });
-  }
-
-  deleteRowData(row_obj: laboratorydata): boolean | any {
-    const allLablistData = this.lablist
-    this.lablist = allLablistData.filter((id: any) => id.id !== row_obj.id)
-    this.dataSource = new MatTableDataSource(this.lablist)
-  }
 }
