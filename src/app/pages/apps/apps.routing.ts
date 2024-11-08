@@ -26,6 +26,7 @@ import { MyReportComponent } from './my-report/my-report.component';
 import { AppChatComponent } from './chat/chat.component';
 import { PatientComponent } from './patient/patient.component';
 import { MedicineComponent } from './medicine/medicine.component';
+import { DoctorsComponent } from './doctors/doctors.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -174,6 +175,17 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url:'/apps/medicine' },
             { title: 'Medicine' },
+          ],
+        },
+      },
+      {
+        path: 'doctors',
+        component: DoctorsComponent,
+        data: {
+          title: 'Doctors',
+          urls: [
+            { title: 'Dashboard', url:'/apps/doctors' },
+            { title: 'Doctors' },
           ],
         },
       },

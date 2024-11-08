@@ -40,9 +40,14 @@ export const navItems: NavItem[] = [
     route: '/apps/patient',
   },
   {
-    displayName: 'medicine',
+    displayName: 'Medicine',
     iconName: 'pills',
     route: '/apps/medicine',
+  },
+  {
+    displayName: 'Doctors',
+    iconName: 'stethoscope',
+    route: '/apps/doctors',
   },
   {
     navCap: 'Apps',

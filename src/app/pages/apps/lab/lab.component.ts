@@ -11,7 +11,7 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   styleUrls: ['./lab.component.scss']
 })
 
-export class LabComponent  {
+export class LabComponent {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   searchText: any;
 
@@ -28,14 +28,14 @@ export class LabComponent  {
     'action'
   ];
 
-  lablist:any = []
+  lablist: any = []
 
   dataSource = new MatTableDataSource(this.lablist)
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(
     public dialog: MatDialog,
-    private firebaseCollectionService:FirebaseCollectionService
+    private firebaseCollectionService: FirebaseCollectionService
   ) { }
 
   ngAfterViewInit(): void {
@@ -43,13 +43,13 @@ export class LabComponent  {
     this.getlabdata()
   }
 
-  getlabdata(){
-    this.firebaseCollectionService.getDocuments('ClinicList','lablist').then((lab) =>{
+  getlabdata() {
+    this.firebaseCollectionService.getDocuments('ClinicList', 'lablist').then((lab) => {
       this.lablist = lab
-      if(lab && lab.length > 0){
+      if (lab && lab.length > 0) {
         this.dataSource = new MatTableDataSource(this.lablist)
         this.dataSource.paginator = this.paginator
-      }else{
+      } else {
         this.lablist = []
         this.dataSource = new MatTableDataSource(this.lablist)
         this.dataSource.paginator = this.paginator
