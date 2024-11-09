@@ -44,7 +44,7 @@ export class AddlaboratorydialogComponent implements OnInit {
       lastName: ['', Validators.required],
       laboratoryName: ['', Validators.required],
       mobileNumber: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
-      laboratoryEmail: ['', Validators.required],
+      laboratoryEmail: ['', [Validators.required,Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
       address: ['', Validators.required]
     })
   }
@@ -59,7 +59,6 @@ export class AddlaboratorydialogComponent implements OnInit {
       laboratoryEmail: this.addlaboratoryForm.value.laboratoryEmail,
       address: this.addlaboratoryForm.value.address,
     }
-    console.log('Addlaboratorydialog======>>>>>', payload);
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

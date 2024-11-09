@@ -46,7 +46,6 @@ export class AdddoctorsdialogComponent implements OnInit {
     if (this.action === 'Update') {
       this.doctorsForm.controls['doctorsName'].setValue(this.local_data.doctorsName)
       this.doctorsForm.controls['department'].setValue(this.local_data.department)
-      this.doctorsForm.controls['specialization'].setValue(this.local_data.specialization)
       this.doctorsForm.controls['degree'].setValue(this.local_data.degree)
       this.doctorsForm.controls['mobileNumber'].setValue(this.local_data.mobileNumber)
       this.doctorsForm.controls['email'].setValue(this.local_data.email)
@@ -70,11 +69,10 @@ export class AdddoctorsdialogComponent implements OnInit {
     this.doctorsForm = this.fb.group({
       doctorsName: ['', Validators.required],
       department: ['', Validators.required],
-      specialization: ['', Validators.required],
       degree: ['', Validators.required],
       mobileNumber: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
-      email: ['', Validators.required],
-      joiningDate: ['', Validators.required],
+      email: ['', [Validators.required,Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
+      joiningDate: [new Date(), Validators.required],
       experience: ['', Validators.required],
       consultationFee: ['', Validators.required],
       availability: ['', Validators.required],
@@ -83,10 +81,10 @@ export class AdddoctorsdialogComponent implements OnInit {
     })
   }
 
-  doAction(){ const payload = {
+  doAction(){ 
+    const payload = {
     doctorsName:this.doctorsForm.value.doctorsName,
     department:this.doctorsForm.value.department,
-    specialization:this.doctorsForm.value.specialization,
     degree:this.doctorsForm.value.degree,
     mobileNumber:this.doctorsForm.value.mobileNumber,
     email:this.doctorsForm.value.email,
@@ -97,7 +95,6 @@ export class AdddoctorsdialogComponent implements OnInit {
     rating: this.doctorsForm.value.rating,
     clinicLocation: this.doctorsForm.value.clinicLocation
   }
-  console.log('Adddoctorsdialog=====>>>>>', payload);
   this.dialogRef.close({ event: this.action, data: payload });
 }
 

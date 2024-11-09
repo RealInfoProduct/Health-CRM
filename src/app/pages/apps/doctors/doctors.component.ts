@@ -20,16 +20,15 @@ export class DoctorsComponent {
     'id',
     'doctorsName',
     'department',
-    'specialization',
-    'degree',
+    'availability',
     'mobileNumber',
-    'email',
-    'joiningDate',
+    'degree',
     'experience',
     'consultationFee',
-    'availability',
+    'email',
     'rating',
     'clinicLocation',
+    'joiningDate',
     'action'
   ]
 
@@ -73,7 +72,6 @@ export class DoctorsComponent {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-    console.log('event--------',event);
   }
 
   openDialog(action: string, obj: any): void {
@@ -86,7 +84,6 @@ export class DoctorsComponent {
       if (result.event === 'Add') {
         this.firebaseCollectionService.addDocument('ClinicList', result.data, 'doctorslist');
         this.getdoctorsdata()
-        console.log('this.doctorslist----------',this.doctorslist);
         
       } else if (result.event === 'Update') {
         this.doctorslist.forEach((element: any) => {

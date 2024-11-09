@@ -1,4 +1,4 @@
-<h2 class="f-w-500 p-b-20 b-b-1" mat-dialog-title><strong>Doctors</strong></h2>
+<h2 class="f-w-500 p-b-20 b-b-1" mat-dialog-title><strong>{{action}} Doctors</strong></h2>
 <mat-dialog-content class="p-t-20" *ngIf="action !== 'Delete'; else elseTemplate">
     <form [formGroup]="doctorsForm">
         <div class="row">
@@ -28,22 +28,10 @@
             </div>
 
             <div class="col-lg-6">
-                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Specialization</mat-label>
-                <mat-form-field appearance="outline" class="w-100">
-                    <input type="text" formControlName="specialization" placeholder="Specialization" matInput require />
-                    <mat-error
-                        *ngIf="doctorsForm.get('specialization').errors && doctorsForm.get('specialization').errors['required']">
-                        Specialization is required
-                    </mat-error>
-                </mat-form-field>
-            </div>
-
-            <div class="col-lg-6">
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Degree</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
                     <input type="text" formControlName="degree" placeholder="Degree" matInput require />
-                    <mat-error
-                        *ngIf="doctorsForm.get('degree').errors && doctorsForm.get('degree').errors['required']">
+                    <mat-error *ngIf="doctorsForm.get('degree').errors && doctorsForm.get('degree').errors['required']">
                         Degree is required
                     </mat-error>
                 </mat-form-field>
@@ -71,6 +59,9 @@
                     <input type="text" formControlName="email" placeholder="Email" matInput require />
                     <mat-error *ngIf="doctorsForm.get('email').errors && doctorsForm.get('email').errors['required']">
                         Email is required
+                    </mat-error>
+                    <mat-error *ngIf="doctorsForm.get('email').errors && doctorsForm.get('email').errors['pattern']">
+                        Please enter a valid email
                     </mat-error>
                 </mat-form-field>
             </div>
@@ -104,8 +95,10 @@
             <div class="col-lg-6">
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Consultation Fee</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
-                    <input type="number" formControlName="consultationFee" placeholder="Consultation Fee" matInput require min="0" />
-                    <mat-error *ngIf="doctorsForm.get('consultationFee').errors && doctorsForm.get('consultationFee').errors['required']">
+                    <input type="number" formControlName="consultationFee" placeholder="Consultation Fee" matInput
+                        require min="0" />
+                    <mat-error
+                        *ngIf="doctorsForm.get('consultationFee').errors && doctorsForm.get('consultationFee').errors['required']">
                         Consultation Fee is required
                     </mat-error>
                 </mat-form-field>
@@ -115,7 +108,8 @@
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Availability</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
                     <input type="text" placeholder="Availability" formControlName="availability" matInput />
-                    <mat-error *ngIf="doctorsForm.get('availability')?.invalid && doctorsForm.get('availability')?.touched">
+                    <mat-error
+                        *ngIf="doctorsForm.get('availability')?.invalid && doctorsForm.get('availability')?.touched">
                         Availability is required
                     </mat-error>
                 </mat-form-field>
@@ -135,7 +129,8 @@
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Clinic Location</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
                     <input type="text" placeholder="Clinic Location" formControlName="clinicLocation" matInput />
-                    <mat-error *ngIf="doctorsForm.get('clinicLocation')?.invalid && doctorsForm.get('clinicLocation')?.touched">
+                    <mat-error
+                        *ngIf="doctorsForm.get('clinicLocation')?.invalid && doctorsForm.get('clinicLocation')?.touched">
                         Clinic Location is required
                     </mat-error>
                 </mat-form-field>
@@ -144,7 +139,8 @@
         </div>
         <mat-divider></mat-divider>
         <mat-dialog-actions class="m-t-10 justify-content-end">
-            <button mat-flat-button  (click)="doAction()" mat-flat-button color="primary" [disabled]="!doctorsForm.valid">
+            <button mat-flat-button (click)="doAction()" mat-flat-button color="primary"
+                [disabled]="!doctorsForm.valid">
                 {{action}}
             </button>
             <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">

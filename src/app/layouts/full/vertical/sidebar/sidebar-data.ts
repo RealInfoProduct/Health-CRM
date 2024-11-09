@@ -50,6 +50,11 @@ export const navItems: NavItem[] = [
     route: '/apps/doctors',
   },
   {
+    displayName: 'Bill',
+    iconName: 'receipt-2',
+    route: '/apps/bill',
+  },
+  {
     navCap: 'Apps',
   },
   {

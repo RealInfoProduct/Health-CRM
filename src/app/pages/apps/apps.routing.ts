@@ -27,6 +27,7 @@ import { AppChatComponent } from './chat/chat.component';
 import { PatientComponent } from './patient/patient.component';
 import { MedicineComponent } from './medicine/medicine.component';
 import { DoctorsComponent } from './doctors/doctors.component';
+import { BillComponent } from './bill/bill.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -186,6 +187,17 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url:'/apps/doctors' },
             { title: 'Doctors' },
+          ],
+        },
+      },
+      {
+        path: 'bill',
+        component: BillComponent,
+        data: {
+          title: 'Bill',
+          urls: [
+            { title: 'Dashboard', url:'/apps/bill' },
+            { title: 'Bill' },
           ],
         },
       },

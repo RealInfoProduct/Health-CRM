@@ -43,7 +43,7 @@ export class AddmedicaldialogComponent implements OnInit {
       lastName: ['', Validators.required],
       medicalName: ['', Validators.required],
       mobileNumber: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
-      middleEmail: ['', Validators.required],
+      middleEmail: ['', [Validators.required,Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
       address: ['', Validators.required]
     })
   }
@@ -58,7 +58,6 @@ export class AddmedicaldialogComponent implements OnInit {
       middleEmail: this.addmedicalForm.value.middleEmail,
       address: this.addmedicalForm.value.address,
     }
-    console.log('Addmedicaldialog=====>>>>>', payload);
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

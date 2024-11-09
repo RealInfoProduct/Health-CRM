@@ -7,7 +7,8 @@
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Patient Name</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
                     <input type="text" formControlName="patientName" placeholder="Patient Name" matInput require />
-                    <mat-error *ngIf="addlabForm.get('patientName').errors && addlabForm.get('patientName').errors['required']">
+                    <mat-error
+                        *ngIf="addlabForm.get('patientName').errors && addlabForm.get('patientName').errors['required']">
                         Patient Name is required
                     </mat-error>
                 </mat-form-field>
@@ -16,11 +17,12 @@
             <div class="col-lg-6">
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Mobile Number</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
-                    <input type="text" formControlName="mobileNumber" placeholder="Mobile Number" matInput require onKeyPress="if(this.value.length==10) return false;"  min="0" />
+                    <input type="text" formControlName="mobileNumber" placeholder="Mobile Number" matInput require
+                        onKeyPress="if(this.value.length==10) return false;" min="0" />
                     <mat-error
-                    *ngIf="addlabForm.get('mobileNumber').errors && addlabForm.get('mobileNumber').errors['required']">
-                    Mobile Number is required
-                </mat-error>
+                        *ngIf="addlabForm.get('mobileNumber').errors && addlabForm.get('mobileNumber').errors['required']">
+                        Mobile Number is required
+                    </mat-error>
                     <mat-error
                         *ngIf="addlabForm.get('mobileNumber').errors && addlabForm.get('mobileNumber').errors['pattern']">
                         Please enter a valid 10-digit
@@ -31,7 +33,8 @@
             <div class="col-lg-6">
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Age</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
-                    <input type="text" formControlName="age" placeholder="Age" onKeyPress="if(this.value.length==3) return false;" matInput require min="0" />
+                    <input type="text" formControlName="age" placeholder="Age"
+                        onKeyPress="if(this.value.length==3) return false;" matInput require min="0" />
                     <mat-error *ngIf="addlabForm.get('age').errors && addlabForm.get('age').errors['required']">
                         Age is required
                     </mat-error>
@@ -42,7 +45,8 @@
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Report Type</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
                     <input type="text" formControlName="reportType" placeholder="Report Type" matInput require />
-                    <mat-error *ngIf="addlabForm.get('reportType').errors && addlabForm.get('reportType').errors['required']">
+                    <mat-error
+                        *ngIf="addlabForm.get('reportType').errors && addlabForm.get('reportType').errors['required']">
                         Report Type is required
                     </mat-error>
                 </mat-form-field>
@@ -63,7 +67,8 @@
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Report Fee</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
                     <input type="number" formControlName="reportFee" placeholder="Report Fee" matInput require />
-                    <mat-error *ngIf="addlabForm.get('reportFee').errors && addlabForm.get('reportFee').errors['required']">
+                    <mat-error
+                        *ngIf="addlabForm.get('reportFee').errors && addlabForm.get('reportFee').errors['required']">
                         Report Fee is required
                     </mat-error>
                 </mat-form-field>
@@ -89,7 +94,7 @@
                     </mat-error>
                 </mat-radio-group>
             </div>
-            
+
         </div>
         <mat-divider></mat-divider>
         <mat-dialog-actions class="m-t-10 justify-content-end">

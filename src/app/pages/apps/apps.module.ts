@@ -87,6 +87,8 @@ import { MedicineComponent } from './medicine/medicine.component';
 import { MedicineDialogComponent } from './medicine/medicine-dialog/medicine-dialog.component';
 import { DoctorsComponent } from './doctors/doctors.component';
 import { AdddoctorsdialogComponent } from './doctors/adddoctorsdialog/adddoctorsdialog.component';
+import { BillComponent } from './bill/bill.component';
+import { AddbilldialogComponent } from './bill/addbilldialog/addbilldialog.component';
 
 
 
@@ -158,6 +160,8 @@ import { AdddoctorsdialogComponent } from './doctors/adddoctorsdialog/adddoctors
     MedicineDialogComponent,
     DoctorsComponent,
     AdddoctorsdialogComponent,
+    BillComponent,
+    AddbilldialogComponent
 
   ],
   providers: [DatePipe],

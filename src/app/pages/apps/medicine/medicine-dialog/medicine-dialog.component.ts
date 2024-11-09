@@ -89,7 +89,6 @@ export class MedicineDialogComponent implements OnInit {
       gst: this.addmedicineForm.value.gst,
       netamount: this.addmedicineForm.value.netamount,
     }
-    console.log('Addmedicinedialog=====>>>>>', payload);
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

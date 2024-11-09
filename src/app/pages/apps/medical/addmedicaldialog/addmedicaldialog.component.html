@@ -7,7 +7,7 @@
                 <mat-form-field appearance="outline" class="w-100">
                     <input type="text" formControlName="medicalName" placeholder="Medical Name" matInput require />
                     <mat-error
-                        *ngIf="addmedicalForm.get('medicalName')?.invalid && addmedicalForm.get('medicalName')?.touched">
+                        *ngIf="addmedicalForm.get('medicalName').errors && addmedicalForm.get('medicalName').errors['required']">
                         Medical Name is required
                     </mat-error>
                 </mat-form-field>
@@ -34,7 +34,7 @@
                 <mat-form-field appearance="outline" class="w-100">
                     <input type="text" formControlName="firstName" placeholder="First Name" matInput requir />
                     <mat-error
-                        *ngIf="addmedicalForm.get('firstName')?.invalid && addmedicalForm.get('firstName')?.touched">
+                        *ngIf="addmedicalForm.get('firstName').errors && addmedicalForm.get('firstName').errors['required']">
                         First Name is required
                     </mat-error>
                 </mat-form-field>
@@ -44,7 +44,7 @@
                 <mat-form-field appearance="outline" class="w-100">
                     <input type="text" formControlName="middleName" placeholder="Middle Name" matInput requir />
                     <mat-error
-                        *ngIf="addmedicalForm.get('middleName')?.invalid && addmedicalForm.get('middleName')?.touched">
+                        *ngIf="addmedicalForm.get('middleName').errors && addmedicalForm.get('middleName').errors['required']">
                         Middle Name is required
                     </mat-error>
                 </mat-form-field>
@@ -54,7 +54,7 @@
                 <mat-form-field appearance="outline" class="w-100">
                     <input type="text" formControlName="lastName" placeholder="Last Name" matInput requir />
                     <mat-error
-                        *ngIf="addmedicalForm.get('lastName')?.invalid && addmedicalForm.get('lastName')?.touched">
+                        *ngIf="addmedicalForm.get('lastName').errors && addmedicalForm.get('lastName').errors['required']">
                         Last Name is required
                     </mat-error>
                 </mat-form-field>
@@ -66,8 +66,12 @@
                 <mat-form-field appearance="outline" class="w-100">
                     <input type="text" formControlName="middleEmail" placeholder="Medical Email" matInput require />
                     <mat-error
-                        *ngIf="addmedicalForm.get('middleEmail')?.invalid && addmedicalForm.get('middleEmail')?.touched">
-                        Medical Name is required
+                        *ngIf="addmedicalForm.get('middleEmail').errors && addmedicalForm.get('middleEmail').errors['required']">
+                        Medical Email is required
+                    </mat-error>
+                    <mat-error
+                        *ngIf="addmedicalForm.get('middleEmail').errors && addmedicalForm.get('middleEmail').errors['pattern']">
+                        Please enter a valid email
                     </mat-error>
                 </mat-form-field>
             </div>
@@ -78,7 +82,8 @@
                 <mat-form-field class="example-full-width w-100 ">
                     <mat-label>Enter Address</mat-label>
                     <textarea formControlName="address" matInput placeholder=""></textarea>
-                    <mat-error *ngIf="addmedicalForm.get('address')?.invalid && addmedicalForm.get('address')?.touched">
+                    <mat-error
+                        *ngIf="addmedicalForm.get('address').errors && addmedicalForm.get('address').errors['required']">
                         Address is required
                     </mat-error>
                 </mat-form-field>

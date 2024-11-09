@@ -1,140 +1,133 @@
 <mat-card class="cardWithShadow">
-    <mat-card-content class="p-24">
-      <div class="row justify-content-between">
-        <div class="col-lg-4">
-          <mat-form-field appearance="outline" class="w-100 hide-hint">
-            <input matInput placeholder="Search Doctors" (keyup)="applyFilter($event)"/>
-            <mat-icon matSuffix>
-              <i-tabler name="search" class="icon-20"></i-tabler>
-            </mat-icon>
-          </mat-form-field>
-        </div>
-        <div class="col-lg-4 d-flex align-items-center justify-content-end">
-          <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
-            Add Doctors
-          </button>
-        </div>
+  <mat-card-content class="p-24">
+    <div class="row justify-content-between">
+      <div class="col-lg-4">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
+          <input matInput placeholder="Search Doctors" (keyup)="applyFilter($event)" />
+          <mat-icon matSuffix>
+            <i-tabler name="search" class="icon-20"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
       </div>
-    </mat-card-content>
-  </mat-card>
+      <div class="col-lg-4 d-flex align-items-center justify-content-end">
+        <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
+          Add Doctors
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
 
-  <mat-card class="cardWithShadow">
-    <mat-card-content class="p-24">
-      <div class="table-responsive">
-        <table mat-table [dataSource]="dataSource" class="w-100">
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-24">
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" class="w-100">
 
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">No.</th>
-            <td mat-cell *matCellDef="let element;  let i = index ">{{ i + 1 }}</td>
-          </ng-container>
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">No.</th>
+          <td mat-cell *matCellDef="let element;  let i = index ">{{ i + 1 }}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="doctorsName">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              Doctors Name
-            </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.doctorsName }}</td>
-          </ng-container>
+        <ng-container matColumnDef="doctorsName">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Doctors Name
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.doctorsName }}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="department">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              Department
-            </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.department }}</td>
-          </ng-container>
+        <ng-container matColumnDef="department">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Department
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.department }}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="specialization">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              Specialization
-            </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.specialization }}</td>
-          </ng-container>
+        <ng-container matColumnDef="availability">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Availability
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.availability }}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="degree">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              Degree
-            </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.degree }}</td>
-          </ng-container>
+        <ng-container matColumnDef="mobileNumber">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Mobile Number
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.mobileNumber }}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="mobileNumber">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              Mobile Number
-            </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.mobileNumber }}</td>
-          </ng-container>
+        <ng-container matColumnDef="degree">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Degree
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.degree }}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              Email
-            </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.email }}</td>
-          </ng-container>
+        <ng-container matColumnDef="experience">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Experience
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.experience }}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="joiningDate">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              Joining Date
-            </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">{{ convertTimestamp(element.joiningDate) | date : "mediumDate" }}</td>
-          </ng-container>
+        <ng-container matColumnDef="consultationFee">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Consultation Fee
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.consultationFee }}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="experience">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              Experience
-            </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.experience }}</td>
-          </ng-container>
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Email
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.email }}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="consultationFee">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              Consultation Fee
-            </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.consultationFee }}</td>
-          </ng-container>
-          
-          <ng-container matColumnDef="availability">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              Availability
-            </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.availability }}</td>
-          </ng-container>
-          
-          <ng-container matColumnDef="rating">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              Rating
-            </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.rating }}</td>
-          </ng-container>
-          
-          <ng-container matColumnDef="clinicLocation">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              ClinicLocation
-            </th>
-            <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.clinicLocation }}</td>
-          </ng-container>
+        <ng-container matColumnDef="rating">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Rating
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.rating }}</td>
+        </ng-container>
 
+        <ng-container matColumnDef="clinicLocation">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            ClinicLocation
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.clinicLocation }}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              Action
-            </th>
-            <td mat-cell *matCellDef="let element" class="action-link">
-              <a (click)="openDialog('Update', element)" class="m-r-10 cursor-pointer"><i-tabler name="edit"
-                  class="icon-18"></i-tabler></a>
-              <a (click)="openDialog('Delete', element)" class="m-r-10 cursor-pointer">
-                <i-tabler name="trash" class="icon-18"></i-tabler>
-              </a>
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="joiningDate">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Joining Date
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ convertTimestamp(element.joiningDate) | date :
+            "mediumDate" }}</td>
+        </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="doctorsColumns"></tr>
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Action
+          </th>
+          <td mat-cell *matCellDef="let element" class="action-link">
+            <a (click)="openDialog('Update', element)" class="m-r-10 cursor-pointer"><i-tabler name="edit"
+                class="icon-18"></i-tabler></a>
+            <a (click)="openDialog('Delete', element)" class="m-r-10 cursor-pointer">
+              <i-tabler name="trash" class="icon-18"></i-tabler>
+            </a>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="doctorsColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: doctorsColumns"></tr>
         <tr class="mat-row" style="text-align: center;" *matNoDataRow>
           <td class="mat-cell" [attr.colspan]="doctorsColumns.length">
             No record found
           </td>
         </tr>
-        </table>
-        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-      </div>
-    </mat-card-content>
-  </mat-card>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>

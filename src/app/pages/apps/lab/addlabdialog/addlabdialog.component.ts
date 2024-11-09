@@ -60,7 +60,6 @@ export class AddlabdialogComponent implements OnInit {
       reportFee: this.addlabForm.value.reportFee,
       disease: this.addlabForm.value.disease
     }
-    console.log('Addlabdialog=====>>>>>', payload);
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

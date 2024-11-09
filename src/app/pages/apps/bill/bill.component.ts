@@ -1,0 +1,94 @@
+import { Component, ViewChild } from '@angular/core';
+import { AddbilldialogComponent } from './addbilldialog/addbilldialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { Timestamp } from 'firebase/firestore';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
+
+@Component({
+  selector: 'app-bill',
+  templateUrl: './bill.component.html',
+  styleUrls: ['./bill.component.scss']
+})
+export class BillComponent {
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
+  searchText: any;
+
+  billColumns: string[] = [
+    'id',
+    'patientName',
+    'doctorName',
+    'status',
+    'date',
+    'paymentMethod',
+    'total',
+    'discount',
+    'tax',
+    'finalTotal',
+    'action'
+  ]
+
+  billlist:any = []
+
+  dataSource = new MatTableDataSource(this.billlist)
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
+
+  constructor(
+    public dialog: MatDialog,
+    private firebaseCollectionService: FirebaseCollectionService
+
+  ) { }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.getbilldata()
+  }
+
+  getbilldata() {
+    this.firebaseCollectionService.getDocuments('ClinicList', 'billlist').then((bill) => {
+      this.billlist = bill
+      if (bill && bill.length > 0) {
+        this.dataSource = new MatTableDataSource(this.billlist)
+        this.dataSource.paginator = this.paginator
+      } else {
+        this.billlist = []
+        this.dataSource = new MatTableDataSource(this.billlist)
+        this.dataSource.paginator = this.paginator
+      }
+    })
+  }
+
+  convertTimestamp(element: any): Date | null {
+    if (element instanceof Timestamp) {
+      return element.toDate();
+    }
+    return null;
+  }
+
+  openDialog(action: string, obj: any): void {
+    obj.action = action;
+    const dialogRef = this.dialog.open(AddbilldialogComponent, {
+      data: obj,
+      width: action === 'Delete' ? '25%' : '50%'
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result.event === 'Add') {
+        this.firebaseCollectionService.addDocument('ClinicList', result.data, 'billlist');
+        this.getbilldata()
+        
+      } else if (result.event === 'Update') {
+        this.billlist.forEach((element: any) => {
+          if (obj.id === element.id) {
+            this.firebaseCollectionService.updateDocument('ClinicList', obj.id, result.data, 'billlist');
+            this.getbilldata()
+          }
+        });
+      } else if (result.event === 'Delete') {
+        this.firebaseCollectionService.deleteDocument('ClinicList', obj.id, 'billlist');
+        this.getbilldata()
+      }
+
+    })
+  }
+}
