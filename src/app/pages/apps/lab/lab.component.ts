@@ -61,7 +61,7 @@ export class LabComponent {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  openDialog(action: string, obj: any): void {
+  openLabDialog(action: string, obj: any): void {
     obj.action = action;
     const dialogRef = this.dialog.open(AddlabdialogComponent, {
       data: obj,

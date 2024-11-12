@@ -61,7 +61,7 @@ export class LaboratoryComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  openDialog(action: string, obj: any): void {
+  openLaboratoryDialog(action: string, obj: any): void {
     obj.action = action;
     const dialogRef = this.dialog.open(AddlaboratorydialogComponent, {
       data: obj,

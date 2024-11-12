@@ -5,7 +5,6 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
-import { log } from 'console';
 
 @Component({
   selector: 'app-doctors',
@@ -74,7 +73,7 @@ export class DoctorsComponent {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  openDialog(action: string, obj: any): void {
+  openDoctorsDialog(action: string, obj: any): void {
     obj.action = action;
     const dialogRef = this.dialog.open(AdddoctorsdialogComponent, {
       data: obj,
@@ -84,7 +83,7 @@ export class DoctorsComponent {
       if (result.event === 'Add') {
         this.firebaseCollectionService.addDocument('ClinicList', result.data, 'doctorslist');
         this.getdoctorsdata()
-        
+
       } else if (result.event === 'Update') {
         this.doctorslist.forEach((element: any) => {
           if (obj.id === element.id) {

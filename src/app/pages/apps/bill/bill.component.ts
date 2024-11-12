@@ -18,9 +18,9 @@ export class BillComponent {
   billColumns: string[] = [
     'id',
     'patientName',
-    'doctorName',
     'status',
-    'date',
+    'admissionDate',
+    'dischargeDate',
     'paymentMethod',
     'total',
     'discount',
@@ -29,7 +29,7 @@ export class BillComponent {
     'action'
   ]
 
-  billlist:any = []
+  billlist: any = []
 
   dataSource = new MatTableDataSource(this.billlist)
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -37,7 +37,6 @@ export class BillComponent {
   constructor(
     public dialog: MatDialog,
     private firebaseCollectionService: FirebaseCollectionService
-
   ) { }
 
   ngAfterViewInit(): void {
@@ -48,6 +47,7 @@ export class BillComponent {
   getbilldata() {
     this.firebaseCollectionService.getDocuments('ClinicList', 'billlist').then((bill) => {
       this.billlist = bill
+    console.log('this.billlist=====',this.billlist);
       if (bill && bill.length > 0) {
         this.dataSource = new MatTableDataSource(this.billlist)
         this.dataSource.paginator = this.paginator
@@ -59,6 +59,11 @@ export class BillComponent {
     })
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   convertTimestamp(element: any): Date | null {
     if (element instanceof Timestamp) {
       return element.toDate();
@@ -66,7 +71,7 @@ export class BillComponent {
     return null;
   }
 
-  openDialog(action: string, obj: any): void {
+  openBillDialog(action: string, obj: any): void {
     obj.action = action;
     const dialogRef = this.dialog.open(AddbilldialogComponent, {
       data: obj,
@@ -76,7 +81,7 @@ export class BillComponent {
       if (result.event === 'Add') {
         this.firebaseCollectionService.addDocument('ClinicList', result.data, 'billlist');
         this.getbilldata()
-        
+
       } else if (result.event === 'Update') {
         this.billlist.forEach((element: any) => {
           if (obj.id === element.id) {

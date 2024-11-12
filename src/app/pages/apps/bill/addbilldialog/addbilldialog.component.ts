@@ -25,18 +25,11 @@ export class AddbilldialogComponent implements OnInit {
     { id: 4, name: 'Net Banking' }
   ]
 
-  doctorNameList = [
-    { id: 1, name: 'Dr.Rajesh' },
-    { id: 2, name: 'DR. John Deo' },
-    { id: 3, name: 'DR. Megha Trivedi' },
-    { id: 4, name: 'DR. Smith' }
-  ]
-
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<AddbilldialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any
-  ) { 
+  ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
@@ -45,9 +38,9 @@ export class AddbilldialogComponent implements OnInit {
     this.addbilllist()
     if (this.action === 'Update') {
       this.billForm.controls['patientName'].setValue(this.local_data.patientName)
-      this.billForm.controls['doctorName'].setValue(this.local_data.doctorName)
       this.billForm.controls['status'].setValue(this.local_data.status)
-      this.billForm.controls['date'].setValue(this.convertTimestamp(this.local_data.date))
+      this.billForm.controls['admissionDate'].setValue(this.convertTimestamp(this.local_data.admissionDate))
+      this.billForm.controls['dischargeDate'].setValue(this.convertTimestamp(this.local_data.dischargeDate))
       this.billForm.controls['paymentMethod'].setValue(this.local_data.paymentMethod)
       this.billForm.controls['total'].setValue(this.local_data.total)
       this.billForm.controls['discount'].setValue(this.local_data.discount)
@@ -56,19 +49,19 @@ export class AddbilldialogComponent implements OnInit {
     }
   }
 
-  convertTimestamp(element : any): Date | null {
-    if(element instanceof Timestamp){
+  convertTimestamp(element: any): Date | null {
+    if (element instanceof Timestamp) {
       return element.toDate();
     }
     return null;
-      }
+  }
 
   addbilllist() {
     this.billForm = this.fb.group({
       patientName: ['', Validators.required],
-      doctorName: ['', Validators.required],
       status: ['', Validators.required],
-      date: [new Date(), Validators.required],
+      admissionDate: ['', Validators.required],
+      dischargeDate: [new Date(), Validators.required],
       paymentMethod: ['', Validators.required],
       total: ['', Validators.required],
       discount: [0, Validators.required],
@@ -83,15 +76,16 @@ export class AddbilldialogComponent implements OnInit {
   doAction() {
     const payload = {
       patientName: this.billForm.value.patientName,
-      doctorName: this.billForm.value.doctorName,
       status: this.billForm.value.status,
-      date: this.billForm.value.date,
+      admissionDate: this.billForm.value.admissionDate,
+      dischargeDate: this.billForm.value.dischargeDate,
       paymentMethod: this.billForm.value.paymentMethod,
       discount: this.billForm.value.discount,
       total: this.billForm.value.total,
       tax: this.billForm.value.tax,
       finalTotal: this.billForm.value.finalTotal
     }
+    console.log(payload);
     this.dialogRef.close({ event: this.action, data: payload });
   }
 
@@ -100,7 +94,7 @@ export class AddbilldialogComponent implements OnInit {
     const discount = this.billForm.get('discount')?.value || 0;
     const tax = this.billForm.get('tax')?.value || 0;
 
-    const  discountAmount = total - (total * discount / 100)
+    const discountAmount = total - (total * discount / 100)
     const finalTotal = discountAmount + (discountAmount * tax / 100)
     this.billForm.get('finalTotal')?.setValue(finalTotal, { emitEvent: false });
   }

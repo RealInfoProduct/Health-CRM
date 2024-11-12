@@ -32,6 +32,8 @@
     "firebase": "^10.14.0",
     "ng-apexcharts": "^1.7.6",
     "ng2-search-filter": "^0.5.1",
+    "ngx-mat-timepicker": "^18.0.0",
+    "ngx-material-timepicker": "^13.1.1",
     "ngx-pagination": "^6.0.1",
     "ngx-permissions": "^13.0.1",
     "ngx-scrollbar": "^11.0.0",

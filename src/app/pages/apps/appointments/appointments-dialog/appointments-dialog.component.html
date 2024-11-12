@@ -1,0 +1,153 @@
+<h2 class="f-w-500 p-b-20 b-b-1" mat-dialog-title><strong>{{action}} Appointments</strong></h2>
+<mat-dialog-content class="p-t-20" *ngIf="action !== 'Delete'; else elseTemplate">
+    <form [formGroup]="appointmentsForm">
+        <div class="row">
+
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Patient Name</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" formControlName="patientName" placeholder="Patient Name" matInput require />
+                    <mat-error
+                        *ngIf="appointmentsForm.get('patientName').errors && appointmentsForm.get('patientName').errors['required']">
+                        Patient Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Doctor Name</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-select #dropdown formControlName="doctorName" placeholder="Doctor Name">
+                        <mat-option [value]="item.id" *ngFor="let item of doctorslist">{{item.doctorsName}}</mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="appointmentsForm.get('doctorName').errors && appointmentsForm.get('doctorName').errors['required']">
+                        Doctor Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block"> Gender </mat-label>
+                <mat-radio-group aria-label="Select an option" formControlName="gender">
+                    <mat-radio-button value="male">Male </mat-radio-button>
+                    <mat-radio-button value="female">Female </mat-radio-button>
+                    <mat-error
+                        *ngIf="appointmentsForm.get('gender')?.invalid && appointmentsForm.get('gender')?.touched">
+                        Gender is required
+                    </mat-error>
+                </mat-radio-group>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Time</mat-label>
+                <mat-form-field>
+                    <input type="text" matInput [ngxMatTimepicker]="timepicker" formControlName="time"
+                        placeholder="Select time" />
+                    <ngx-mat-timepicker-toggle [for]="timepicker" matSuffix></ngx-mat-timepicker-toggle>
+                    <ngx-mat-timepicker #timepicker></ngx-mat-timepicker>
+                    <mat-error *ngIf="appointmentsForm.get('time')?.invalid && appointmentsForm.get('time')?.touched">
+                        Time is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Date</mat-label>
+                <mat-form-field class="w-100" appearance="outline">
+                    <input matInput [matDatepicker]="touchpic" placeholder="Date" formControlName="date" />
+                    <mat-datepicker-toggle matIconSuffix [for]="touchpic"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #touchpic></mat-datepicker>
+                    <mat-error *ngIf="appointmentsForm.get('date')?.invalid && appointmentsForm.get('date')?.touched">
+                        Date is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Mobile Number</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="number" formControlName="mobileNumber" placeholder="Mobile Number" matInput require
+                        onKeyPress="if(this.value.length==10) return false;" min="0" />
+                    <mat-error
+                        *ngIf="appointmentsForm.get('mobileNumber').errors && appointmentsForm.get('mobileNumber').errors['required']">
+                        Mobile Number is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Email</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input type="text" formControlName="email" placeholder="Email" matInput  />
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Appointment Status</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-select #dropdown formControlName="appointmentStatus" placeholder="Appointment Status">
+                        <mat-option [value]="item.name"
+                            *ngFor="let item of appointmentStatusList">{{item.name}}</mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="appointmentsForm.get('appointmentStatus').errors && appointmentsForm.get('appointmentStatus').errors['required']">
+                        Appointment Status is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Visit Type</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-select #dropdown formControlName="visitType" placeholder="Visit Type">
+                        <mat-option [value]="item.name" *ngFor="let item of visitTypeList">{{item.name}}</mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="appointmentsForm.get('visitType').errors && appointmentsForm.get('visitType').errors['required']">
+                        Visit Type is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Payment Method</mat-label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-select #dropdown formControlName="paymentMethod" placeholder="Payment Method">
+                        <mat-option [value]="item.name" *ngFor="let item of paymentMethodList">{{item.name}}</mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="appointmentsForm.get('paymentMethod').errors && appointmentsForm.get('paymentMethod').errors['required']">
+                        Payment Method is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+        </div>
+        <mat-divider></mat-divider>
+        <mat-dialog-actions class="m-t-10 justify-content-end">
+            <button mat-flat-button (click)="doAction()" mat-flat-button color="primary"
+                [disabled]="!appointmentsForm.valid">
+               {{action}}
+            </button>
+            <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">
+                Cancel
+            </button>
+        </mat-dialog-actions>
+    </form>
+</mat-dialog-content>
+<ng-template #elseTemplate>
+    <div class="p-x-24">
+        <p>Are you sure you want to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
+    </div>
+    <mat-divider></mat-divider>
+
+    <div mat-dialog-actions class="p-x-24 p-b-24 m-t-10 justify-content-end">
+        <button mat-button (click)="doAction()" mat-flat-button color="warn">
+            {{action}}
+        </button>
+        <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">
+            Cancel
+        </button>
+    </div>
+</ng-template>

@@ -89,6 +89,10 @@ import { DoctorsComponent } from './doctors/doctors.component';
 import { AdddoctorsdialogComponent } from './doctors/adddoctorsdialog/adddoctorsdialog.component';
 import { BillComponent } from './bill/bill.component';
 import { AddbilldialogComponent } from './bill/addbilldialog/addbilldialog.component';
+import { AppointmentsComponent } from './appointments/appointments.component';
+import { AppointmentsDialogComponent } from './appointments/appointments-dialog/appointments-dialog.component';
+import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
+import { MatInputModule } from '@angular/material/input';
 
 
 
@@ -112,6 +116,8 @@ import { AddbilldialogComponent } from './bill/addbilldialog/addbilldialog.compo
     }),
     MatNativeDateModule,
     NgScrollbarModule,
+    MatInputModule,
+    NgxMatTimepickerModule,
   ],
   exports: [TablerIconsModule],
   declarations: [
@@ -161,7 +167,9 @@ import { AddbilldialogComponent } from './bill/addbilldialog/addbilldialog.compo
     DoctorsComponent,
     AdddoctorsdialogComponent,
     BillComponent,
-    AddbilldialogComponent
+    AddbilldialogComponent,
+    AppointmentsComponent,
+    AppointmentsDialogComponent,
 
   ],
   providers: [DatePipe],

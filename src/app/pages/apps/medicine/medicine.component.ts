@@ -64,7 +64,7 @@ export class MedicineComponent {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  openDialog(action: string, obj: any): void {
+  openMedicineDialog(action: string, obj: any): void {
     obj.action = action;
     const dialogRef = this.dialog.open(MedicineDialogComponent, {
       data: obj,

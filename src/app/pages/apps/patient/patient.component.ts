@@ -45,12 +45,13 @@ export class PatientComponent {
   }
 
   ngAfterViewInit(): void {
-    this.getPatientData()
+    this.getPatientData() 
   }
 
   getPatientData() {
     this.firebaseCollectionService.getDocuments('ClinicList', 'Patientlist').then((Patient) => {
       this.Patientlist = Patient
+      console.log('this.Patientlist=====',this.Patientlist);
       if (Patient && Patient.length > 0) {
         this.dataSource = new MatTableDataSource(this.Patientlist);
       } else {
@@ -62,7 +63,7 @@ export class PatientComponent {
     });
   }
 
-  addPatient(action: string, obj: any) {
+  openPatientDialog(action: string, obj: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(PatientDialogComponent, {
       data: obj,

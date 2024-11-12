@@ -28,6 +28,7 @@ import { PatientComponent } from './patient/patient.component';
 import { MedicineComponent } from './medicine/medicine.component';
 import { DoctorsComponent } from './doctors/doctors.component';
 import { BillComponent } from './bill/bill.component';
+import { AppointmentsComponent } from './appointments/appointments.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -110,6 +111,17 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Todo App' },
+          ],
+        },
+      },
+      {
+        path: 'appointments',
+        component: AppointmentsComponent,
+        data: {
+          title: 'Appointments',
+          urls: [
+            { title: 'Dashboard', url: '/apps/appointments' },
+            { title: 'Appointments' },
           ],
         },
       },

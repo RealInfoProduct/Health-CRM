@@ -38,10 +38,10 @@ export class AddlabdialogComponent implements OnInit {
 
   addmedicallist() {
     this.addlabForm = this.fb.group({
-      patientName:['',Validators.required],
-      mobileNumber:['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
-      age:['',Validators.required],
-      gender:['',Validators.required],
+      patientName: ['', Validators.required],
+      mobileNumber: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
+      age: ['', Validators.required],
+      gender: ['', Validators.required],
       reportType: ['', Validators.required],
       reportName: ['', Validators.required],
       reportFee: ['', Validators.required],
@@ -51,10 +51,10 @@ export class AddlabdialogComponent implements OnInit {
 
   doAction(): void {
     const payload = {
-      patientName:this.addlabForm.value.patientName,
-      mobileNumber:this.addlabForm.value.mobileNumber,
-      age:this.addlabForm.value.age,
-      gender:this.addlabForm.value.gender,
+      patientName: this.addlabForm.value.patientName,
+      mobileNumber: this.addlabForm.value.mobileNumber,
+      age: this.addlabForm.value.age,
+      gender: this.addlabForm.value.gender,
       reportType: this.addlabForm.value.reportType,
       reportName: this.addlabForm.value.reportName,
       reportFee: this.addlabForm.value.reportFee,

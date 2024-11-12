@@ -10,7 +10,7 @@
         </mat-form-field>
       </div>
       <div class="col-lg-4 d-flex align-items-center justify-content-end">
-        <button mat-flat-button (click)="addPatient('Add',{})" color="primary">
+        <button mat-flat-button (click)="openPatientDialog('Add',{})" color="primary">
           Add Patient
         </button>
       </div>
@@ -74,10 +74,10 @@
           </th>
           <td mat-cell *matCellDef="let element" class="action-link">
             <a class="m-r-10 cursor-pointer">
-              <i-tabler name="edit" class="icon-18" (click)="addPatient('Update', element)"></i-tabler>
+              <i-tabler name="edit" class="icon-18" (click)="openPatientDialog('Update', element)"></i-tabler>
             </a>
             <a class="m-r-10 cursor-pointer">
-              <i-tabler name="trash" class="icon-18" (click)="addPatient('Delete', element)"></i-tabler>
+              <i-tabler name="trash" class="icon-18" (click)="openPatientDialog('Delete', element)"></i-tabler>
             </a>
           </td>
         </ng-container>

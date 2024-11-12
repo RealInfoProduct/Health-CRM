@@ -10,7 +10,7 @@
         </mat-form-field>
       </div>
       <div class="col-lg-4 d-flex align-items-center justify-content-end">
-        <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
+        <button mat-flat-button (click)="openMedicalDialog('Add', {})" color="primary">
           Add Medical
         </button>
       </div>
@@ -74,10 +74,10 @@
             Action
           </th>
           <td mat-cell *matCellDef="let element" class="action-link">
-            <a (click)="openDialog('Update', element)" class="m-r-10 cursor-pointer">
+            <a (click)="openMedicalDialog('Update', element)" class="m-r-10 cursor-pointer">
               <i-tabler name="edit" class="icon-18"></i-tabler>
             </a>
-            <a (click)="openDialog('Delete', element)" class="m-r-10 cursor-pointer">
+            <a (click)="openMedicalDialog('Delete', element)" class="m-r-10 cursor-pointer">
               <i-tabler name="trash" class="icon-18"></i-tabler>
             </a>
           </td>
