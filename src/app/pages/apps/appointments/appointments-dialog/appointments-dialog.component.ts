@@ -14,13 +14,6 @@ export class AppointmentsDialogComponent implements OnInit {
   action: string;
   local_data: any;
 
-  // doctorList: any = [
-  //   { id: 1, name: 'Dr.Sarah Smith' },
-  //   { id: 2, name: 'Dr.Jay Soni' },
-  //   { id: 3, name: 'Dr.Rajesh' },
-  //   { id: 4, name: 'Dr.Jayesh Shah' },
-  // ]
-
   appointmentStatusList: any = [
     { id: 1, name: 'Scheduled' },
     { id: 2, name: 'Completed' },

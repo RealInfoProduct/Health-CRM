@@ -16,7 +16,7 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Appointments',
-    iconName: 'report-medical',
+    iconName: 'checkup-list',
     route: '/apps/appointments',
   },
   {
