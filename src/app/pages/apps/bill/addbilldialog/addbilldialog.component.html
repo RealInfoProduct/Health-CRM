@@ -68,7 +68,7 @@
             <div class="col-lg-6">
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Total</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
-                    <input type="text" formControlName="total" placeholder="Total" matInput require />
+                    <input type="number" formControlName="total" placeholder="Total" matInput require />
                     <mat-error *ngIf="billForm.get('total').errors && billForm.get('total').errors['required']">
                         Total is required
                     </mat-error>
@@ -78,7 +78,7 @@
             <div class="col-lg-6">
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Discount %</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
-                    <input type="text" formControlName="discount" placeholder="Discount" matInput require />
+                    <input type="number" formControlName="discount" placeholder="Discount" matInput require />
                     <mat-error *ngIf="billForm.get('discount').errors && billForm.get('discount').errors['required']">
                         Discount is required
                     </mat-error>
@@ -88,7 +88,7 @@
             <div class="col-lg-6">
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Tax %</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
-                    <input type="text" formControlName="tax" placeholder="Tax" matInput require />
+                    <input type="number" formControlName="tax" placeholder="Tax" matInput require />
                     <mat-error *ngIf="billForm.get('tax').errors && billForm.get('tax').errors['required']">
                         Tax is required
                     </mat-error>
@@ -98,7 +98,7 @@
             <div class="col-lg-6">
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Final Total</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
-                    <input type="text" formControlName="finalTotal" placeholder="Final Total" matInput require />
+                    <input type="number" formControlName="finalTotal" placeholder="Final Total" matInput require />
                     <mat-error
                         *ngIf="billForm.get('finalTotal').errors && billForm.get('finalTotal').errors['required']">
                         Final Total is required

@@ -17,7 +17,7 @@
             <div class="col-lg-6">
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Mobile Number</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
-                    <input type="text" formControlName="mobileNumber" placeholder="Mobile Number" matInput require
+                    <input type="number" formControlName="mobileNumber" placeholder="Mobile Number" matInput require
                         onKeyPress="if(this.value.length==10) return false;" min="0" />
                     <mat-error
                         *ngIf="addlabForm.get('mobileNumber').errors && addlabForm.get('mobileNumber').errors['required']">
@@ -33,7 +33,7 @@
             <div class="col-lg-6">
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Age</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
-                    <input type="text" formControlName="age" placeholder="Age"
+                    <input type="number" formControlName="age" placeholder="Age"
                         onKeyPress="if(this.value.length==3) return false;" matInput require min="0" />
                     <mat-error *ngIf="addlabForm.get('age').errors && addlabForm.get('age').errors['required']">
                         Age is required
