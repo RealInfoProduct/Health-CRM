@@ -15,6 +15,11 @@ export const navItems: NavItem[] = [
     route: '/dashboards/dashboard2',
   },
   {
+    displayName: 'Appointments',
+    iconName: 'report-medical',
+    route: '/apps/appointments',
+  },
+  {
     displayName: 'Medical',
     iconName: 'report-medical',
     route: '/apps/medical',
