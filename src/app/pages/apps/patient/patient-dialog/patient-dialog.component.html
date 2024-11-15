@@ -2,6 +2,7 @@
 <mat-dialog-content class="p-t-20" *ngIf="action !== 'Delete'; else elseTemplate">
     <form [formGroup]="PatientForm">
         <div class="row">
+            
             <div class="col-lg-6">
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">First Name</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
@@ -12,6 +13,7 @@
                     </mat-error>
                 </mat-form-field>
             </div>
+
             <div class="col-lg-6">
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Last Name</mat-label>
                 <mat-form-field appearance="outline" class="w-100">
@@ -29,7 +31,7 @@
                         onKeyPress="if(this.value.length==10) return false;" matInput min="0" />
                     <mat-error
                         *ngIf="PatientForm.get('mobileNumber').errors && PatientForm.get('mobileNumber').errors['required']">
-                        Mobile Number is required
+                        Mobile number is required
                     </mat-error>
                     <mat-error
                         *ngIf="PatientForm.get('mobileNumber').errors && PatientForm.get('mobileNumber').errors['pattern']">
@@ -37,42 +39,60 @@
                     </mat-error>
                 </mat-form-field>
             </div>
+
             <div class="col-lg-6">
-                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Address</mat-label>
-                <mat-form-field appearance="outline" class="w-100">
-                    <input type="text" placeholder="Address" formControlName="address" matInput />
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Address</mat-label>
+                    <input type="text" placeholder="Enter address" formControlName="address" matInput />
                     <mat-error
                         *ngIf="PatientForm.get('address').errors && PatientForm.get('address').errors['required']">
                         Address is required
                     </mat-error>
                 </mat-form-field>
             </div>
+
             <div class="col-lg-6">
-                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Blood Group</mat-label>
-                <mat-form-field appearance="outline" class="w-100">
-                    <input type="text" placeholder="Blood Group" formControlName="bloodGroup" matInput />
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Blood Group</mat-label>
+                    <input type="text" placeholder="Enter blood group" formControlName="bloodGroup" matInput />
                 </mat-form-field>
             </div>
+
             <div class="col-lg-6">
-                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">DOB</mat-label>
-                <mat-form-field class="w-100" appearance="outline">
-                    <input matInput [matDatepicker]="touchpic" placeholder="DOB" formControlName="dob" />
+                <mat-form-field class="w-100 m-t-10" appearance="outline">
+                    <mat-label>Date</mat-label>
+                    <input matInput [matDatepicker]="touchpic" placeholder="Enter date" formControlName="date" />
                     <mat-datepicker-toggle matIconSuffix [for]="touchpic"></mat-datepicker-toggle>
                     <mat-datepicker touchUi #touchpic></mat-datepicker>
-                    <mat-error *ngIf="PatientForm.get('dob').errors && PatientForm.get('dob').errors['required']">
-                        DOB is required
+                    <mat-error *ngIf="PatientForm.get('date').errors && PatientForm.get('date').errors['required']">
+                        Date is required
                     </mat-error>
                 </mat-form-field>
             </div>
+
             <div class="col-lg-6">
-                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Age</mat-label>
-                <mat-form-field appearance="outline" class="w-100">
-                    <input type="number" placeholder="Age" formControlName="age" matInput />
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Age</mat-label>
+                    <input type="number" placeholder="Enter age" formControlName="age" matInput />
                     <mat-error *ngIf="PatientForm.get('age').errors && PatientForm.get('age').errors['required']">
                         Age is required
                     </mat-error>
                 </mat-form-field>
             </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Laboratory Name</mat-label>
+                    <mat-select #dropdown formControlName="laboratoryName" placeholder="Enter laboratory name">
+                        <mat-option [value]="item.id" *ngFor="let item of laboratorylist">{{item.laboratoryName}}</mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="PatientForm.get('laboratoryName').errors && PatientForm.get('laboratoryName').errors['required']">
+                        Laboratory name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
             <div class="col-lg-6">
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Gender</mat-label>
                 <mat-radio-group aria-label="Select an option" formControlName="gender">
@@ -83,28 +103,24 @@
                     </mat-error>
                 </mat-radio-group>
             </div>
+           
         </div>
-        <mat-divider></mat-divider>
-        <mat-dialog-actions class="m-t-10 justify-content-end">
-            <button mat-flat-button mat-flat-button color="primary" (click)="Adddata();"
-                [disabled]="action !== 'Delete' && PatientForm.invalid">
-                {{action}}
-            </button>
-            <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">
-                Cancel
-            </button>
-        </mat-dialog-actions>
     </form>
 </mat-dialog-content>
+
+<mat-divider></mat-divider>
+<mat-dialog-actions class="p-24 justify-content-end">
+    <button mat-stroked-button color="warn"  mat-dialog-close class="m-l-8" >
+        Cancel
+    </button>
+    <button mat-flat-button mat-flat-button [mat-dialog-close]="true" color="primary" (click)="Adddata();"
+        [disabled]="action !== 'Delete' && PatientForm.invalid">
+        {{action}}
+    </button>
+</mat-dialog-actions>
 <ng-template #elseTemplate>
     <div class="p-x-24">
         <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
     </div>
     <mat-divider></mat-divider>
-    <div mat-dialog-actions class="p-x-24 p-b-24 m-t-10 justify-content-end">
-        <button mat-button (click)="Adddata();" mat-flat-button color="warn">
-            {{action}}
-        </button>
-        <button mat-stroked-button color="warn" (click)="closeDialog()" class="m-l-8">Cancel</button>
-    </div>
 </ng-template>

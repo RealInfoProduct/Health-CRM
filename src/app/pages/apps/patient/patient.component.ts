@@ -11,25 +11,27 @@ import { Timestamp } from 'firebase/firestore';
   templateUrl: './patient.component.html',
   styleUrls: ['./patient.component.scss']
 })
-export class PatientComponent {
+export class PatientComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
 
   PatientColumns: string[] = [
     'id',
+    'laboratoryName',
     'firstName',
     'lastName',
     'mobileNumber',
     'address',
     'bloodGroup',
-    'dob',
+    'date',
     'age',
     'gender',
     'action'
   ];
 
-  Patientlist: any = []
+  patientlist: any = []
+  laboratorylist: any = []
 
-  dataSource = new MatTableDataSource(this.Patientlist)
+  dataSource = new MatTableDataSource(this.patientlist)
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(
@@ -44,19 +46,33 @@ export class PatientComponent {
     return null;
   }
 
-  ngAfterViewInit(): void {
-    this.getPatientData() 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  ngOnInit(): void {
+    this.getPatientData()
+    this.getlaboratoryData() 
+  }
+
+  getlaboratoryData() {
+    this.firebaseCollectionService.getDocuments('ClinicList', 'laboratorylist').then((laboratory) => {
+      this.laboratorylist = laboratory
+    }).catch((error) => {
+      console.error('Error fetching laboratory:', error);
+    });
   }
 
   getPatientData() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'Patientlist').then((Patient) => {
-      this.Patientlist = Patient
-      console.log('this.Patientlist=====',this.Patientlist);
-      if (Patient && Patient.length > 0) {
-        this.dataSource = new MatTableDataSource(this.Patientlist);
+    this.firebaseCollectionService.getDocuments('ClinicList', 'patientlist').then((patient) => {
+      this.patientlist = patient
+      console.log('this.Patientlist=====',this.patientlist);
+      if (patient && patient.length > 0) {
+        this.dataSource = new MatTableDataSource(this.patientlist);
       } else {
-        this.Patientlist = [];
-        this.dataSource = new MatTableDataSource(this.Patientlist);
+        this.patientlist = [];
+        this.dataSource = new MatTableDataSource(this.patientlist);
       }
     }).catch((error) => {
       console.error('Error fetching laboratory:', error);
@@ -71,21 +87,26 @@ export class PatientComponent {
     })
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('ClinicList', result.data, 'Patientlist')
+        this.firebaseCollectionService.addDocument('ClinicList', result.data, 'patientlist')
         this.getPatientData()
       }
       if (result?.event === 'Update') {
-        this.Patientlist.forEach((element: any) => {
+        this.patientlist.forEach((element: any) => {
           if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('ClinicList', obj.id, result.data, 'Patientlist');
+            this.firebaseCollectionService.updateDocument('ClinicList', obj.id, result.data, 'patientlist');
             this.getPatientData()
           }
         })
       }
       if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('ClinicList', obj.id, 'Patientlist');
+        this.firebaseCollectionService.deleteDocument('ClinicList', obj.id, 'patientlist');
         this.getPatientData()
       }
     });
   }
+
+  getlaboratorylist(laboratoryId: string): string {  
+    return this.laboratorylist.find((laboratoryObj:any) => laboratoryObj.id === laboratoryId)?.laboratoryName ;
+  }
+
 }

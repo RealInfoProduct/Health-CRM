@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AddbilldialogComponent } from './addbilldialog/addbilldialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -11,7 +11,7 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   templateUrl: './bill.component.html',
   styleUrls: ['./bill.component.scss']
 })
-export class BillComponent {
+export class BillComponent implements OnInit{
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   searchText: any;
 
@@ -30,6 +30,7 @@ export class BillComponent {
   ]
 
   billlist: any = []
+  appointmentslist: any = []
 
   dataSource = new MatTableDataSource(this.billlist)
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -39,9 +40,19 @@ export class BillComponent {
     private firebaseCollectionService: FirebaseCollectionService
   ) { }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
     this.getbilldata()
+    this.getappointmentdata()
+  }
+
+  getappointmentdata() {
+    this.firebaseCollectionService.getDocuments('ClinicList', 'appointmentslist').then((appointment) => {
+      this.appointmentslist = appointment
+      console.log('this.appointmentslist=====',this.appointmentslist);
+    }).catch((error) => {
+      console.error('Error fetching laboratory:', error);
+    });
   }
 
   getbilldata() {
@@ -95,5 +106,9 @@ export class BillComponent {
       }
 
     })
+  }
+
+  getAppointmentlist(appointmentId: string): string {  
+    return this.appointmentslist.find((appointmentObj:any) => appointmentObj.id === appointmentId)?.firstName  ;
   }
 }

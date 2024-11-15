@@ -47,13 +47,17 @@ export class AppointmentsDialogComponent implements OnInit {
   ngOnInit(): void {
     this.addAppointmentsList()
     if (this.action === 'Update') {
-      this.appointmentsForm.controls['patientName'].setValue(this.local_data.patientName)
+      this.appointmentsForm.controls['firstName'].setValue(this.local_data.firstName)
+      this.appointmentsForm.controls['lastName'].setValue(this.local_data.lastName)
       this.appointmentsForm.controls['doctorName'].setValue(this.local_data.doctorName)
       this.appointmentsForm.controls['gender'].setValue(this.local_data.gender)
       this.appointmentsForm.controls['date'].setValue(this.convertTimestamp(this.local_data.date))
       this.appointmentsForm.controls['time'].setValue(this.local_data.time)
+      this.appointmentsForm.controls['address'].setValue(this.local_data.address)
       this.appointmentsForm.controls['mobileNumber'].setValue(this.local_data.mobileNumber)
       this.appointmentsForm.controls['email'].setValue(this.local_data.email)
+      this.appointmentsForm.controls['bloodGroup'].setValue(this.local_data.bloodGroup)
+      this.appointmentsForm.controls['age'].setValue(this.local_data.age)
       this.appointmentsForm.controls['appointmentStatus'].setValue(this.local_data.appointmentStatus)
       this.appointmentsForm.controls['visitType'].setValue(this.local_data.visitType)
       this.appointmentsForm.controls['paymentMethod'].setValue(this.local_data.paymentMethod)
@@ -83,13 +87,17 @@ export class AppointmentsDialogComponent implements OnInit {
 
   addAppointmentsList() {
     this.appointmentsForm = this.fb.group({
-      patientName: ['', Validators.required],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       doctorName: ['', Validators.required],
       gender: ['', Validators.required],
-      date: ['', Validators.required],
+      date: [new Date(), Validators.required],
       time: ['', Validators.required],
+      address: ['', Validators.required],
       mobileNumber: ['', Validators.required],
       email: [''],
+      bloodGroup: [''],
+      age: ['', Validators.required],
       appointmentStatus: ['', Validators.required],
       visitType: ['', Validators.required],
       paymentMethod: ['', Validators.required]
@@ -98,22 +106,21 @@ export class AppointmentsDialogComponent implements OnInit {
 
   doAction() {
     const payload = {
-      patientName: this.appointmentsForm.value.patientName,
+      firstName: this.appointmentsForm.value.firstName,
+      lastName: this.appointmentsForm.value.lastName,
       doctorName: this.appointmentsForm.value.doctorName,
       gender: this.appointmentsForm.value.gender,
       date: this.appointmentsForm.value.date,
       time: this.appointmentsForm.value.time,
+      address: this.appointmentsForm.value.address,
       mobileNumber: this.appointmentsForm.value.mobileNumber,
       email: this.appointmentsForm.value.email,
+      bloodGroup: this.appointmentsForm.value.bloodGroup,
+      age: this.appointmentsForm.value.age,
       appointmentStatus: this.appointmentsForm.value.appointmentStatus,
       visitType: this.appointmentsForm.value.visitType,
       paymentMethod: this.appointmentsForm.value.paymentMethod
     }
     this.dialogRef.close({ event: this.action, data: payload });
   }
-
-  closeDialog() {
-    this.dialogRef.close({ event: 'Cancel' });
-  }
-
 }

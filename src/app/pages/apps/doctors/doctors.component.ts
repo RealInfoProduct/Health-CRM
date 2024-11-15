@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AdddoctorsdialogComponent } from './adddoctorsdialog/adddoctorsdialog.component';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -11,7 +11,7 @@ import { Timestamp } from 'firebase/firestore';
   templateUrl: './doctors.component.html',
   styleUrls: ['./doctors.component.scss']
 })
-export class DoctorsComponent {
+export class DoctorsComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   searchText: any;
 
@@ -49,7 +49,7 @@ export class DoctorsComponent {
   }
 
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
     this.getdoctorsdata()
   }

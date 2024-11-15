@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Timestamp } from 'firebase/firestore';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-patient-dialog',
@@ -13,10 +14,13 @@ export class PatientDialogComponent implements OnInit {
   action: string;
   local_data: any;
 
+  laboratorylist: any = []
+
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<PatientDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
+    private firebaseCollectionService: FirebaseCollectionService
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
@@ -30,10 +34,22 @@ export class PatientDialogComponent implements OnInit {
       this.PatientForm.controls['mobileNumber'].setValue(this.local_data.mobileNumber)
       this.PatientForm.controls['address'].setValue(this.local_data.address)
       this.PatientForm.controls['bloodGroup'].setValue(this.local_data.bloodGroup)
-      this.PatientForm.controls['dob'].setValue(this.convertTimestamp(this.local_data.dob))
+      this.PatientForm.controls['date'].setValue(this.convertTimestamp(this.local_data.date))
       this.PatientForm.controls['age'].setValue(this.local_data.age)
       this.PatientForm.controls['gender'].setValue(this.local_data.gender)
+      this.PatientForm.controls['laboratoryName'].setValue(this.local_data.laboratoryName)
     }
+    this.getlaboratoryData()
+  }
+
+  getlaboratoryData() {
+    this.firebaseCollectionService.getDocuments('ClinicList', 'laboratorylist').then((laboratory) => {
+      if (laboratory && laboratory.length > 0) {
+        this.laboratorylist = laboratory
+      } 
+    }).catch((error) => {
+      console.error('Error fetching laboratory:', error);
+    });
   }
 
   convertTimestamp(element : any): Date | null {
@@ -51,9 +67,10 @@ export class PatientDialogComponent implements OnInit {
       mobileNumber: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
       address: ['', Validators.required],
       bloodGroup: [''],
-      dob: ['', Validators.required],
+      date: [new Date(), Validators.required],
       age: ['', Validators.required],
       gender: ['', Validators.required],
+      laboratoryName: ['', Validators.required],
     })
   }
 
@@ -64,16 +81,13 @@ export class PatientDialogComponent implements OnInit {
       mobileNumber: this.PatientForm.value.mobileNumber,
       address: this.PatientForm.value.address,
       bloodGroup: this.PatientForm.value.bloodGroup,
-      dob: this.PatientForm.value.dob,
+      date: this.PatientForm.value.date,
       age: this.PatientForm.value.age,
-      gender: this.PatientForm.value.gender
+      gender: this.PatientForm.value.gender,
+      laboratoryName: this.PatientForm.value.laboratoryName
     }
     this.dialogRef.close({ event: this.action, data: payload });
 
-  }
-
-  closeDialog(): void {
-    this.dialogRef.close({ event: 'Cancel' });
   }
 
 }

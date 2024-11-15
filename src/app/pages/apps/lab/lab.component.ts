@@ -11,7 +11,7 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   styleUrls: ['./lab.component.scss']
 })
 
-export class LabComponent {
+export class LabComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   searchText: any;
 
@@ -38,7 +38,7 @@ export class LabComponent {
     private firebaseCollectionService: FirebaseCollectionService
   ) { }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
     this.getlabdata()
   }

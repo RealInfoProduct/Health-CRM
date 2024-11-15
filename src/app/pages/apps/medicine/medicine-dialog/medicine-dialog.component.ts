@@ -16,7 +16,6 @@ export class MedicineDialogComponent implements OnInit {
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<MedicineDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any
-
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
@@ -53,7 +52,6 @@ export class MedicineDialogComponent implements OnInit {
     this.addmedicineForm.get('rate')?.valueChanges.subscribe(() => this.updateAmount());
     this.addmedicineForm.get('discount')?.valueChanges.subscribe(() => this.updateAmount());
     this.addmedicineForm.get('gst')?.valueChanges.subscribe(() => this.updateAmount());
-
   }
 
   updateAmount(): void {
@@ -61,19 +59,19 @@ export class MedicineDialogComponent implements OnInit {
     const rate = this.addmedicineForm.get('rate')?.value;
     const discount = this.addmedicineForm.get('discount')?.value;
     const gst = this.addmedicineForm.get('gst')?.value;
-  
-    if (qty != null && rate != null ) {
+
+    if (qty != null && rate != null) {
 
       const amount = qty * rate;
 
       this.addmedicineForm.get('amount')?.setValue(parseFloat(amount.toFixed(2)), { emitEvent: false });
 
       const discountedAmount = amount - (amount * discount / 100);
-  
+
       const netAmount = discountedAmount + (discountedAmount * gst / 100);
-  
+
       this.addmedicineForm.get('netamount')?.setValue(parseFloat(netAmount.toFixed(2)), { emitEvent: false });
-  
+
     }
   }
 
@@ -92,7 +90,4 @@ export class MedicineDialogComponent implements OnInit {
     this.dialogRef.close({ event: this.action, data: payload });
   }
 
-  closeDialog(): void {
-    this.dialogRef.close({ event: 'Cancel' });
-  }
 }

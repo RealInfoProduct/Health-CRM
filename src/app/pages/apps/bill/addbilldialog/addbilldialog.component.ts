@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Timestamp } from 'firebase/firestore';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-addbilldialog',
@@ -24,11 +25,14 @@ export class AddbilldialogComponent implements OnInit {
     { id: 3, name: 'Debit Card' },
     { id: 4, name: 'Net Banking' }
   ]
+  appointmentslist: any =[]
 
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<AddbilldialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
+    private firebaseCollectionService: FirebaseCollectionService
+
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
@@ -47,6 +51,16 @@ export class AddbilldialogComponent implements OnInit {
       this.billForm.controls['tax'].setValue(this.local_data.tax)
       this.billForm.controls['finalTotal'].setValue(this.local_data.finalTotal)
     }
+    this.getappointmentdata()
+    
+  }
+
+  getappointmentdata() {
+    this.firebaseCollectionService.getDocuments('ClinicList', 'appointmentslist').then((appointment) => {
+      if (appointment && appointment.length > 0) {
+        this.appointmentslist = appointment
+      }
+    })
   }
 
   convertTimestamp(element: any): Date | null {
@@ -97,10 +111,6 @@ export class AddbilldialogComponent implements OnInit {
     const discountAmount = total - (total * discount / 100)
     const finalTotal = discountAmount + (discountAmount * tax / 100)
     this.billForm.get('finalTotal')?.setValue(finalTotal, { emitEvent: false });
-  }
-
-  closeDialog() {
-    this.dialogRef.close({ event: 'Cancel' });
   }
 
 }

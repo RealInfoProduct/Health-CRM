@@ -34,9 +34,7 @@ export class LaboratoryComponent implements OnInit {
     private firebaseCollectionService: FirebaseCollectionService
   ) { }
 
-  ngOnInit(): void { }
-
-  ngAfterViewInit(): void {
+  ngOnInit(): void { 
     this.dataSource.paginator = this.paginator;
     this.getlaboratoryData()
   }

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MedicineDialogComponent } from './medicine-dialog/medicine-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,7 +10,7 @@ import { MatPaginator } from '@angular/material/paginator';
   templateUrl: './medicine.component.html',
   styleUrls: ['./medicine.component.scss']
 })
-export class MedicineComponent {
+export class MedicineComponent implements OnInit{
 
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   searchText: any;
@@ -39,7 +39,7 @@ export class MedicineComponent {
     public dialog: MatDialog,
     private firebaseCollectionService:FirebaseCollectionService) { }
 
-    ngAfterViewInit(){
+    ngOnInit(): void {
       this.dataSource.paginator = this.paginator
       this.getmedicineData()
     }

@@ -62,8 +62,4 @@ export class AddlaboratorydialogComponent implements OnInit {
     this.dialogRef.close({ event: this.action, data: payload });
   }
 
-  closeDialog(): void {
-    this.dialogRef.close({ event: 'Cancel' });
-  }
-
 }

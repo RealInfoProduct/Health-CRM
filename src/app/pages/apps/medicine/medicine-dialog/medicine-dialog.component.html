@@ -4,31 +4,31 @@
         <div class="row">
 
             <div class="col-lg-6">
-                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Medicine Name</mat-label>
-                <mat-form-field appearance="outline" class="w-100">
-                    <input type="text" formControlName="medicineName" placeholder="Medicine Name" matInput require />
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Medicine Name</mat-label>
+                    <input type="text" formControlName="medicineName" placeholder="Enter medicine name" matInput require />
                     <mat-error
                         *ngIf="addmedicineForm.get('medicineName').errors && addmedicineForm.get('medicineName').errors['required']">
-                        Medicine Name is required
+                        Medicine name is required
                     </mat-error>
                 </mat-form-field>
             </div>
 
             <div class="col-lg-6">
-                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Company Name</mat-label>
-                <mat-form-field appearance="outline" class="w-100">
-                    <input type="text" formControlName="companyName" placeholder="Company Name" matInput require />
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Company Name</mat-label>
+                    <input type="text" formControlName="companyName" placeholder="Enter company name" matInput require />
                     <mat-error
                         *ngIf="addmedicineForm.get('companyName').errors && addmedicineForm.get('companyName').errors['required']">
-                        Company Name is required
+                        Company name is required
                     </mat-error>
                 </mat-form-field>
             </div>
 
             <div class="col-lg-6">
-                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Pack</mat-label>
-                <mat-form-field appearance="outline" class="w-100">
-                    <input type="text" formControlName="pack" placeholder="Pack" matInput require min="0" />
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Pack</mat-label>
+                    <input type="text" formControlName="pack" placeholder="Enter pack" matInput require min="0" />
                     <mat-error
                         *ngIf="addmedicineForm.get('pack').errors && addmedicineForm.get('pack').errors['required']">
                         Pack is required
@@ -37,9 +37,9 @@
             </div>
 
             <div class="col-lg-6">
-                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Qty</mat-label>
-                <mat-form-field appearance="outline" class="w-100">
-                    <input type="number" formControlName="qty" placeholder="Qty" matInput require min="0" />
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Qty</mat-label>
+                    <input type="number" formControlName="qty" placeholder="Enter qty" matInput require min="0" />
                     <mat-error
                         *ngIf="addmedicineForm.get('qty').errors && addmedicineForm.get('qty').errors['required']">
                         Qty is required
@@ -48,9 +48,9 @@
             </div>
 
             <div class="col-lg-6">
-                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Rate</mat-label>
-                <mat-form-field appearance="outline" class="w-100">
-                    <input type="number" formControlName="rate" placeholder="Rate" matInput require min="0" />
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Rate</mat-label>
+                    <input type="number" formControlName="rate" placeholder="Enter rate" matInput require min="0" />
                     <mat-error
                         *ngIf="addmedicineForm.get('rate').errors && addmedicineForm.get('rate').errors['required']">
                         Rate is required
@@ -59,9 +59,9 @@
             </div>
 
             <div class="col-lg-6">
-                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Amount</mat-label>
-                <mat-form-field appearance="outline" class="w-100">
-                    <input type="number" formControlName="amount" placeholder="Amount" matInput require min="0" />
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Amount</mat-label>
+                    <input type="number" formControlName="amount" placeholder="Enter amount" matInput require min="0" />
                     <mat-error
                         *ngIf="addmedicineForm.get('amount').errors && addmedicineForm.get('amount').errors['required']">
                         Amount is required
@@ -70,9 +70,9 @@
             </div>
 
             <div class="col-lg-4">
-                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Discount %</mat-label>
-                <mat-form-field appearance="outline" class="w-100">
-                    <input type="number" formControlName="discount" placeholder="Discount" matInput require min="0" />
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Discount %</mat-label>
+                    <input type="number" formControlName="discount" placeholder="Enter discount" matInput require min="0" />
                     <mat-error
                         *ngIf="addmedicineForm.get('discount').errors && addmedicineForm.get('discount').errors['required']">
                         Discount is required
@@ -81,9 +81,9 @@
             </div>
 
             <div class="col-lg-4">
-                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">GST %</mat-label>
-                <mat-form-field appearance="outline" class="w-100">
-                    <input type="number" formControlName="gst" placeholder="GST" matInput require min="0" />
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>GST %</mat-label>
+                    <input type="number" formControlName="gst" placeholder="Enter GST" matInput require min="0" />
                     <mat-error
                         *ngIf="addmedicineForm.get('gst').errors && addmedicineForm.get('gst').errors['required']">
                         GST is required
@@ -92,38 +92,32 @@
             </div>
 
             <div class="col-lg-4">
-                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">NetAmount</mat-label>
-                <mat-form-field appearance="outline" class="w-100">
-                    <input type="number" formControlName="netamount" placeholder="NetAmount" matInput require min="0" />
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>NetAmount</mat-label>
+                    <input type="number" formControlName="netamount" placeholder="Enter netamount" matInput require min="0" />
                     <mat-error
                         *ngIf="addmedicineForm.get('netamount').errors && addmedicineForm.get('netamount').errors['required']">
-                        NetAmount is required
+                        Netamount is required
                     </mat-error>
                 </mat-form-field>
             </div>
 
         </div>
-        <mat-divider></mat-divider>
-        <mat-dialog-actions class="m-t-10 justify-content-end">
-            <button mat-flat-button (click)="doAction()" mat-flat-button color="primary"
-                [disabled]="!addmedicineForm.valid">
-                {{action}}
-            </button>
-            <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">
-                Cancel
-            </button>
-        </mat-dialog-actions>
     </form>
 </mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions class="p-24 justify-content-end">
+    <button mat-stroked-button color="warn" class="m-l-8" mat-dialog-close>
+        Cancel
+    </button>
+    <button mat-flat-button (click)="doAction()" [mat-dialog-close]="true" mat-flat-button color="primary"
+        [disabled]="action !== 'Delete' && addmedicineForm.invalid">
+        {{action}}
+    </button>
+</mat-dialog-actions>
 <ng-template #elseTemplate>
     <div class="p-x-24">
         <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
     </div>
     <mat-divider></mat-divider>
-    <div mat-dialog-actions class="p-x-24 p-b-24 m-t-10 justify-content-end">
-        <button mat-button (click)="doAction()" mat-flat-button color="warn">
-            {{action}}
-        </button>
-        <button mat-stroked-button color="warn" (click)="closeDialog()" class="m-l-8">Cancel</button>
-    </div>
 </ng-template>

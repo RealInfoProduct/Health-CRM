@@ -10,7 +10,7 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
   templateUrl: './medical.component.html',
   styleUrls: ['./medical.component.scss']
 })
-export class MedicalComponent {
+export class MedicalComponent implements OnInit{
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   searchText: any;
 
@@ -36,7 +36,7 @@ export class MedicalComponent {
 
 
 
-  ngAfterViewInit(): void {
+    ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
     this.getMedicalData()
   }

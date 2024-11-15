@@ -12,7 +12,7 @@ import { error } from 'console';
   templateUrl: './appointments.component.html',
   styleUrls: ['./appointments.component.scss']
 })
-export class AppointmentsComponent {
+export class AppointmentsComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   searchText: any;
 
@@ -23,8 +23,11 @@ export class AppointmentsComponent {
     'gender',
     'date',
     'time',
+    'address',
     'mobileNumber',
     'email',
+    'bloodGroup',
+    'age',
     'appointmentStatus',
     'visitType',
     'paymentMethod',
@@ -42,7 +45,7 @@ export class AppointmentsComponent {
     private firebaseCollectionService: FirebaseCollectionService
   ) { }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
     this.getappointmentdata()
     this.getdoctorsdata()
