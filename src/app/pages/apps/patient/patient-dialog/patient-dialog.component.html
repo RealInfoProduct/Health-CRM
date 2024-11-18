@@ -2,31 +2,23 @@
 <mat-dialog-content class="p-t-20" *ngIf="action !== 'Delete'; else elseTemplate">
     <form [formGroup]="PatientForm">
         <div class="row">
-            
+        
             <div class="col-lg-6">
-                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">First Name</mat-label>
-                <mat-form-field appearance="outline" class="w-100">
-                    <input type="text" placeholder="First Name" formControlName="firstName" matInput />
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Patient Name</mat-label>
+                    <mat-select #dropdown formControlName="patientName" placeholder="Enter patient name">
+                        <mat-option [value]="item.id" *ngFor="let item of appointmentslist">{{item.firstName}} {{item.lastName}}</mat-option>
+                    </mat-select>
                     <mat-error
-                        *ngIf="PatientForm.get('firstName').errors && PatientForm.get('firstName').errors['required']">
-                        First Name is required
+                        *ngIf="PatientForm.get('patientName').errors && PatientForm.get('patientName').errors['required']">
+                        Patient name is required
                     </mat-error>
                 </mat-form-field>
             </div>
 
             <div class="col-lg-6">
-                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Last Name</mat-label>
-                <mat-form-field appearance="outline" class="w-100">
-                    <input type="text" placeholder="Last Name" formControlName="lastName" matInput />
-                    <mat-error
-                        *ngIf="PatientForm.get('lastName').errors && PatientForm.get('lastName').errors['required']">
-                        Last Name is required
-                    </mat-error>
-                </mat-form-field>
-            </div>
-            <div class="col-lg-6">
-                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Mobile Number</mat-label>
-                <mat-form-field appearance="outline" class="w-100">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label >Mobile Number</mat-label>
                     <input type="number" placeholder="Mobile Number" formControlName="mobileNumber"
                         onKeyPress="if(this.value.length==10) return false;" matInput min="0" />
                     <mat-error
@@ -71,11 +63,37 @@
             </div>
 
             <div class="col-lg-6">
+                <mat-form-field class="w-100 m-t-10">
+                    <mat-label>Time</mat-label>
+                    <input type="text" matInput [ngxMatTimepicker]="timepicker" formControlName="time"
+                        placeholder="Select time" />
+                    <ngx-mat-timepicker-toggle [for]="timepicker" matSuffix></ngx-mat-timepicker-toggle>
+                    <ngx-mat-timepicker #timepicker></ngx-mat-timepicker>
+                    <mat-error *ngIf="PatientForm.get('time')?.invalid && PatientForm.get('time')?.touched">
+                        Time is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Age</mat-label>
                     <input type="number" placeholder="Enter age" formControlName="age" matInput />
                     <mat-error *ngIf="PatientForm.get('age').errors && PatientForm.get('age').errors['required']">
                         Age is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Doctor Name</mat-label>
+                    <mat-select #dropdown formControlName="doctorName" placeholder="Enter doctor name">
+                        <mat-option [value]="item.id" *ngFor="let item of doctorslist">{{item.doctorsName}}</mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="PatientForm.get('doctorName').errors && PatientForm.get('doctorName').errors['required']">
+                        Doctor name is required
                     </mat-error>
                 </mat-form-field>
             </div>
@@ -102,6 +120,46 @@
                         Gender is required
                     </mat-error>
                 </mat-radio-group>
+            </div>
+            
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Appointment Status</mat-label>
+                    <mat-select #dropdown formControlName="appointmentStatus" placeholder="Select appointment status">
+                        <mat-option [value]="item.name"
+                            *ngFor="let item of appointmentStatusList">{{item.name}}</mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="PatientForm.get('appointmentStatus').errors && PatientForm.get('appointmentStatus').errors['required']">
+                        Appointment status is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Visit Type</mat-label>
+                    <mat-select #dropdown formControlName="visitType" placeholder="Select visit type">
+                        <mat-option [value]="item.name" *ngFor="let item of visitTypeList">{{item.name}}</mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="PatientForm.get('visitType').errors && PatientForm.get('visitType').errors['required']">
+                        Visit type is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Payment Method</mat-label>
+                    <mat-select #dropdown formControlName="paymentMethod" placeholder="Select payment method">
+                        <mat-option [value]="item.name" *ngFor="let item of paymentMethodList">{{item.name}}</mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="PatientForm.get('paymentMethod').errors && PatientForm.get('paymentMethod').errors['required']">
+                        Payment method is required
+                    </mat-error>
+                </mat-form-field>
             </div>
            
         </div>

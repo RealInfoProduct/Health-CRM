@@ -16,20 +16,26 @@ export class PatientComponent implements OnInit {
 
   PatientColumns: string[] = [
     'id',
+    'patientName',
     'laboratoryName',
-    'firstName',
-    'lastName',
+    'doctorName',
     'mobileNumber',
     'address',
     'bloodGroup',
     'date',
+    'time',
     'age',
     'gender',
+    'appointmentStatus',
+    'visitType',
+    'paymentMethod',
     'action'
   ];
 
   patientlist: any = []
   laboratorylist: any = []
+  doctorslist: any = []
+  appointmentslist: any = []
 
   dataSource = new MatTableDataSource(this.patientlist)
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -41,9 +47,9 @@ export class PatientComponent implements OnInit {
 
   convertTimestamp(element: any): Date | null {
     if (element instanceof Timestamp) {
-      return element.toDate();
+      return element.toDate(); 
     }
-    return null;
+    return null;    
   }
 
   applyFilter(event: Event) {
@@ -54,6 +60,26 @@ export class PatientComponent implements OnInit {
   ngOnInit(): void {
     this.getPatientData()
     this.getlaboratoryData() 
+    this.getdoctorsdata()
+    this.getappointmentdata()
+  }
+
+
+  getappointmentdata() {
+    this.firebaseCollectionService.getDocuments('ClinicList', 'appointmentslist').then((appointment) => {
+      this.appointmentslist = appointment
+      console.log('this.appointmentslist=====>>>',this.appointmentslist);
+    }).catch((error) =>{
+      console.error('Error fetching doctors:', error);
+    }) 
+  }
+
+  getdoctorsdata() {
+    this.firebaseCollectionService.getDocuments('ClinicList', 'doctorslist').then((doctors) => {
+      this.doctorslist = doctors 
+    }).catch((error) =>{
+      console.error('Error fetching doctors:', error);
+    }) 
   }
 
   getlaboratoryData() {
@@ -70,14 +96,17 @@ export class PatientComponent implements OnInit {
       console.log('this.Patientlist=====',this.patientlist);
       if (patient && patient.length > 0) {
         this.dataSource = new MatTableDataSource(this.patientlist);
+        this.dataSource.paginator = this.paginator
       } else {
         this.patientlist = [];
         this.dataSource = new MatTableDataSource(this.patientlist);
+        this.dataSource.paginator = this.paginator
       }
     }).catch((error) => {
       console.error('Error fetching laboratory:', error);
     });
   }
+
 
   openPatientDialog(action: string, obj: any) {
     obj.action = action;
@@ -107,6 +136,14 @@ export class PatientComponent implements OnInit {
 
   getlaboratorylist(laboratoryId: string): string {  
     return this.laboratorylist.find((laboratoryObj:any) => laboratoryObj.id === laboratoryId)?.laboratoryName ;
+  }
+
+  getDoctorslist(doctorId: string): string {  
+    return this.doctorslist.find((doctorObj:any) => doctorObj.id === doctorId)?.doctorsName ;
+  }
+
+  getappointmentlist(appointmentId: string): string {  
+    return this.appointmentslist.find((appointmentObj:any) => appointmentObj.id === appointmentId)?.firstName ;
   }
 
 }
