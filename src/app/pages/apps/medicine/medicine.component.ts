@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MedicineDialogComponent } from './medicine-dialog/medicine-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,6 +19,7 @@ export class MedicineComponent implements OnInit{
     'id',
     'medicineName',
     'companyName',
+    'category',
     'pack',
     'qty',
     'rate',

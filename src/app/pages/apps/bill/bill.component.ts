@@ -111,4 +111,5 @@ export class BillComponent implements OnInit{
   getAppointmentlist(appointmentId: string): string {  
     return this.appointmentslist.find((appointmentObj:any) => appointmentObj.id === appointmentId)?.firstName  ;
   }
+
 }

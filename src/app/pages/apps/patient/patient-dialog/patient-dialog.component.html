@@ -8,6 +8,7 @@
                     <mat-label>Patient Name</mat-label>
                     <mat-select #dropdown formControlName="patientName" placeholder="Enter patient name">
                         <mat-option [value]="item.id" *ngFor="let item of appointmentslist">{{item.firstName}} {{item.lastName}}</mat-option>
+                        <mat-option *ngIf="appointmentslist.length === 0" disabled>No patients available</mat-option>
                     </mat-select>
                     <mat-error
                         *ngIf="PatientForm.get('patientName').errors && PatientForm.get('patientName').errors['required']">
@@ -104,10 +105,6 @@
                     <mat-select #dropdown formControlName="laboratoryName" placeholder="Enter laboratory name">
                         <mat-option [value]="item.id" *ngFor="let item of laboratorylist">{{item.laboratoryName}}</mat-option>
                     </mat-select>
-                    <mat-error
-                        *ngIf="PatientForm.get('laboratoryName').errors && PatientForm.get('laboratoryName').errors['required']">
-                        Laboratory name is required
-                    </mat-error>
                 </mat-form-field>
             </div>
 

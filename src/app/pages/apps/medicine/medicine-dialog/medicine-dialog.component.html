@@ -27,6 +27,20 @@
 
             <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Category</mat-label>
+                    <mat-select #dropdown formControlName="category" placeholder="Enter category">
+                        <mat-option [value]="item.name"
+                            *ngFor="let item of CategoryList">{{item.name}}</mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="addmedicineForm.get('category').errors && addmedicineForm.get('category').errors['required']">
+                        Category is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Pack</mat-label>
                     <input type="text" formControlName="pack" placeholder="Enter pack" matInput require min="0" />
                     <mat-error

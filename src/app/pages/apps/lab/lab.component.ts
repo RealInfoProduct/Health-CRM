@@ -18,6 +18,7 @@ export class LabComponent implements OnInit {
   labColumns: string[] = [
     'id',
     'patientName',
+    'laboratoryName',
     'mobileNumber',
     'age',
     'gender',
@@ -29,6 +30,8 @@ export class LabComponent implements OnInit {
   ];
 
   lablist: any = []
+  appointmentslist: any = []
+  laboratorylist: any = []
 
   dataSource = new MatTableDataSource(this.lablist)
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
@@ -41,7 +44,27 @@ export class LabComponent implements OnInit {
   ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
     this.getlabdata()
+    this.getappointmentdata()
+    this.getlaboratoryData()
   }
+
+  getappointmentdata() {
+    this.firebaseCollectionService.getDocuments('ClinicList', 'appointmentslist').then((appointment) => {
+      this.appointmentslist = appointment
+      console.log('this.appointmentslist=====',this.appointmentslist);
+    }).catch((error) => {
+      console.error('Error fetching laboratory:', error);
+    });
+  }
+
+  getlaboratoryData() {
+    this.firebaseCollectionService.getDocuments('ClinicList', 'laboratorylist').then((laboratory) => {
+      this.laboratorylist = laboratory
+    }).catch((error) => {
+      console.error('Error fetching laboratory:', error);
+    });
+  }
+
 
   getlabdata() {
     this.firebaseCollectionService.getDocuments('ClinicList', 'lablist').then((lab) => {
@@ -85,4 +108,12 @@ export class LabComponent implements OnInit {
     });
   }
 
+  getAppointmentlist(appointmentId: string): string {  
+    return this.appointmentslist.find((appointmentObj:any) => appointmentObj.id === appointmentId)?.firstName  ;
+  }
+
+  getlaboratorylist(laboratoryId: string): string {  
+    return this.laboratorylist.find((laboratoryObj:any) => laboratoryObj.id === laboratoryId)?.laboratoryName ;
+  }
+  
 }

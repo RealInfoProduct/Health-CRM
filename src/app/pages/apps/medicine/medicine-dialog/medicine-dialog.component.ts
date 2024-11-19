@@ -12,6 +12,12 @@ export class MedicineDialogComponent implements OnInit {
   action: string;
   local_data: any;
 
+  CategoryList = [
+    { id: 1, name: 'Tablet' },
+    { id: 2, name: 'Syrup' },
+    { id: 3, name: 'Injectable' }
+  ]
+
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<MedicineDialogComponent>,
@@ -26,6 +32,7 @@ export class MedicineDialogComponent implements OnInit {
     if (this.action === 'Update') {
       this.addmedicineForm.controls['medicineName'].setValue(this.local_data.medicineName)
       this.addmedicineForm.controls['companyName'].setValue(this.local_data.companyName)
+      this.addmedicineForm.controls['category'].setValue(this.local_data.companyName)
       this.addmedicineForm.controls['pack'].setValue(this.local_data.pack)
       this.addmedicineForm.controls['qty'].setValue(this.local_data.qty)
       this.addmedicineForm.controls['rate'].setValue(this.local_data.rate)
@@ -40,6 +47,7 @@ export class MedicineDialogComponent implements OnInit {
     this.addmedicineForm = this.fb.group({
       medicineName: ['', Validators.required],
       companyName: ['', Validators.required],
+      category: ['', Validators.required],
       pack: ['', Validators.required],
       qty: ['', Validators.required],
       rate: ['', Validators.required],
@@ -79,6 +87,7 @@ export class MedicineDialogComponent implements OnInit {
     const payload = {
       medicineName: this.addmedicineForm.value.medicineName,
       companyName: this.addmedicineForm.value.companyName,
+      category: this.addmedicineForm.value.category,
       pack: this.addmedicineForm.value.pack,
       qty: this.addmedicineForm.value.qty,
       rate: this.addmedicineForm.value.rate,

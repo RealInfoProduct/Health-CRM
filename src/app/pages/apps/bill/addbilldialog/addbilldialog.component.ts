@@ -52,7 +52,6 @@ export class AddbilldialogComponent implements OnInit {
       this.billForm.controls['finalTotal'].setValue(this.local_data.finalTotal)
     }
     this.getappointmentdata()
-    
   }
 
   getappointmentdata() {
@@ -60,6 +59,8 @@ export class AddbilldialogComponent implements OnInit {
       if (appointment && appointment.length > 0) {
         this.appointmentslist = appointment
       }
+    }).catch((error) =>{
+      console.error('Error fetching doctors:', error);
     })
   }
 
@@ -107,10 +108,14 @@ export class AddbilldialogComponent implements OnInit {
     const total = this.billForm.get('total')?.value || 0;
     const discount = this.billForm.get('discount')?.value || 0;
     const tax = this.billForm.get('tax')?.value || 0;
-
-    const discountAmount = total - (total * discount / 100)
-    const finalTotal = discountAmount + (discountAmount * tax / 100)
-    this.billForm.get('finalTotal')?.setValue(finalTotal, { emitEvent: false });
+  
+    const discountAmount = total - (total * discount / 100);
+    const finalTotal = discountAmount + (discountAmount * tax / 100);
+  
+    const roundedFinalTotal = Math.round(finalTotal);
+  
+    this.billForm.get('finalTotal')?.setValue(roundedFinalTotal, { emitEvent: false });
   }
+  
 
 }

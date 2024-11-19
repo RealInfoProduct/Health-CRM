@@ -39,6 +39,7 @@ export class MedicalComponent implements OnInit{
     ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
     this.getMedicalData()
+    this.getMedicalData();
   }
 
   getMedicalData() {

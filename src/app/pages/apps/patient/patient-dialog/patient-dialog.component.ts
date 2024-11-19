@@ -48,27 +48,54 @@ export class PatientDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.PatientFormlist()
+    this.PatientFormlist();
+  
     if (this.action === 'Update') {
-      this.PatientForm.controls['patientName'].setValue(this.local_data.patientName)
-      this.PatientForm.controls['mobileNumber'].setValue(this.local_data.mobileNumber)
-      this.PatientForm.controls['address'].setValue(this.local_data.address)
-      this.PatientForm.controls['bloodGroup'].setValue(this.local_data.bloodGroup)
-      this.PatientForm.controls['date'].setValue(this.convertTimestamp(this.local_data.date))
-      this.PatientForm.controls['time'].setValue(this.local_data.time)
-      this.PatientForm.controls['age'].setValue(this.local_data.age)
-      this.PatientForm.controls['gender'].setValue(this.local_data.gender)
-      this.PatientForm.controls['laboratoryName'].setValue(this.local_data.laboratoryName)
-      this.PatientForm.controls['doctorName'].setValue(this.local_data.doctorName)
-      this.PatientForm.controls['appointmentStatus'].setValue(this.local_data.appointmentStatus)
-      this.PatientForm.controls['visitType'].setValue(this.local_data.visitType)
-      this.PatientForm.controls['paymentMethod'].setValue(this.local_data.paymentMethod)
-
+      this.PatientForm.patchValue({
+        patientName: this.local_data.patientName,
+        mobileNumber: this.local_data.mobileNumber,
+        address: this.local_data.address,
+        bloodGroup: this.local_data.bloodGroup,
+        date: this.convertTimestamp(this.local_data.date),
+        time: this.local_data.time,
+        age: this.local_data.age,
+        gender: this.local_data.gender,
+        laboratoryName: this.local_data.laboratoryName,
+        doctorName: this.local_data.doctorName,
+        appointmentStatus: this.local_data.appointmentStatus,
+        visitType: this.local_data.visitType,
+        paymentMethod: this.local_data.paymentMethod
+      });
     }
-    this.getlaboratoryData()
-    this.getdoctorsdata()
-    this.getappointmentdata()
+  
+    this.getlaboratoryData();
+    this.getdoctorsdata();
+    this.getappointmentdata();
+  
+    this.PatientForm.get('patientName')?.valueChanges.subscribe((patientId) => {
+      const selectedPatient = this.appointmentslist.find(
+        (appointment) => appointment.id === patientId
+      );
+  
+      if (selectedPatient) {
+        this.PatientForm.patchValue({
+          mobileNumber: selectedPatient.mobileNumber,
+          address: selectedPatient.address,
+          bloodGroup: selectedPatient.bloodGroup,
+          date: this.convertTimestamp(selectedPatient.date),
+          time: selectedPatient.time,
+          age: selectedPatient.age,
+          gender: selectedPatient.gender,
+          laboratoryName: selectedPatient.laboratoryName,
+          doctorName: selectedPatient.doctorName,
+          appointmentStatus: selectedPatient.appointmentStatus,
+          visitType: selectedPatient.visitType,
+          paymentMethod: selectedPatient.paymentMethod
+        });
+      }
+    });
   }
+  
 
   getdoctorsdata() {
     this.firebaseCollectionService.getDocuments('ClinicList', 'doctorslist').then((doctors) => {
@@ -97,6 +124,7 @@ export class PatientDialogComponent implements OnInit {
     this.firebaseCollectionService.getDocuments('ClinicList', 'laboratorylist').then((laboratory) => {
       if (laboratory && laboratory.length > 0) {
         this.laboratorylist = laboratory
+        console.log('Laboratory List:', this.laboratorylist);
       } 
     }).catch((error) => {
       console.error('Error fetching laboratory:', error);
@@ -121,7 +149,7 @@ export class PatientDialogComponent implements OnInit {
       time: ['', Validators.required],
       age: ['', Validators.required],
       gender: ['', Validators.required],
-      laboratoryName: ['', Validators.required],
+      laboratoryName: [''],
       doctorName: ['', Validators.required],
       appointmentStatus: ['', Validators.required],
       visitType: ['', Validators.required],

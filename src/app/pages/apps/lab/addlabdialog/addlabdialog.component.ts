@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-addlabdialog',
@@ -12,11 +13,14 @@ export class AddlabdialogComponent implements OnInit {
   action: string;
   local_data: any;
 
+  appointmentslist: any =[]
+  laboratorylist: any =[]
+
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<AddlabdialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
-
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
+    private firebaseCollectionService: FirebaseCollectionService
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
@@ -33,7 +37,45 @@ export class AddlabdialogComponent implements OnInit {
       this.addlabForm.controls['reportName'].setValue(this.local_data.reportName)
       this.addlabForm.controls['reportFee'].setValue(this.local_data.reportFee)
       this.addlabForm.controls['disease'].setValue(this.local_data.disease)
+      this.addlabForm.controls['laboratoryName'].setValue(this.local_data.laboratoryName)
     }
+    this.getlaboratoryData()
+    this.getappointmentdata()
+    
+    this.addlabForm.get('patientName')?.valueChanges.subscribe((selectedId) => {
+      const selectedPatient = this.appointmentslist.find((item: any) => item.id === selectedId);
+      if (selectedPatient) {
+        this.addlabForm.patchValue({
+          mobileNumber: selectedPatient.mobileNumber,
+          age: selectedPatient.age,
+          gender: selectedPatient.gender,
+          reportType: '',
+          reportName: '',
+          reportFee: '',
+          disease: '',
+          laboratoryName: '',
+        });
+      }
+    });
+  }
+
+  getappointmentdata() {
+    this.firebaseCollectionService.getDocuments('ClinicList', 'appointmentslist').then((appointment) => {
+      if (appointment && appointment.length > 0) {
+        this.appointmentslist = appointment
+      }
+    })
+  }
+
+  getlaboratoryData() {
+    this.firebaseCollectionService.getDocuments('ClinicList', 'laboratorylist').then((laboratory) => {
+      if (laboratory && laboratory.length > 0) {
+        this.laboratorylist = laboratory
+        console.log('Laboratory List:', this.laboratorylist);
+      } 
+    }).catch((error) => {
+      console.error('Error fetching laboratory:', error);
+    });
   }
 
   addmedicallist() {
@@ -46,6 +88,7 @@ export class AddlabdialogComponent implements OnInit {
       reportName: ['', Validators.required],
       reportFee: ['', Validators.required],
       disease: ['', Validators.required],
+      laboratoryName: ['', Validators.required]
     })
   }
 
@@ -58,7 +101,8 @@ export class AddlabdialogComponent implements OnInit {
       reportType: this.addlabForm.value.reportType,
       reportName: this.addlabForm.value.reportName,
       reportFee: this.addlabForm.value.reportFee,
-      disease: this.addlabForm.value.disease
+      disease: this.addlabForm.value.disease,
+      laboratoryName: this.addlabForm.value.laboratoryName
     }
     this.dialogRef.close({ event: this.action, data: payload });
   }
