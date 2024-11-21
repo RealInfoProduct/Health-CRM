@@ -38,7 +38,6 @@ export class AddlaboratorydialogComponent implements OnInit {
 
   laboratorylist() {
     this.addlaboratoryForm = this.fb.group({
-      id: [''],
       firstName: ['', Validators.required],
       middleName: ['', Validators.required],
       lastName: ['', Validators.required],

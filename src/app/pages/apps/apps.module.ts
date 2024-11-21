@@ -93,6 +93,8 @@ import { AppointmentsComponent } from './appointments/appointments.component';
 import { AppointmentsDialogComponent } from './appointments/appointments-dialog/appointments-dialog.component';
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { MatInputModule } from '@angular/material/input';
+import { StaffComponent } from './staff/staff.component';
+import { StaffDialogComponent } from './staff/staff-dialog/staff-dialog.component';
 
 
 
@@ -170,6 +172,8 @@ import { MatInputModule } from '@angular/material/input';
     AddbilldialogComponent,
     AppointmentsComponent,
     AppointmentsDialogComponent,
+    StaffComponent,
+    StaffDialogComponent,
 
   ],
   providers: [DatePipe],

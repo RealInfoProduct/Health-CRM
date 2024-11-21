@@ -86,7 +86,6 @@ export class PatientDialogComponent implements OnInit {
           time: selectedPatient.time,
           age: selectedPatient.age,
           gender: selectedPatient.gender,
-          laboratoryName: selectedPatient.laboratoryName,
           doctorName: selectedPatient.doctorName,
           appointmentStatus: selectedPatient.appointmentStatus,
           visitType: selectedPatient.visitType,
@@ -140,7 +139,6 @@ export class PatientDialogComponent implements OnInit {
 
   PatientFormlist() {
     this.PatientForm = this.fb.group({
-      id: [''],
       patientName: ['', Validators.required],
       mobileNumber: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
       address: ['', Validators.required],

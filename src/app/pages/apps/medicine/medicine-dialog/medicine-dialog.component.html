@@ -6,7 +6,8 @@
             <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Medicine Name</mat-label>
-                    <input type="text" formControlName="medicineName" placeholder="Enter medicine name" matInput require />
+                    <input type="text" formControlName="medicineName" placeholder="Enter medicine name" matInput
+                        require />
                     <mat-error
                         *ngIf="addmedicineForm.get('medicineName').errors && addmedicineForm.get('medicineName').errors['required']">
                         Medicine name is required
@@ -17,10 +18,40 @@
             <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Company Name</mat-label>
-                    <input type="text" formControlName="companyName" placeholder="Enter company name" matInput require />
+                    <input type="text" formControlName="companyName" placeholder="Enter company name" matInput
+                        require />
                     <mat-error
                         *ngIf="addmedicineForm.get('companyName').errors && addmedicineForm.get('companyName').errors['required']">
                         Company name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+
+            <div class="col-lg-6">
+                <mat-form-field class="w-100 m-t-10" appearance="outline">
+                    <mat-label>Purchase Date</mat-label>
+                    <input matInput [matDatepicker]="touchpic" placeholder="Enter purchase date"
+                        formControlName="purchaseDate" />
+                    <mat-datepicker-toggle matIconSuffix [for]="touchpic"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #touchpic></mat-datepicker>
+                    <mat-error
+                        *ngIf="addmedicineForm.get('purchaseDate')?.invalid && addmedicineForm.get('purchaseDate')?.touched">
+                        Purchase Date is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field class="w-100 m-t-10" appearance="outline">
+                    <mat-label>Expiry Date</mat-label>
+                    <input matInput [matDatepicker]="expiryDate" placeholder="Enter expiry date"
+                        formControlName="expiryDate" />
+                    <mat-datepicker-toggle matIconSuffix [for]="expiryDate"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #expiryDate></mat-datepicker>
+                    <mat-error
+                        *ngIf="addmedicineForm.get('expiryDate')?.invalid && addmedicineForm.get('expiryDate')?.touched">
+                        Expiry date is required
                     </mat-error>
                 </mat-form-field>
             </div>
@@ -29,8 +60,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Category</mat-label>
                     <mat-select #dropdown formControlName="category" placeholder="Enter category">
-                        <mat-option [value]="item.name"
-                            *ngFor="let item of CategoryList">{{item.name}}</mat-option>
+                        <mat-option [value]="item.name" *ngFor="let item of CategoryList">{{item.name}}</mat-option>
                     </mat-select>
                     <mat-error
                         *ngIf="addmedicineForm.get('category').errors && addmedicineForm.get('category').errors['required']">
@@ -83,10 +113,11 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-lg-4">
+            <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Discount %</mat-label>
-                    <input type="number" formControlName="discount" placeholder="Enter discount" matInput require min="0" />
+                    <input type="number" formControlName="discount" placeholder="Enter discount" matInput require
+                        min="0" />
                     <mat-error
                         *ngIf="addmedicineForm.get('discount').errors && addmedicineForm.get('discount').errors['required']">
                         Discount is required
@@ -94,7 +125,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-lg-4">
+            <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>GST %</mat-label>
                     <input type="number" formControlName="gst" placeholder="Enter GST" matInput require min="0" />
@@ -105,10 +136,11 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-lg-4">
+            <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>NetAmount</mat-label>
-                    <input type="number" formControlName="netamount" placeholder="Enter netamount" matInput require min="0" />
+                    <input type="number" formControlName="netamount" placeholder="Enter netamount" matInput require
+                        min="0" />
                     <mat-error
                         *ngIf="addmedicineForm.get('netamount').errors && addmedicineForm.get('netamount').errors['required']">
                         Netamount is required

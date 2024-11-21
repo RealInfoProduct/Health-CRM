@@ -20,7 +20,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Laboratory Name</mat-label>
                     <mat-select #dropdown formControlName="laboratoryName" placeholder="Enter laboratory name">
-                        <mat-option [value]="item.name" *ngFor="let item of laboratorylist">{{item.laboratoryName}}</mat-option>
+                        <mat-option [value]="item.id" *ngFor="let item of laboratorylist">{{item.laboratoryName}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>

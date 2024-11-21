@@ -35,6 +35,11 @@ export const navItems: NavItem[] = [
     route: '/apps/lab',
   },
   {
+    displayName: 'Staff',
+    iconName: 'users',
+    route: '/apps/staff',
+  },
+  {
     displayName: 'My Report',
     iconName: 'file-report',
     route: '/apps/report',

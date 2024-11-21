@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-medicine-dialog',
@@ -32,7 +33,9 @@ export class MedicineDialogComponent implements OnInit {
     if (this.action === 'Update') {
       this.addmedicineForm.controls['medicineName'].setValue(this.local_data.medicineName)
       this.addmedicineForm.controls['companyName'].setValue(this.local_data.companyName)
-      this.addmedicineForm.controls['category'].setValue(this.local_data.companyName)
+      this.addmedicineForm.controls['purchaseDate'].setValue(this.convertTimestamp(this.local_data.purchaseDate))
+      this.addmedicineForm.controls['expiryDate'].setValue(this.convertTimestamp(this.local_data.expiryDate))
+      this.addmedicineForm.controls['category'].setValue(this.local_data.category)
       this.addmedicineForm.controls['pack'].setValue(this.local_data.pack)
       this.addmedicineForm.controls['qty'].setValue(this.local_data.qty)
       this.addmedicineForm.controls['rate'].setValue(this.local_data.rate)
@@ -43,10 +46,19 @@ export class MedicineDialogComponent implements OnInit {
     }
   }
 
+  convertTimestamp(element: any): Date | null {
+    if (element instanceof Timestamp) {
+      return element.toDate();
+    }
+    return null;
+  }
+  
   addmedicallist() {
     this.addmedicineForm = this.fb.group({
       medicineName: ['', Validators.required],
       companyName: ['', Validators.required],
+      purchaseDate: [new Date(), Validators.required],
+      expiryDate: ['', Validators.required],
       category: ['', Validators.required],
       pack: ['', Validators.required],
       qty: ['', Validators.required],
@@ -87,6 +99,8 @@ export class MedicineDialogComponent implements OnInit {
     const payload = {
       medicineName: this.addmedicineForm.value.medicineName,
       companyName: this.addmedicineForm.value.companyName,
+      purchaseDate: this.addmedicineForm.value.purchaseDate,
+      expiryDate: this.addmedicineForm.value.expiryDate,
       category: this.addmedicineForm.value.category,
       pack: this.addmedicineForm.value.pack,
       qty: this.addmedicineForm.value.qty,

@@ -4,6 +4,7 @@ import { MedicineDialogComponent } from './medicine-dialog/medicine-dialog.compo
 import { MatDialog } from '@angular/material/dialog';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { MatPaginator } from '@angular/material/paginator';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-medicine',
@@ -19,6 +20,8 @@ export class MedicineComponent implements OnInit{
     'id',
     'medicineName',
     'companyName',
+    'purchaseDate',
+    'expiryDate',
     'category',
     'pack',
     'qty',
@@ -63,6 +66,13 @@ export class MedicineComponent implements OnInit{
 
    applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  convertTimestamp(element: any): Date | null {
+    if (element instanceof Timestamp) {
+      return element.toDate();
+    }
+    return null;
   }
 
   openMedicineDialog(action: string, obj: any): void {

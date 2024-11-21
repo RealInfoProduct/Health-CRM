@@ -29,6 +29,7 @@ import { MedicineComponent } from './medicine/medicine.component';
 import { DoctorsComponent } from './doctors/doctors.component';
 import { BillComponent } from './bill/bill.component';
 import { AppointmentsComponent } from './appointments/appointments.component';
+import { StaffComponent } from './staff/staff.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -155,6 +156,17 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url:'/apps/lab' },
             { title: 'Lab' },
+          ],
+        },
+      },
+      {
+        path: 'staff',
+        component: StaffComponent,
+        data: {
+          title: 'Staff',
+          urls: [
+            { title: 'Dashboard', url:'/apps/staff' },
+            { title: 'Staff' },
           ],
         },
       },
