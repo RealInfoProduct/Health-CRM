@@ -185,6 +185,7 @@ export class FullComponent implements OnInit {
     },
   ];
  userEmail:any = localStorage.getItem('userEmail')?.split('@')[0].slice(0, 15);
+ userName:any = localStorage.getItem('userName')
   constructor(
     private settings: CoreService,
     private mediaMatcher: MediaMatcher,

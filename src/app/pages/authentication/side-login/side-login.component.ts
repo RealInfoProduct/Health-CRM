@@ -18,7 +18,8 @@ export class AppSideLoginComponent {
   constructor(private settings: CoreService, private router: Router ,private authService:AuthService) {}
 
   form = new FormGroup({
-    uname: new FormControl('', [Validators.required]),
+    userName: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
   });
 
@@ -26,7 +27,17 @@ export class AppSideLoginComponent {
     return this.form.controls;
   }
 
+  // submit() {
+  //   this.authService.signIn( this.form.value.emai l , this.form.value.password)
+  // }
   submit() {
-    this.authService.signIn(this.form.value.uname , this.form.value.password)
-  }
+    if (this.form.valid) {
+      const { email, password, userName } = this.form.value;
+      this.authService.signIn(email, password, userName).catch(error => {
+        console.error("Login failed", error);
+      });
+    }
+
+}
+
 }

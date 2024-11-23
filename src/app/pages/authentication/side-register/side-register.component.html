@@ -103,6 +103,17 @@
                 </mat-hint>
               </mat-form-field>
 
+              <!--username -->
+              <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">User Name</mat-label>
+               <mat-form-field appearance="outline" class="w-100" color="primary">
+                 <input matInput formControlName="userName" />
+                 <mat-hint *ngIf="f['userName'].touched && f['userName'].invalid" class="m-b-16 error-msg">
+                   <div class="text-error" *ngIf="f['userName'].errors && f['userName'].errors['required']">
+                    User Name is required.
+                   </div>
+                 </mat-hint>
+               </mat-form-field>
+
               <button mat-flat-button color="primary" class="w-100" [disabled]="!form.valid">
                 Sign Up
               </button>

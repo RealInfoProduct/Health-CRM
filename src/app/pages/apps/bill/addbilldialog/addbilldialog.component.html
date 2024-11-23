@@ -18,12 +18,12 @@
 
             <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Status</mat-label>
+                    <mat-label>Payment Status</mat-label>
                     <mat-select #dropdown formControlName="status" placeholder="Enter status">
                         <mat-option [value]="item.name" *ngFor="let item of statusList">{{item.name}}</mat-option>
                     </mat-select>
                     <mat-error *ngIf="billForm.get('status').errors && billForm.get('status').errors['required']">
-                        Status is required
+                        Payment status is required
                     </mat-error>
                 </mat-form-field>
             </div>

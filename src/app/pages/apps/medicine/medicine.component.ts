@@ -20,8 +20,6 @@ export class MedicineComponent implements OnInit{
     'id',
     'medicineName',
     'companyName',
-    'purchaseDate',
-    'expiryDate',
     'category',
     'pack',
     'qty',

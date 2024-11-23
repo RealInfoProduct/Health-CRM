@@ -8,18 +8,56 @@ import firebase from 'firebase/compat/app';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class  AuthService {
 
   constructor(private afAuth: AngularFireAuth,private snackBar: MatSnackBar,private firestore: AngularFirestore,private router: Router) { }
 
   // Sign in with email and password
-  async signIn(email: any, password: any) {
-    try {
-      const result:any = await this.afAuth.signInWithEmailAndPassword(email, password);
+  // async signIn(email: any, password: any) {
+  //   try {
+  //     const result:any = await this.afAuth.signInWithEmailAndPassword(email, password);
       
+  //     // Fetch user data from Firestore
+  //     const userDoc = await this.firestore.collection('ClinicList').doc(result.user?.uid).get().toPromise();
+  //     const userData :any = userDoc?.data();
+  //     if (userData?.isDisabled) {
+  //       this.snackBar.open('This account is not active!!', 'Close', {
+  //         duration: 3000,
+  //         horizontalPosition: 'right',
+  //         verticalPosition: 'top',
+  //       });
+  //       throw new Error("This account is not active.");
+  //     }
+  //     localStorage.setItem('uid' , result.user._delegate.uid)
+  //     localStorage.setItem('userEmail' , result.user._delegate.email)
+      
+  //     this.router.navigate(['/dashboards/dashboard1']);
+  //     this.snackBar.open('Login successful', 'Close', {
+  //       duration: 3000,
+  //       horizontalPosition: 'right',
+  //       verticalPosition: 'top',
+  //     });
+  //     return result;
+  //   } catch (error) {
+  //     console.error("Error signing in", error);
+  //     this.snackBar.open(`${error}`, 'Close', {
+  //       duration: 3000,
+  //       horizontalPosition: 'right',
+  //       verticalPosition: 'top',
+  //     });
+  //     throw error;
+  //   }
+  // }
+
+  async signIn(email: any, password: any, userName: any) {
+    try {
+      const result: any = await this.afAuth.signInWithEmailAndPassword(email, password);
+  
       // Fetch user data from Firestore
       const userDoc = await this.firestore.collection('ClinicList').doc(result.user?.uid).get().toPromise();
-      const userData :any = userDoc?.data();
+      const userData: any = userDoc?.data();
+
+  
       if (userData?.isDisabled) {
         this.snackBar.open('This account is not active!!', 'Close', {
           duration: 3000,
@@ -28,8 +66,12 @@ export class AuthService {
         });
         throw new Error("This account is not active.");
       }
-      localStorage.setItem('uid' , result.user._delegate.uid)
-      localStorage.setItem('userEmail' , result.user._delegate.email)
+  
+      // Store user details locally
+      localStorage.setItem('uid', result.user._delegate.uid);
+      localStorage.setItem('userEmail', result.user._delegate.email);
+      localStorage.setItem('userName', userData.userName);
+      
       this.router.navigate(['/dashboards/dashboard1']);
       this.snackBar.open('Login successful', 'Close', {
         duration: 3000,
@@ -37,6 +79,7 @@ export class AuthService {
         verticalPosition: 'top',
       });
       return result;
+  
     } catch (error) {
       console.error("Error signing in", error);
       this.snackBar.open(`${error}`, 'Close', {
@@ -47,11 +90,57 @@ export class AuthService {
       throw error;
     }
   }
+  
 
-   async signUp(signUpData :any) {
+  //  async signUp(signUpData :any) {
+  //   try {
+  //     const result:any = await this.afAuth.createUserWithEmailAndPassword(signUpData.email, signUpData.password);
+
+  //     await this.firestore.collection('ClinicList').doc(result.user?.uid).set({
+  //       firstName: signUpData.firstName,
+  //       lastName: signUpData.lastName,
+  //       mobileNumber: signUpData.mobileNumber,
+  //       clinicName: signUpData.clinicName,
+  //       address: signUpData.address,
+  //       email: signUpData.email,
+  //       password: signUpData.password,
+  //       userName: signUpData.userName,
+  //       isDisabled: true
+  //     });
+      
+  //     this.snackBar.open(`Account created: ${result.user._delegate.email}`, 'Close', {
+  //       duration: 3000,
+  //       horizontalPosition: 'right',
+  //       verticalPosition: 'top',
+  //     });
+  //     return result;
+  //   } catch (error) {
+  //     this.snackBar.open(`${error}`, 'Close', {
+  //       duration: 3000,
+  //       horizontalPosition: 'right',
+  //       verticalPosition: 'top',
+  //     });
+  //     throw error;
+  //   }
+  // }
+
+  async signUp(signUpData: any) {
     try {
-      const result:any = await this.afAuth.createUserWithEmailAndPassword(signUpData.email, signUpData.password);
-
+      // Check if the email is already in use
+      const signInMethods = await this.afAuth.fetchSignInMethodsForEmail(signUpData.email);
+      if (signInMethods.length > 0) {
+        this.snackBar.open('This email address is already registered. Please use another email.', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+        throw new Error('Email address is already in use.');
+      }
+  
+      // Create the new user
+      const result: any = await this.afAuth.createUserWithEmailAndPassword(signUpData.email, signUpData.password);
+  
+      // Save user data to Firestore
       await this.firestore.collection('ClinicList').doc(result.user?.uid).set({
         firstName: signUpData.firstName,
         lastName: signUpData.lastName,
@@ -60,17 +149,21 @@ export class AuthService {
         address: signUpData.address,
         email: signUpData.email,
         password: signUpData.password,
-        isDisabled: true
+        userName: signUpData.userName,
+        isDisabled: true,
       });
-      
+  
       this.snackBar.open(`Account created: ${result.user._delegate.email}`, 'Close', {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'top',
       });
+  
       return result;
+  
     } catch (error) {
-      this.snackBar.open(`${error}`, 'Close', {
+      console.error('Error during sign-up', error);
+      this.snackBar.open(`${error.message}`, 'Close', {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'top',
@@ -78,6 +171,7 @@ export class AuthService {
       throw error;
     }
   }
+  
 
   // Sign out
   async signOut() {

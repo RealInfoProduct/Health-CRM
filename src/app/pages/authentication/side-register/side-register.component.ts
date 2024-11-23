@@ -25,6 +25,7 @@ export class AppSideRegisterComponent {
     address: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
+    userName: new FormControl('', [Validators.required]),
   });
 
   get f() {
@@ -40,6 +41,7 @@ export class AppSideRegisterComponent {
     address: this.form.value.address,
     email: this.form.value.email,
     password: this.form.value.password,
+    userName: this.form.value.userName,
     }
     const registerSuccess:any = this.authService.signUp(registerUserData)
     if(registerSuccess){
