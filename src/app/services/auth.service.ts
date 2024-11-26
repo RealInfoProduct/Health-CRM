@@ -13,51 +13,14 @@ export class  AuthService {
   constructor(private afAuth: AngularFireAuth,private snackBar: MatSnackBar,private firestore: AngularFirestore,private router: Router) { }
 
   // Sign in with email and password
-  // async signIn(email: any, password: any) {
-  //   try {
-  //     const result:any = await this.afAuth.signInWithEmailAndPassword(email, password);
-      
-  //     // Fetch user data from Firestore
-  //     const userDoc = await this.firestore.collection('ClinicList').doc(result.user?.uid).get().toPromise();
-  //     const userData :any = userDoc?.data();
-  //     if (userData?.isDisabled) {
-  //       this.snackBar.open('This account is not active!!', 'Close', {
-  //         duration: 3000,
-  //         horizontalPosition: 'right',
-  //         verticalPosition: 'top',
-  //       });
-  //       throw new Error("This account is not active.");
-  //     }
-  //     localStorage.setItem('uid' , result.user._delegate.uid)
-  //     localStorage.setItem('userEmail' , result.user._delegate.email)
-      
-  //     this.router.navigate(['/dashboards/dashboard1']);
-  //     this.snackBar.open('Login successful', 'Close', {
-  //       duration: 3000,
-  //       horizontalPosition: 'right',
-  //       verticalPosition: 'top',
-  //     });
-  //     return result;
-  //   } catch (error) {
-  //     console.error("Error signing in", error);
-  //     this.snackBar.open(`${error}`, 'Close', {
-  //       duration: 3000,
-  //       horizontalPosition: 'right',
-  //       verticalPosition: 'top',
-  //     });
-  //     throw error;
-  //   }
-  // }
-
-  async signIn(email: any, password: any, userName: any) {
+  async signIn(email: any, password: any, userType:any ) {
     try {
-      const result: any = await this.afAuth.signInWithEmailAndPassword(email, password);
-  
+      const result:any = await this.afAuth.signInWithEmailAndPassword(email, password);
+      
       // Fetch user data from Firestore
       const userDoc = await this.firestore.collection('ClinicList').doc(result.user?.uid).get().toPromise();
-      const userData: any = userDoc?.data();
+      const userData :any = userDoc?.data();
 
-  
       if (userData?.isDisabled) {
         this.snackBar.open('This account is not active!!', 'Close', {
           duration: 3000,
@@ -66,11 +29,19 @@ export class  AuthService {
         });
         throw new Error("This account is not active.");
       }
-  
-      // Store user details locally
+
+      if(userData?.userType !== userType){
+        this.snackBar.open('Incorrect user type!', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+        throw new Error('User type mismatch.');
+      }
+
       localStorage.setItem('uid', result.user._delegate.uid);
       localStorage.setItem('userEmail', result.user._delegate.email);
-      localStorage.setItem('userName', userData.userName);
+      localStorage.setItem('usertype', userData.userType);
       
       this.router.navigate(['/dashboards/dashboard1']);
       this.snackBar.open('Login successful', 'Close', {
@@ -149,7 +120,7 @@ export class  AuthService {
         address: signUpData.address,
         email: signUpData.email,
         password: signUpData.password,
-        userName: signUpData.userName,
+        userType: signUpData.userType,
         isDisabled: true,
       });
   

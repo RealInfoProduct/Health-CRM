@@ -49,6 +49,8 @@ export class AppNavItemComponent implements OnChanges {
   @HostBinding('attr.aria-expanded') ariaExpanded = this.expanded;
   @Input() item: NavItem | any;
   @Input() depth: any;
+  
+userType:any = localStorage.getItem('usertype')
 
   constructor(public navService: NavService, public router: Router) {
     if (this.depth === undefined) {
@@ -67,6 +69,13 @@ export class AppNavItemComponent implements OnChanges {
     });
   }
 
+  isVisible(item: NavItem): boolean {
+    if (item.allowedUserTypes) {
+      return item.allowedUserTypes.includes(this.userType);
+    }
+    return true;
+  }
+  
   onItemSelected(item: NavItem) {
     if (!item.children || !item.children.length) {
       this.router.navigate([item.route]);

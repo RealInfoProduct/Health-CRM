@@ -3,17 +3,24 @@ import { CoreService } from 'src/app/services/core.service';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
-import { NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-side-register',
   standalone: true,
-  imports: [RouterModule, MaterialModule, FormsModule, ReactiveFormsModule, NgIf],
+  imports: [RouterModule, MaterialModule, FormsModule, ReactiveFormsModule, NgIf, NgFor],
   templateUrl: './side-register.component.html',
 })
 export class AppSideRegisterComponent {
   options = this.settings.getOptions();
+
+  userTypeList = [
+    {id:1 , typeName:'Admin'},
+    {id:2 , typeName:'Medical'},
+    {id:3 , typeName:'Patient'},
+    {id:4 , typeName:'Doctor'}
+  ]
 
   constructor(private settings: CoreService, private router: Router, private authService:AuthService) {}
 
@@ -25,7 +32,7 @@ export class AppSideRegisterComponent {
     address: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
-    userName: new FormControl('', [Validators.required]),
+    userType: new FormControl('', [Validators.required]),
   });
 
   get f() {
@@ -41,7 +48,7 @@ export class AppSideRegisterComponent {
     address: this.form.value.address,
     email: this.form.value.email,
     password: this.form.value.password,
-    userName: this.form.value.userName,
+    userType: this.form.value.userType,
     }
     const registerSuccess:any = this.authService.signUp(registerUserData)
     if(registerSuccess){

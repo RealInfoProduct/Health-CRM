@@ -121,7 +121,7 @@ import { StaffDialogComponent } from './staff/staff-dialog/staff-dialog.componen
     MatInputModule,
     NgxMatTimepickerModule,
   ],
-  exports: [TablerIconsModule],
+  exports: [TablerIconsModule,MedicineComponent,MedicalComponent],
   declarations: [
     AppChatComponent,
     AppPermissionComponent,
