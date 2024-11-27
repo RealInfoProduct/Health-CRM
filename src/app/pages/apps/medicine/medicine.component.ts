@@ -1,4 +1,4 @@
- import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MedicineDialogComponent } from './medicine-dialog/medicine-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -22,7 +22,7 @@ export class MedicineComponent implements OnInit{
     'medicineName',
     'companyName',
     'category',
-    'pack',
+    // 'pack',
     'qty',
     'rate',
     'amount',
@@ -33,6 +33,7 @@ export class MedicineComponent implements OnInit{
   ];
 
   medicinelist: any = []
+  appointmentslist: any = []
 
   dataSource = new MatTableDataSource(this.medicinelist);
 
@@ -45,6 +46,15 @@ export class MedicineComponent implements OnInit{
     ngOnInit(): void {
       this.dataSource.paginator = this.paginator
       this.getmedicineData()
+      this. getappointmentdata()
+    }
+
+    getappointmentdata() {
+      this.firebaseCollectionService.getDocuments('ClinicList', 'appointmentslist').then((appointment) => {
+        this.appointmentslist = appointment
+      }).catch((error) =>{
+        console.error('Error fetching doctors:', error);
+      }) 
     }
 
    getmedicineData(){
@@ -53,6 +63,8 @@ export class MedicineComponent implements OnInit{
       if(medicine && medicine.length > 0){
         this.dataSource = new MatTableDataSource(this.medicinelist)
         this.dataSource.paginator = this.paginator 
+        console.log('this.medicinelist=====>>>>>1',this.medicinelist);
+        
       } else {
         this.medicinelist = [];
         this.dataSource = new MatTableDataSource(this.medicinelist);
@@ -84,12 +96,14 @@ export class MedicineComponent implements OnInit{
       if (result.event === 'Add') {
         this.firebaseCollectionService.addDocument('ClinicList', result.data ,'medicinelist')
         this.getmedicineData()
+        console.log("this.medicinelist=====>>>>>",this.medicinelist);
       }
       if (result.event === 'Update') {
         this.medicinelist.forEach((element: any) => {
           if (obj.id === element.id) {
             this.firebaseCollectionService.updateDocument('ClinicList', obj.id, result.data, 'medicinelist')
             this.getmedicineData()
+            console.log("this.medicinelist=====>>>>>",this.medicinelist);
           }
         })
         this.dataSource = new MatTableDataSource(this.medicinelist)
@@ -99,5 +113,9 @@ export class MedicineComponent implements OnInit{
         this.getmedicineData()
       }
     });
+  }
+
+  getappointmentlist(appointmentId: string): string {  
+    return this.appointmentslist.find((appointmentObj:any) => appointmentObj.id === appointmentId)?.firstName ;
   }
 }

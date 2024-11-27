@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Timestamp } from 'firebase/firestore';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
@@ -20,7 +20,7 @@ export class MedicineDialogComponent implements OnInit {
     { id: 3, name: 'Injectable' }
   ]
 
-  patientlist = []
+  appointmentslist = []
 
   constructor(
     private fb: FormBuilder,
@@ -37,25 +37,23 @@ export class MedicineDialogComponent implements OnInit {
     this.addmedicallist()
     if (this.action === 'Update') {
       this.addmedicineForm.controls['patientName'].setValue(this.local_data.patientName)
-      this.addmedicineForm.controls['medicineName'].setValue(this.local_data.medicineName)
-      this.addmedicineForm.controls['companyName'].setValue(this.local_data.companyName)
-      this.addmedicineForm.controls['category'].setValue(this.local_data.category)
-      this.addmedicineForm.controls['pack'].setValue(this.local_data.pack)
-      this.addmedicineForm.controls['qty'].setValue(this.local_data.qty)
-      this.addmedicineForm.controls['rate'].setValue(this.local_data.rate)
       this.addmedicineForm.controls['amount'].setValue(this.local_data.amount)
       this.addmedicineForm.controls['discount'].setValue(this.local_data.discount)
       this.addmedicineForm.controls['gst'].setValue(this.local_data.gst)
       this.addmedicineForm.controls['netamount'].setValue(this.local_data.netamount)
+      this.local_data.medicine.forEach((element:any) => {
+        this.addMedicine(element)
+      });
+    }else{
+      this.addMedicine()
     }
-    this. getPatientData()
+    this.getappointmentdata()
   }
 
-  getPatientData() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'patientlist').then((patient) => {
-      if (patient && patient.length > 0) {
-        this.patientlist = patient
-        console.log('this.Patientlist=====',this.patientlist);
+  getappointmentdata() {
+    this.firebaseCollectionService.getDocuments('ClinicList', 'appointmentslist').then((appointment) => {
+      if (appointment && appointment.length > 0) {
+        this.appointmentslist = appointment
       }
     }).catch((error) => {
       console.error('Error fetching laboratory:', error);
@@ -72,59 +70,75 @@ export class MedicineDialogComponent implements OnInit {
   addmedicallist() {
     this.addmedicineForm = this.fb.group({
       patientName: ['', Validators.required],
-      medicineName: ['', Validators.required],
-      companyName: ['', Validators.required],
-      category: ['', Validators.required],
-      pack: ['', Validators.required],
-      qty: ['', Validators.required],
-      rate: ['', Validators.required],
+      medicine :this.fb.array([]),
       amount: ['', Validators.required],
       discount: [0, Validators.required],
       gst: [5, Validators.required],
       netamount: ['', Validators.required],
     })
-    this.addmedicineForm.get('qty')?.valueChanges.subscribe(() => this.updateAmount());
-    this.addmedicineForm.get('rate')?.valueChanges.subscribe(() => this.updateAmount());
+    this.getMedicineFormArry().valueChanges.subscribe(() => this.updateAmount());
     this.addmedicineForm.get('discount')?.valueChanges.subscribe(() => this.updateAmount());
     this.addmedicineForm.get('gst')?.valueChanges.subscribe(() => this.updateAmount());
   }
 
-  updateAmount(): void {
-    const qty = this.addmedicineForm.get('qty')?.value;
-    const rate = this.addmedicineForm.get('rate')?.value;
-    const discount = this.addmedicineForm.get('discount')?.value;
-    const gst = this.addmedicineForm.get('gst')?.value;
+getMedicineFormArry(){
+  return this.addmedicineForm.get('medicine') as FormArray
+}
 
-    if (qty != null && rate != null) {
-
-      const amount = qty * rate;
-
-      this.addmedicineForm.get('amount')?.setValue(parseFloat(amount.toFixed(2)), { emitEvent: false });
-
-      const discountedAmount = amount - (amount * discount / 100);
-
-      const netAmount = discountedAmount + (discountedAmount * gst / 100);
-
-      this.addmedicineForm.get('netamount')?.setValue(parseFloat(netAmount.toFixed(2)), { emitEvent: false });
-
-    }
+  addMedicine(medicine?:any){
+this.getMedicineFormArry().push(
+  this.fb.group({
+      medicineName: [medicine?.medicineName || '', Validators.required],
+      companyName: [medicine?.companyName || '', Validators.required],
+      category: [medicine?.category || '', Validators.required],
+      // pack: [medicine?.pack || '', Validators.required],
+      qty: [medicine?.qty || '', Validators.required],
+      rate: [medicine?.rate || '', Validators.required],
+  })
+)
   }
+
+  removemedicine(index:any){
+    this.getMedicineFormArry().removeAt(index)
+  }
+
+  updateAmount(): void {
+    let totalAmount = 0;
+  
+    this.getMedicineFormArry().controls.forEach((group: FormGroup) => {
+      const qty = group.get('qty')?.value || 0;
+      const rate = group.get('rate')?.value || 0;
+  
+      if (qty > 0 && rate > 0) {
+        const amount = qty * rate;
+        group.get('amount')?.setValue(parseFloat(amount.toFixed(2)), { emitEvent: false });
+        totalAmount += amount;
+      }
+    });
+  
+    // Apply discount and GST on the total amount
+    const discount = this.addmedicineForm.get('discount')?.value || 0;
+    const gst = this.addmedicineForm.get('gst')?.value || 0;
+  
+    const discountedAmount = totalAmount - (totalAmount * discount / 100);
+    const netAmount = discountedAmount + (discountedAmount * gst / 100);
+  
+    this.addmedicineForm.get('amount')?.setValue(parseFloat(totalAmount.toFixed(2)), { emitEvent: false });
+    this.addmedicineForm.get('netamount')?.setValue(parseFloat(netAmount.toFixed(2)), { emitEvent: false });
+  }
+  
 
   doAction(): void {
     const payload = {
       patientName: this.addmedicineForm.value.patientName,
-      medicineName: this.addmedicineForm.value.medicineName,
-      companyName: this.addmedicineForm.value.companyName,
-      category: this.addmedicineForm.value.category,
-      pack: this.addmedicineForm.value.pack,
-      qty: this.addmedicineForm.value.qty,
-      rate: this.addmedicineForm.value.rate,
+      medicine: this.addmedicineForm.value.medicine,
       amount: this.addmedicineForm.value.amount,
       discount: this.addmedicineForm.value.discount,
       gst: this.addmedicineForm.value.gst,
       netamount: this.addmedicineForm.value.netamount,
     }
     this.dialogRef.close({ event: this.action, data: payload });
+    console.log('payload',payload);
   }
 
 }
