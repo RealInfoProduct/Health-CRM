@@ -18,6 +18,7 @@ export class MedicineComponent implements OnInit{
   
   medicineColumns: string[] = [
     'id',
+    'patientName',
     'medicineName',
     'companyName',
     'category',

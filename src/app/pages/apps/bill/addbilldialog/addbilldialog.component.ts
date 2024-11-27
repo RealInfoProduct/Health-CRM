@@ -100,7 +100,6 @@ export class AddbilldialogComponent implements OnInit {
       tax: this.billForm.value.tax,
       finalTotal: this.billForm.value.finalTotal
     }
-    console.log(payload);
     this.dialogRef.close({ event: this.action, data: payload });
   }
 

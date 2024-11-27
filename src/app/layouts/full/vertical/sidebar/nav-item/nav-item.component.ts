@@ -61,19 +61,58 @@ userType:any = localStorage.getItem('usertype')
   ngOnChanges() {
     this.navService.currentUrl.subscribe((url: string) => {
       if (this.item.route && url) {
-        // console.log(`Checking '/${this.item.route}' against '${url}'`);
+        console.log(`Checking '/${this.item.route}' against '${url}'`);
         this.expanded = url.indexOf(`/${this.item.route}`) === 0;
         this.ariaExpanded = this.expanded;
-        //console.log(`${this.item.route} is expanded: ${this.expanded}`);
+        console.log(`${this.item.route} is expanded: ${this.expanded}`);
       }
     });
   }
 
-  isVisible(item: NavItem): boolean {
-    if (item.allowedUserTypes) {
-      return item.allowedUserTypes.includes(this.userType);
+  // isVisible(item: NavItem): boolean {
+  //   if (item.allowedUserTypes) {
+  //     return item.allowedUserTypes.includes(this.userType);
+  //   }
+  //   return true;
+  // }
+  
+
+  isVisible(item: any): boolean {
+    if (this.userType === 'Medical' && (item.route === '/dashboards/dashboard1' ||
+      item.route === '/dashboards/dashboard2' ||
+      item.route === '/apps/medicine')) {
+      return true; 
+    } if (this.userType === 'Patient' && (item.route === '/dashboards/dashboard1' ||
+      item.route === '/dashboards/dashboard2' ||
+      item.route === '/apps/appointments' ||
+      item.route === '/apps/doctors' ||
+      item.route === '/apps/bill' )) 
+      {
+      return true; 
+    } if (this.userType === 'Doctor' && (item.route === '/dashboards/dashboard1' ||
+      item.route === '/dashboards/dashboard2' ||
+      item.route === '/apps/appointments' ||
+      item.route === '/apps/doctors' ||
+      item.route === '/apps/patient' ||
+      item.route === '/apps/staff' ||
+      item.route === '/apps/medicine' )) 
+      {
+      return true; 
+    } if (this.userType === 'Admin' && (item.route === '/dashboards/dashboard1' ||
+      item.route === '/dashboards/dashboard2' ||
+      item.route === '/apps/appointments' ||
+      item.route === '/apps/medical' ||
+      item.route === '/apps/laboratory' ||
+      item.route === '/apps/lab' ||
+      item.route === '/apps/staff' ||
+      item.route === '/apps/patient' ||
+      item.route === '/apps/medicine' ||
+      item.route === '/apps/doctors' ||
+      item.route === '/apps/bill' )) 
+      {
+      return true; 
     }
-    return true;
+    return false; 
   }
   
   onItemSelected(item: NavItem) {

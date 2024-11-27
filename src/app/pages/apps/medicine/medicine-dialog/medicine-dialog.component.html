@@ -5,6 +5,19 @@
 
             <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Patient Name</mat-label>
+                    <mat-select #dropdown formControlName="patientName" placeholder="Enter patient name">
+                        <mat-option [value]="item.name" *ngFor="let item of patientlist">{{item.name}}</mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="addmedicineForm.get('patientName').errors && addmedicineForm.get('patientName').errors['required']">
+                        Patient name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Medicine Name</mat-label>
                     <input type="text" formControlName="medicineName" placeholder="Enter medicine name" matInput
                         require />

@@ -49,7 +49,6 @@ export class BillComponent implements OnInit{
   getappointmentdata() {
     this.firebaseCollectionService.getDocuments('ClinicList', 'appointmentslist').then((appointment) => {
       this.appointmentslist = appointment
-      console.log('this.appointmentslist=====',this.appointmentslist);
     }).catch((error) => {
       console.error('Error fetching laboratory:', error);
     });
@@ -58,7 +57,6 @@ export class BillComponent implements OnInit{
   getbilldata() {
     this.firebaseCollectionService.getDocuments('ClinicList', 'billlist').then((bill) => {
       this.billlist = bill
-    console.log('this.billlist=====',this.billlist);
       if (bill && bill.length > 0) {
         this.dataSource = new MatTableDataSource(this.billlist)
         this.dataSource.paginator = this.paginator

@@ -149,7 +149,6 @@ export class AppTopCardsComponent implements OnInit {
       .getDocuments('ClinicList', 'billlist')
       .then((bill) => {
         this.billlist = bill;
-        console.log('this.billlist=====', this.billlist);
 
         if (bill && bill.length > 0) {
           this.dataSource = new MatTableDataSource(this.billlist);

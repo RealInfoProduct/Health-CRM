@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Timestamp } from 'firebase/firestore';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-medicine-dialog',
@@ -19,10 +20,14 @@ export class MedicineDialogComponent implements OnInit {
     { id: 3, name: 'Injectable' }
   ]
 
+  patientlist = []
+
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<MedicineDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
+    private firebaseCollectionService: FirebaseCollectionService
+
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
@@ -31,6 +36,7 @@ export class MedicineDialogComponent implements OnInit {
   ngOnInit(): void {
     this.addmedicallist()
     if (this.action === 'Update') {
+      this.addmedicineForm.controls['patientName'].setValue(this.local_data.patientName)
       this.addmedicineForm.controls['medicineName'].setValue(this.local_data.medicineName)
       this.addmedicineForm.controls['companyName'].setValue(this.local_data.companyName)
       this.addmedicineForm.controls['category'].setValue(this.local_data.category)
@@ -42,6 +48,18 @@ export class MedicineDialogComponent implements OnInit {
       this.addmedicineForm.controls['gst'].setValue(this.local_data.gst)
       this.addmedicineForm.controls['netamount'].setValue(this.local_data.netamount)
     }
+    this. getPatientData()
+  }
+
+  getPatientData() {
+    this.firebaseCollectionService.getDocuments('ClinicList', 'patientlist').then((patient) => {
+      if (patient && patient.length > 0) {
+        this.patientlist = patient
+        console.log('this.Patientlist=====',this.patientlist);
+      }
+    }).catch((error) => {
+      console.error('Error fetching laboratory:', error);
+    });
   }
 
   convertTimestamp(element: any): Date | null {
@@ -53,6 +71,7 @@ export class MedicineDialogComponent implements OnInit {
   
   addmedicallist() {
     this.addmedicineForm = this.fb.group({
+      patientName: ['', Validators.required],
       medicineName: ['', Validators.required],
       companyName: ['', Validators.required],
       category: ['', Validators.required],
@@ -93,6 +112,7 @@ export class MedicineDialogComponent implements OnInit {
 
   doAction(): void {
     const payload = {
+      patientName: this.addmedicineForm.value.patientName,
       medicineName: this.addmedicineForm.value.medicineName,
       companyName: this.addmedicineForm.value.companyName,
       category: this.addmedicineForm.value.category,
