@@ -78,27 +78,8 @@ userType:any = localStorage.getItem('usertype')
   
 
   isVisible(item: any): boolean {
-    if (this.userType === 'Medical' && (item.route === '/dashboards/dashboard1' ||
-      item.route === '/dashboards/dashboard2' ||
-      item.route === '/apps/medicine')) {
-      return true; 
-    } if (this.userType === 'Patient' && (item.route === '/dashboards/dashboard1' ||
-      item.route === '/dashboards/dashboard2' ||
-      item.route === '/apps/appointments' ||
-      item.route === '/apps/doctors' ||
-      item.route === '/apps/bill' )) 
-      {
-      return true; 
-    } if (this.userType === 'Doctor' && (item.route === '/dashboards/dashboard1' ||
-      item.route === '/dashboards/dashboard2' ||
-      item.route === '/apps/appointments' ||
-      item.route === '/apps/doctors' ||
-      item.route === '/apps/patient' ||
-      item.route === '/apps/staff' ||
-      item.route === '/apps/medicine' )) 
-      {
-      return true; 
-    } if (this.userType === 'Admin' && (item.route === '/dashboards/dashboard1' ||
+    if (this.userType === 'Admin' && (
+      item.route === '/dashboards/dashboard1' ||
       item.route === '/dashboards/dashboard2' ||
       item.route === '/apps/appointments' ||
       item.route === '/apps/medical' ||
@@ -108,10 +89,37 @@ userType:any = localStorage.getItem('usertype')
       item.route === '/apps/patient' ||
       item.route === '/apps/medicine' ||
       item.route === '/apps/doctors' ||
-      item.route === '/apps/bill' )) 
+      item.route === '/apps/bill' 
+    )) 
       {
       return true; 
-    }
+    } if (this.userType === 'Medical' && (
+      item.route === '/dashboards/dashboard1' ||
+      item.route === '/dashboards/dashboard2' ||
+      item.route === '/apps/medicine'
+    )) {
+      return true; 
+    } if (this.userType === 'Patient' && (
+      item.route === '/dashboards/dashboard1' ||
+      item.route === '/dashboards/dashboard2' ||
+      item.route === '/apps/appointments' ||
+      item.route === '/apps/doctors' ||
+      item.route === '/apps/bill' 
+    )) 
+      {
+      return true; 
+    } if (this.userType === 'Doctor' && (
+      item.route === '/dashboards/dashboard1' ||
+      item.route === '/dashboards/dashboard2' ||
+      item.route === '/apps/appointments' ||
+      item.route === '/apps/doctors' ||
+      item.route === '/apps/patient' ||
+      item.route === '/apps/staff' ||
+      item.route === '/apps/medicine'
+     )) 
+      {
+      return true; 
+    } 
     return false; 
   }
   
