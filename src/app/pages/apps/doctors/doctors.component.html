@@ -9,7 +9,7 @@
           </mat-icon>
         </mat-form-field>
       </div>
-      <div class="col-lg-4 d-flex align-items-center justify-content-end">
+      <div class="col-lg-4 d-flex align-items-center justify-content-end" *ngIf="userType !== 'Patient'">
         <button mat-flat-button (click)="openDoctorsDialog('Add', {})" color="primary">
           Add Doctors
         </button>
@@ -106,7 +106,7 @@
             "mediumDate" }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="action">
+        <ng-container *ngIf="userType !== 'Patient'"  matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
             Action
           </th>

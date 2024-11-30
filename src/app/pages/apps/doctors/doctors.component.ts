@@ -33,6 +33,8 @@ export class DoctorsComponent implements OnInit {
 
   doctorslist: any = []
 
+  userType:any = localStorage.getItem('usertype')
+  
   dataSource = new MatTableDataSource(this.doctorslist)
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
@@ -50,12 +52,15 @@ export class DoctorsComponent implements OnInit {
 
 
   ngOnInit(): void {
+    if(this.userType === 'Patient'){
+      this.doctorsColumns = this.doctorsColumns.filter(column =>column !== 'action' )
+    }
     this.dataSource.paginator = this.paginator;
     this.getdoctorsdata()
   }
 
   getdoctorsdata() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'doctorslist').then((doctors) => {
+    this.firebaseCollectionService.getDocuments('ClinicList', 'doctorslist').then((doctors) => {  
       this.doctorslist = doctors
       if (doctors && doctors.length > 0) {
         this.dataSource = new MatTableDataSource(this.doctorslist)

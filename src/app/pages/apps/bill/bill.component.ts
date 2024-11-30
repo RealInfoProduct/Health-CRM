@@ -32,6 +32,7 @@ export class BillComponent implements OnInit{
   billlist: any = []
   appointmentslist: any = []
 
+  userType:any = localStorage.getItem('usertype')
   dataSource = new MatTableDataSource(this.billlist)
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
@@ -41,6 +42,9 @@ export class BillComponent implements OnInit{
   ) { }
 
   ngOnInit(): void {
+    if(this.userType === 'Patient'){
+      this.billColumns = this.billColumns.filter(column => column !== 'action')
+    }
     this.dataSource.paginator = this.paginator;
     this.getbilldata()
     this.getappointmentdata()

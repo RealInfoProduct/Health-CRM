@@ -10,7 +10,12 @@ import firebase from 'firebase/compat/app';
 })
 export class  AuthService {
 
-  constructor(private afAuth: AngularFireAuth,private snackBar: MatSnackBar,private firestore: AngularFirestore,private router: Router) { }
+  constructor(
+    private afAuth: AngularFireAuth,
+    private snackBar: MatSnackBar,
+    private firestore: AngularFirestore,
+    private router: Router
+  ) { }
 
   // Sign in with email and password
   async signIn(email: any, password: any, userType:any ) {
@@ -95,53 +100,241 @@ export class  AuthService {
   //   }
   // }
 
-  async signUp(signUpData: any) {
-    try {
-      // Check if the email is already in use
-      const signInMethods = await this.afAuth.fetchSignInMethodsForEmail(signUpData.email);
-      if (signInMethods.length > 0) {
-        this.snackBar.open('This email address is already registered. Please use another email.', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-        });
-        throw new Error('Email address is already in use.');
-      }
+  // async signUp(signUpData: any) {
+  //   try {
+  //     // Check if the email is already in use
+  //     const signInMethods = await this.afAuth.fetchSignInMethodsForEmail(signUpData.email);
+  //     if (signInMethods.length > 0) {
+  //       this.snackBar.open('This email address is already registered. Please use another email.', 'Close', {
+  //         duration: 3000,
+  //         horizontalPosition: 'right',
+  //         verticalPosition: 'top',
+  //       });
+  //       throw new Error('Email address is already in use.');
+  //     }
   
-      // Create the new user
-      const result: any = await this.afAuth.createUserWithEmailAndPassword(signUpData.email, signUpData.password);
+  //     // Create the new user
+  //     const result: any = await this.afAuth.createUserWithEmailAndPassword(signUpData.email, signUpData.password);
   
-      // Save user data to Firestore
-      await this.firestore.collection('ClinicList').doc(result.user?.uid).set({
-        firstName: signUpData.firstName,
-        lastName: signUpData.lastName,
-        mobileNumber: signUpData.mobileNumber,
-        clinicName: signUpData.clinicName,
-        address: signUpData.address,
-        email: signUpData.email,
-        password: signUpData.password,
-        userType: signUpData.userType,
-        isDisabled: true,
-      });
+  //     // Save user data to Firestore
+  //     await this.firestore.collection('ClinicList').doc(result.user?.uid).set({
+  //       firstName: signUpData.firstName,
+  //       lastName: signUpData.lastName,
+  //       mobileNumber: signUpData.mobileNumber,
+  //       clinicName: signUpData.clinicName,
+  //       address: signUpData.address,
+  //       email: signUpData.email,
+  //       password: signUpData.password,
+  //       userType: signUpData.userType,
+  //       isDisabled: true,
+  //     });
   
-      this.snackBar.open(`Account created: ${result.user._delegate.email}`, 'Close', {
+  //     this.snackBar.open(`Account created: ${result.user._delegate.email}`, 'Close', {
+  //       duration: 3000,
+  //       horizontalPosition: 'right',
+  //       verticalPosition: 'top',
+  //     });
+  
+  //     return result;
+  
+  //   } catch (error) {
+  //     console.error('Error during sign-up', error);
+  //     this.snackBar.open(`${error.message}`, 'Close', {
+  //       duration: 3000,
+  //       horizontalPosition: 'right',
+  //       verticalPosition: 'top',
+  //     });
+  //     throw error;
+  //   }
+  // }
+
+
+  // async signUp(signUpData: any) {
+  //   try {
+  //     // Check if the email is already in use
+  //     const signInMethods = await this.afAuth.fetchSignInMethodsForEmail(signUpData.email);
+  //     if (signInMethods.length > 0) {
+  //       this.snackBar.open('This email address is already registered. Please use another email.', 'Close', {
+  //         duration: 3000,
+  //         horizontalPosition: 'right',
+  //         verticalPosition: 'top',
+  //       });
+  //       throw new Error('Email address is already in use.');
+  //     }
+  
+  //     // Create the new user
+  //     const result: any = await this.afAuth.createUserWithEmailAndPassword(signUpData.email, signUpData.password);
+  
+  //     // Determine the subcollection name based on the userType
+  //     const subCollectionName = signUpData.userType; // Ensure this value is one of 'Admin', 'Medical', 'Patient', 'Doctor'
+  
+  //     // Validate userType
+  //     if (!['Admin', 'Medical', 'Patient', 'Doctor'].includes(subCollectionName)) {
+  //       throw new Error('Invalid user type. Please select a valid type.');
+  //     }
+  
+  //     // Save user data to Firestore in the appropriate subcollection
+  //     await this.firestore
+  //       .collection('ClinicList')
+  //       .doc(result.user?.uid)
+  //       .collection(subCollectionName)
+  //       .doc(result.user?.uid)
+  //       .set({
+  //         firstName: signUpData.firstName,
+  //         lastName: signUpData.lastName,
+  //         mobileNumber: signUpData.mobileNumber,
+  //         clinicName: signUpData.clinicName,
+  //         address: signUpData.address,
+  //         email: signUpData.email,
+  //         password: signUpData.password,
+  //         userType: signUpData.userType,
+  //         isDisabled: true,
+  //       });
+  
+  //     this.snackBar.open(`Account created: ${result.user._delegate.email}`, 'Close', {
+  //       duration: 3000,
+  //       horizontalPosition: 'right',
+  //       verticalPosition: 'top',
+  //     });
+  
+  //     return result;
+  
+  //   } catch (error) {
+  //     console.error('Error during sign-up', error);
+  //     this.snackBar.open(`${error.message}`, 'Close', {
+  //       duration: 3000,
+  //       horizontalPosition: 'right',
+  //       verticalPosition: 'top',
+  //     });
+  //     throw error;
+  //   }
+  // }
+  
+// async signUp(signUpData: any) {
+//   try {
+//     // Check if the email is already in use
+//     const signInMethods = await this.afAuth.fetchSignInMethodsForEmail(signUpData.email);
+//     if (signInMethods.length > 0) {
+//       this.snackBar.open('This email address is already registered. Please use another email.', 'Close', {
+//         duration: 3000,
+//         horizontalPosition: 'right',
+//         verticalPosition: 'top',
+//       });
+//       throw new Error('Email address is already in use.');
+//     }
+
+//     // Create the new user
+//     const result: any = await this.afAuth.createUserWithEmailAndPassword(signUpData.email, signUpData.password);
+
+//     // Define user data
+//     const userData = {
+//       firstName: signUpData.firstName,
+//       lastName: signUpData.lastName,
+//       mobileNumber: signUpData.mobileNumber,
+//       clinicName: signUpData.clinicName,
+//       address: signUpData.address,
+//       email: signUpData.email,
+//       password: signUpData.password,
+//       userType: signUpData.userType,
+//       isDisabled: true,
+//     };
+
+//     // Save user data to Firestore under 'ClinicList'
+//     const userDocRef = this.firestore.collection('ClinicList').doc(result.user?.uid);
+//     await userDocRef.set(userData);
+
+//     // Add user data to the appropriate subcollection based on userType
+//     const userType = signUpData.userType; // Should be 'Admin', 'Medical', 'Patient', or 'Doctor'
+//     if (['Admin', 'Medical', 'Patient', 'Doctor'].includes(userType)) {
+//       await userDocRef.collection(userType).doc(result.user?.uid).set(userData);
+//     } else {
+//       throw new Error(`Invalid userType: ${userType}`);
+//     }
+
+//     // Show success message
+//     this.snackBar.open(`Account created: ${result.user.email}`, 'Close', {
+//       duration: 3000,
+//       horizontalPosition: 'right',
+//       verticalPosition: 'top',
+//     });
+
+//     return result;
+
+//   } catch (error) {
+//     console.error('Error during sign-up', error);
+//     this.snackBar.open(`${error.message}`, 'Close', {
+//       duration: 3000,
+//       horizontalPosition: 'right',
+//       verticalPosition: 'top',
+//     });
+//     throw error;
+//   }
+// }
+
+
+
+async signUp(signUpData: any) {
+  try {
+    // Check if the email is already in use
+    const signInMethods = await this.afAuth.fetchSignInMethodsForEmail(signUpData.email);
+    if (signInMethods.length > 0) {
+      this.snackBar.open('This email address is already registered. Please use another email.', 'Close', {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'top',
       });
-  
-      return result;
-  
-    } catch (error) {
-      console.error('Error during sign-up', error);
-      this.snackBar.open(`${error.message}`, 'Close', {
-        duration: 3000,
-        horizontalPosition: 'right',
-        verticalPosition: 'top',
-      });
-      throw error;
+      throw new Error('Email address is already in use.');
     }
+
+    // Create the new user
+    const result: any = await this.afAuth.createUserWithEmailAndPassword(signUpData.email, signUpData.password);
+
+    // Define user data
+    const userData = {
+      firstName: signUpData.firstName,
+      lastName: signUpData.lastName,
+      mobileNumber: signUpData.mobileNumber,
+      clinicName: signUpData.clinicName,
+      address: signUpData.address,
+      email: signUpData.email,
+      userType: signUpData.userType,
+      isDisabled: true, // Set the account as disabled initially
+    };
+
+    // Save user data to Firestore under 'ClinicList'
+    const userDocRef = this.firestore.collection('ClinicList').doc(result.user?.uid);
+    await userDocRef.set(userData);
+
+    // Add user data to the appropriate subcollection based on userType
+    const validUserTypes = ['Admin', 'Medical', 'Patient', 'Doctor'];
+    const userType = signUpData.userType;
+
+    if (validUserTypes.includes(userType)) {
+      await userDocRef.collection(userType).doc(result.user?.uid).set(userData);
+    } else {
+      throw new Error(`Invalid userType: ${userType}`);
+    }
+
+    // Show success message
+    this.snackBar.open(`Account created successfully for: ${result.user.email}`, 'Close', {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
+
+    return result; // Return result for further processing if needed
+
+  } catch (error) {
+    console.error('Error during sign-up:', error);
+    this.snackBar.open(`Error: ${error.message}`, 'Close', {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
+    throw error; // Propagate error for external handling if required
   }
+}
+
   
 
   // Sign out

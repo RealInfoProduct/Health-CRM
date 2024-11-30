@@ -46,8 +46,6 @@ export class AppointmentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
-    console.log('getappointmentdata');
-    
     this.getappointmentdata()
     this.getdoctorsdata()
   }
@@ -62,12 +60,9 @@ export class AppointmentsComponent implements OnInit {
 
   getappointmentdata() {
     this.firebaseCollectionService.getDocuments('ClinicList', 'appointmentslist').then((appointment) => {
-      debugger
       this.appointmentslist = appointment
       if (appointment && appointment.length > 0) {
         this.dataSource = new MatTableDataSource(this.appointmentslist)
-        console.log('this.appointmentslist=====>>>>>>',this.appointmentslist);
-        
         this.dataSource.paginator = this.paginator
       } else {
         this.appointmentslist = []

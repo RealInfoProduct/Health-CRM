@@ -22,7 +22,11 @@ export class AppSideLoginComponent implements OnInit  {
     {id:4 , typeName:'Doctor'}
   ]
 
-  constructor(private settings: CoreService, private router: Router ,private authService:AuthService) {}
+  constructor(
+    private settings: CoreService, 
+    private router: Router,
+    private authService:AuthService
+  ) {}
 
   ngOnInit() {}
 
