@@ -36,6 +36,7 @@ export class AppointmentsComponent implements OnInit {
   appointmentslist: any = []
   doctorslist: any = []
 
+  userType:any = localStorage.getItem('usertype')
   dataSource = new MatTableDataSource(this.appointmentslist)
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 

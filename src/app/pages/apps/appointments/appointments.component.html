@@ -9,7 +9,7 @@
           </mat-icon>
         </mat-form-field>
       </div>
-      <div class="col-lg-4 d-flex align-items-center justify-content-end">
+      <div class="col-lg-4 d-flex align-items-center justify-content-end"  *ngIf="userType !== 'Doctor'">
         <button mat-flat-button (click)="openAppointmentsDialog('Add', {})" color="primary">
           Add Appointments
         </button>
