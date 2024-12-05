@@ -23,6 +23,19 @@
 
             <form class="m-t-30" [formGroup]="form" (ngSubmit)="submit()">
 
+               <!--userType -->
+               <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">User Type</mat-label>
+               <mat-form-field appearance="outline" class="w-100" color="primary">
+                 <mat-select #dropdown formControlName="userType" placeholder="Enter user type">
+                  <mat-option [value]="item.typeName" *ngFor="let item of userTypeList">{{item.typeName}}</mat-option>
+              </mat-select>
+                 <mat-hint *ngIf="f['userType'].touched && f['userType'].invalid" class="m-b-16 error-msg">
+                   <div class="text-error" *ngIf="f['userType'].errors && f['userType'].errors['required']">
+                    User type is required.
+                   </div>
+                 </mat-hint>
+               </mat-form-field>
+
                <!-- firstName -->
               <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">First Name</mat-label>
               <mat-form-field appearance="outline" class="w-100" color="primary">
@@ -60,12 +73,23 @@
                </mat-form-field>
 
                <!-- clinic name  -->
-               <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Clinic Name</mat-label>
-               <mat-form-field appearance="outline" class="w-100" color="primary">
+               <mat-label *ngIf="form.get('userType').value === 'Doctor'"  class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Clinic Name</mat-label>
+               <mat-form-field appearance="outline" class="w-100" color="primary" *ngIf="form.get('userType').value === 'Doctor'" >
                  <input matInput formControlName="clinicName" />
                  <mat-hint *ngIf="f['clinicName'].touched && f['clinicName'].invalid" class="m-b-16 error-msg">
                    <div class="text-error" *ngIf="f['clinicName'].errors && f['clinicName'].errors['required']">
                     Clinic Name is required.
+                   </div>
+                 </mat-hint>
+               </mat-form-field>
+
+               <!-- Medical name  -->
+               <mat-label *ngIf="form.get('userType').value === 'Medical'"  class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Medical Name</mat-label>
+               <mat-form-field appearance="outline" class="w-100" color="primary" *ngIf="form.get('userType').value === 'Medical'" >
+                 <input matInput formControlName="medicalName" />
+                 <mat-hint *ngIf="f['medicalName'].touched && f['medicalName'].invalid" class="m-b-16 error-msg">
+                   <div class="text-error" *ngIf="f['medicalName'].errors && f['medicalName'].errors['required']">
+                    Medical Name is required.
                    </div>
                  </mat-hint>
                </mat-form-field>
@@ -103,21 +127,7 @@
                 </mat-hint>
               </mat-form-field>
 
-              <!--userType -->
-              <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">User Type</mat-label>
-               <mat-form-field appearance="outline" class="w-100" color="primary">
-                 <!-- <input matInput formControlName="userName" /> -->
-                 <mat-select #dropdown formControlName="userType" placeholder="Enter user type">
-                  <mat-option [value]="item.typeName" *ngFor="let item of userTypeList">{{item.typeName}}</mat-option>
-              </mat-select>
-                 <mat-hint *ngIf="f['userType'].touched && f['userType'].invalid" class="m-b-16 error-msg">
-                   <div class="text-error" *ngIf="f['userType'].errors && f['userType'].errors['required']">
-                    User type is required.
-                   </div>
-                 </mat-hint>
-               </mat-form-field>
-
-              <button mat-flat-button color="primary" class="w-100" [disabled]="!form.valid">
+              <button mat-flat-button color="primary" class="w-100" [disabled]="!form.invalid">
                 Sign Up
               </button>
               <!-- input -->

@@ -64,6 +64,8 @@ export class DoctorsComponent implements OnInit {
       this.doctorslist = doctors
       if (doctors && doctors.length > 0) {
         this.dataSource = new MatTableDataSource(this.doctorslist)
+        console.log('this.doctorslist====>>>>',this.doctorslist);
+        
         this.dataSource.paginator = this.paginator
       } else {
         this.doctorslist = []

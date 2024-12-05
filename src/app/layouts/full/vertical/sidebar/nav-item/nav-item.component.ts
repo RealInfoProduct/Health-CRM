@@ -115,7 +115,8 @@ userType:any = localStorage.getItem('usertype')
       item.route === '/apps/doctors' ||
       item.route === '/apps/patient' ||
       item.route === '/apps/staff' ||
-      item.route === '/apps/medicine'
+      item.route === '/apps/medicine' ||
+      item.route === '/apps/medical' 
      )) 
       {
       return true; 

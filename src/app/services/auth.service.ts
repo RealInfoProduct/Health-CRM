@@ -124,6 +124,7 @@ async signUp(signUpData: any) {
       lastName: signUpData.lastName,
       mobileNumber: signUpData.mobileNumber,
       clinicName: signUpData.clinicName,
+      medicalName: signUpData.medicalName,
       address: signUpData.address,
       email: signUpData.email,
       password: signUpData.password,
