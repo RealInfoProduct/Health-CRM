@@ -67,62 +67,12 @@ export class  AuthService {
     }
   }
 
-  
-  
+   async signUp(signUpData :any) {
+    try {
+      const result:any = await this.afAuth.createUserWithEmailAndPassword(signUpData.email, signUpData.password);
 
-  //  async signUp(signUpData :any) {
-  //   try {
-  //     const result:any = await this.afAuth.createUserWithEmailAndPassword(signUpData.email, signUpData.password);
-
-  //     await this.firestore.collection('ClinicList').doc(result.user?.uid).set({
-  //       firstName: signUpData.firstName,
-  //       lastName: signUpData.lastName,
-  //       mobileNumber: signUpData.mobileNumber,
-  //       clinicName: signUpData.clinicName,
-  //       address: signUpData.address,
-  //       email: signUpData.email,
-  //       password: signUpData.password,
-  //       userName: signUpData.userName,
-  //       isDisabled: true
-  //     });
-      
-  //     this.snackBar.open(`Account created: ${result.user._delegate.email}`, 'Close', {
-  //       duration: 3000,
-  //       horizontalPosition: 'right',
-  //       verticalPosition: 'top',
-  //     });
-  //     return result;
-  //   } catch (error) {
-  //     this.snackBar.open(`${error}`, 'Close', {
-  //       duration: 3000,
-  //       horizontalPosition: 'right',
-  //       verticalPosition: 'top',
-  //     });
-  //     throw error;
-  //   }
-  // }
-
-
-
-async signUp(signUpData: any) {
-  try {
-    // Check if the email is already in use
-    const signInMethods = await this.afAuth.fetchSignInMethodsForEmail(signUpData.email);
-    if (signInMethods.length > 0) {
-      this.snackBar.open('This email address is already registered. Please use another email.', 'Close', {
-        duration: 3000,
-        horizontalPosition: 'right',
-        verticalPosition: 'top',
-      });
-      throw new Error('Email address is already in use.');
-    }
-
-    // Create the new user
-    const result: any = await this.afAuth.createUserWithEmailAndPassword(signUpData.email, signUpData.password);
-
-    // Define user data
-    const userData = {
-      firstName: signUpData.firstName,
+      await this.firestore.collection('ClinicList').doc(result.user?.uid).set({
+        firstName: signUpData.firstName,
       lastName: signUpData.lastName,
       mobileNumber: signUpData.mobileNumber,
       clinicName: signUpData.clinicName,
@@ -131,46 +81,25 @@ async signUp(signUpData: any) {
       email: signUpData.email,
       password: signUpData.password,
       userType: signUpData.userType,
-      isDisabled: true, // Set the account as disabled initially
-    };
-
-    // Save user data to Firestore under 'ClinicList'
-    const userDocRef = this.firestore.collection('ClinicList').doc(result.user?.uid);
-    await userDocRef.set(userData);
-
-    // Add user data to the appropriate subcollection based on userType
-    const validUserTypes = ['Admin', 'Medical', 'Patient', 'Doctor'];
-    const userType = signUpData.userType;
-
-    if (validUserTypes.includes(userType)) {
-      await userDocRef.collection(userType).doc(result.user?.uid).set(userData);
-    } else {
-      throw new Error(`Invalid userType: ${userType}`);
+      isDisabled: true,
+      });
+      
+      this.snackBar.open(`Account created: ${result.user._delegate.email}`, 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+      return result;
+    } catch (error) {
+      this.snackBar.open(`${error}`, 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+      throw error;
     }
-
-    // Show success message
-    this.snackBar.open(`Account created successfully for: ${result.user.email}`, 'Close', {
-      duration: 3000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-    });
-
-    return result; // Return result for further processing if needed
-
-  } catch (error) {
-    console.error('Error during sign-up:', error);
-    this.snackBar.open(`Error: ${error.message}`, 'Close', {
-      duration: 3000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-    });
-    throw error; // Propagate error for external handling if required
   }
-}
 
-
-
-  
 
   // Sign out
   async signOut() {
