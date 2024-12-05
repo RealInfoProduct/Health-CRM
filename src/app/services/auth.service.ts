@@ -66,6 +66,8 @@ export class  AuthService {
       throw error;
     }
   }
+
+  
   
 
   //  async signUp(signUpData :any) {
@@ -165,6 +167,8 @@ async signUp(signUpData: any) {
     throw error; // Propagate error for external handling if required
   }
 }
+
+
 
   
 
