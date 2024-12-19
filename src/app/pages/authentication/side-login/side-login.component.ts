@@ -16,10 +16,10 @@ export class AppSideLoginComponent implements OnInit  {
   options = this.settings.getOptions();
 
   userTypeList:any = [
-    {id:1 , typeName:'Admin'},
+    // {id:1 , typeName:'Admin'},
+    {id:1 , typeName:'Doctor'},
     {id:2 , typeName:'Medical'},
-    {id:3 , typeName:'Patient'},
-    {id:4 , typeName:'Doctor'}
+    {id:3 , typeName:'Patient'}
   ]
 
   constructor(

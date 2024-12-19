@@ -67,7 +67,7 @@ export class AppointmentsDialogComponent implements OnInit {
 
   
   getdoctorsdata() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'doctorslist').then((doctors) => {
+    this.firebaseCollectionService.getDocuments('Doctor', 'doctorslist').then((doctors) => {
       if (doctors && doctors.length > 0) {
         this.doctorslist = doctors
         console.log('this.doctorslist-----',this.doctorslist);

@@ -78,22 +78,23 @@ userType:any = localStorage.getItem('usertype')
   
 
   isVisible(item: any): boolean {
-    if (this.userType === 'Admin' && (
-      item.route === '/dashboards/dashboard1' ||
-      item.route === '/dashboards/dashboard2' ||
-      item.route === '/apps/appointments' ||
-      item.route === '/apps/medical' ||
-      item.route === '/apps/laboratory' ||
-      item.route === '/apps/lab' ||
-      item.route === '/apps/staff' ||
-      item.route === '/apps/patient' ||
-      item.route === '/apps/medicine' ||
-      item.route === '/apps/doctors' ||
-      item.route === '/apps/bill' 
-    )) 
-      {
-      return true; 
-    } if (this.userType === 'Medical' && (
+    // if (this.userType === 'Admin' && (
+    //   item.route === '/dashboards/dashboard1' ||
+    //   item.route === '/dashboards/dashboard2' ||
+    //   item.route === '/apps/appointments' ||
+    //   item.route === '/apps/medical' ||
+    //   item.route === '/apps/laboratory' ||
+    //   item.route === '/apps/lab' ||
+    //   item.route === '/apps/staff' ||
+    //   item.route === '/apps/patient' ||
+    //   item.route === '/apps/medicine' ||
+    //   item.route === '/apps/doctors' ||
+    //   item.route === '/apps/bill' 
+    // )) 
+    //   {
+    //   return true; 
+    // }
+     if (this.userType === 'Medical' && (
       item.route === '/dashboards/dashboard1' ||
       item.route === '/dashboards/dashboard2' ||
       item.route === '/apps/medicine'
@@ -103,7 +104,7 @@ userType:any = localStorage.getItem('usertype')
       item.route === '/dashboards/dashboard1' ||
       item.route === '/dashboards/dashboard2' ||
       item.route === '/apps/appointments' ||
-      item.route === '/apps/doctors' ||
+      // item.route === '/apps/doctors' ||
       item.route === '/apps/bill' 
     )) 
       {

@@ -131,7 +131,7 @@ export class AppTopCardsComponent implements OnInit {
   }
 
   getdoctorsdata() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'doctorslist').then((doctors) => {
+    this.firebaseCollectionService.getDocuments('Doctor', 'doctorslist').then((doctors) => {
       this.doctorslist = doctors || [];
       this.dataSource = new MatTableDataSource(this.doctorslist)
 

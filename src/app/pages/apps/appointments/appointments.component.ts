@@ -52,7 +52,7 @@ export class AppointmentsComponent implements OnInit {
   }
 
   getdoctorsdata() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'doctorslist').then((doctors) => {
+    this.firebaseCollectionService.getDocuments('Doctor', 'doctorslist').then((doctors) => {
       this.doctorslist = doctors 
     }).catch((error) =>{
       console.error('Error fetching doctors:', error);
@@ -60,7 +60,7 @@ export class AppointmentsComponent implements OnInit {
   }
 
   getappointmentdata() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'appointmentslist').then((appointment) => {
+    this.firebaseCollectionService.getDocuments('Patient', 'appointmentslist').then((appointment) => {
       this.appointmentslist = appointment
       if (appointment && appointment.length > 0) {
         this.dataSource = new MatTableDataSource(this.appointmentslist)
@@ -94,17 +94,17 @@ export class AppointmentsComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.firebaseCollectionService.addDocument('ClinicList', result.data, 'appointmentslist');
+        this.firebaseCollectionService.addDocument('Patient', result.data, 'appointmentslist');
         this.getappointmentdata()
       } else if (result.event === 'Update') {
         this.appointmentslist.forEach((element: any) => {
           if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('ClinicList', obj.id, result.data, 'appointmentslist');
+            this.firebaseCollectionService.updateDocument('Patient', obj.id, result.data, 'appointmentslist');
             this.getappointmentdata()
           }
         });
       } else if (result.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('ClinicList', obj.id, 'appointmentslist');
+        this.firebaseCollectionService.deleteDocument('Patient', obj.id, 'appointmentslist');
         this.getappointmentdata()
       }
 

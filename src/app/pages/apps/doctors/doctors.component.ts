@@ -5,6 +5,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
+import { log } from 'node:console';
 
 @Component({
   selector: 'app-doctors',
@@ -59,9 +60,27 @@ export class DoctorsComponent implements OnInit {
     this.getdoctorsdata()
   }
 
+  // getdoctorsdata() {
+  //   this.firebaseCollectionService.getDocuments('ClinicList', 'doctorslist').then((doctors) => {  
+  //     this.doctorslist = doctors
+  //     if (doctors && doctors.length > 0) {
+  //       this.dataSource = new MatTableDataSource(this.doctorslist)
+  //       console.log('this.doctorslist====>>>>',this.doctorslist);
+        
+  //       this.dataSource.paginator = this.paginator
+  //     } else {
+  //       this.doctorslist = []
+  //       this.dataSource = new MatTableDataSource(this.doctorslist)
+  //       this.dataSource.paginator = this.paginator
+  //     }
+  //   })
+  // }
+
+
   getdoctorsdata() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'doctorslist').then((doctors) => {  
+    this.firebaseCollectionService.getDocuments('Doctor', 'doctorslist').then((doctors) => {  
       this.doctorslist = doctors
+      console.log('this.doctorslist===>>>',this.doctorslist);
       if (doctors && doctors.length > 0) {
         this.dataSource = new MatTableDataSource(this.doctorslist)
         console.log('this.doctorslist====>>>>',this.doctorslist);
@@ -74,7 +93,7 @@ export class DoctorsComponent implements OnInit {
       }
     })
   }
-
+  
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -86,20 +105,39 @@ export class DoctorsComponent implements OnInit {
       data: obj,
       width: action === 'Delete' ? '25%' : '50%'
     });
-    dialogRef.afterClosed().subscribe((result) => {
+    // dialogRef.afterClosed().subscribe((result) => {
+    //   if (result.event === 'Add') {
+    //     this.firebaseCollectionService.addDocument('Doctor', result.data, 'doctorslist');
+    //     this.getdoctorsdata()
+
+    //   } else if (result.event === 'Update') {
+    //     this.doctorslist.forEach((element: any) => {
+    //       if (obj.id === element.id) {
+    //         this.firebaseCollectionService.updateDocument('Doctor', obj.id, result.data, 'doctorslist');
+    //         this.getdoctorsdata()
+    //       }
+    //     });
+    //   } else if (result.event === 'Delete') {
+    //     this.firebaseCollectionService.deleteDocument('Doctor', obj.id, 'doctorslist');
+    //     this.getdoctorsdata()
+    //   }
+
+    // })
+
+     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.firebaseCollectionService.addDocument('ClinicList', result.data, 'doctorslist');
+        this.firebaseCollectionService.addDocument('Doctor', result.data, 'doctorslist');
         this.getdoctorsdata()
 
       } else if (result.event === 'Update') {
         this.doctorslist.forEach((element: any) => {
           if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('ClinicList', obj.id, result.data, 'doctorslist');
+            this.firebaseCollectionService.updateDocument('Doctor', obj.id, result.data, 'doctorslist');
             this.getdoctorsdata()
           }
         });
       } else if (result.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('ClinicList', obj.id, 'doctorslist');
+        this.firebaseCollectionService.deleteDocument('Doctor', obj.id, 'doctorslist');
         this.getdoctorsdata()
       }
 
