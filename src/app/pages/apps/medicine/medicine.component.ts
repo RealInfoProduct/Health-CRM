@@ -25,6 +25,7 @@ export class MedicineComponent implements OnInit{
     // 'pack',
     'qty',
     'rate',
+    'paymentMethod',
     'amount',
     'disc',
     'gst',
@@ -49,16 +50,44 @@ export class MedicineComponent implements OnInit{
       this. getappointmentdata()
     }
 
-    getappointmentdata() {
-      this.firebaseCollectionService.getDocuments('ClinicList', 'appointmentslist').then((appointment) => {
-        this.appointmentslist = appointment
-      }).catch((error) =>{
-        console.error('Error fetching doctors:', error);
-      }) 
-    }
+    // getappointmentdata() {
+    //   this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist').then((appointment) => {
+    //     this.appointmentslist = appointment
+    //     console.log('this.appointmentslist=====>>>>>',this.appointmentslist);
+        
+    //   }).catch((error) =>{
+    //     console.error('Error fetching doctors:', error);
+    //   }) 
+    // }
 
+    getappointmentdata() {
+      // Check if appointmentslist is already stored in localStorage
+      const storedAppointments = localStorage.getItem('appointmentsData');
+      
+      if (storedAppointments) {
+        // Parse the JSON string and assign it to appointmentslist
+        this.appointmentslist = JSON.parse(storedAppointments);
+
+        console.log('Loaded appointments from localStorage:', this.appointmentslist);
+      } else {
+        // Fetch from Firebase if not found in localStorage
+        this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist').then((appointment) => {
+          if (appointment && appointment.length > 0) {
+            this.appointmentslist = appointment;
+    
+            // Store the fetched data in localStorage
+            localStorage.setItem('appointmentslist', JSON.stringify(this.appointmentslist));
+            console.log('Fetched appointments from Firebase and stored in localStorage:', this.appointmentslist);
+          }
+        }).catch((error) => {
+          console.error('Error fetching appointments:', error);
+        });
+      }
+    }
+    
+    
    getmedicineData(){
-    this.firebaseCollectionService.getDocuments('ClinicList','medicinelist').then((medicine) =>{
+    this.firebaseCollectionService.getDocuments('Medical','medicinelist').then((medicine) =>{
       this.medicinelist = medicine
       if(medicine && medicine.length > 0){
         this.dataSource = new MatTableDataSource(this.medicinelist)
@@ -94,14 +123,14 @@ export class MedicineComponent implements OnInit{
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.firebaseCollectionService.addDocument('ClinicList', result.data ,'medicinelist')
+        this.firebaseCollectionService.addDocument('Medical', result.data ,'medicinelist')
         this.getmedicineData()
         console.log("this.medicinelist=====>>>>>",this.medicinelist);
       }
       if (result.event === 'Update') {
         this.medicinelist.forEach((element: any) => {
           if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('ClinicList', obj.id, result.data, 'medicinelist')
+            this.firebaseCollectionService.updateDocument('Medical', obj.id, result.data, 'medicinelist')
             this.getmedicineData()
             console.log("this.medicinelist=====>>>>>",this.medicinelist);
           }
@@ -109,13 +138,13 @@ export class MedicineComponent implements OnInit{
         this.dataSource = new MatTableDataSource(this.medicinelist)
       }
       if (result.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('ClinicList', obj.id, 'medicinelist')
+        this.firebaseCollectionService.deleteDocument('Medical', obj.id, 'medicinelist')
         this.getmedicineData()
       }
     });
   }
 
-  getappointmentlist(appointmentId: string): string {  
-    return this.appointmentslist.find((appointmentObj:any) => appointmentObj.id === appointmentId)?.firstName ;
+  getappointmentlist(medicineId: string): string {  
+    return this.appointmentslist.find((appointmentObj:any) => appointmentObj.id === medicineId)?.firstName ;
   }
 }

@@ -49,7 +49,7 @@ export class LabComponent implements OnInit {
   }
 
   getappointmentdata() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'appointmentslist').then((appointment) => {
+    this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist').then((appointment) => {
       this.appointmentslist = appointment
       console.log('this.appointmentslist=====',this.appointmentslist);
     }).catch((error) => {
@@ -58,7 +58,7 @@ export class LabComponent implements OnInit {
   }
 
   getlaboratoryData() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'laboratorylist').then((laboratory) => {
+    this.firebaseCollectionService.getDocuments('Doctor', 'laboratorylist').then((laboratory) => {
       this.laboratorylist = laboratory
     }).catch((error) => {
       console.error('Error fetching laboratory:', error);
@@ -67,7 +67,7 @@ export class LabComponent implements OnInit {
 
 
   getlabdata() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'lablist').then((lab) => {
+    this.firebaseCollectionService.getDocuments('Doctor', 'lablist').then((lab) => {
       this.lablist = lab
       if (lab && lab.length > 0) {
         this.dataSource = new MatTableDataSource(this.lablist)
@@ -92,17 +92,17 @@ export class LabComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.firebaseCollectionService.addDocument('ClinicList', result.data, 'lablist');
+        this.firebaseCollectionService.addDocument('Doctor', result.data, 'lablist');
         this.getlabdata()
       } else if (result.event === 'Update') {
         this.lablist.forEach((element: any) => {
           if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('ClinicList', obj.id, result.data, 'lablist');
+            this.firebaseCollectionService.updateDocument('Doctor', obj.id, result.data, 'lablist');
             this.getlabdata()
           }
         });
       } else if (result.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('ClinicList', obj.id, 'lablist');
+        this.firebaseCollectionService.deleteDocument('Doctor', obj.id, 'lablist');
         this.getlabdata()
       }
     });

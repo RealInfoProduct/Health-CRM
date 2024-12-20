@@ -40,7 +40,7 @@ export class LaboratoryComponent implements OnInit {
   }
 
   getlaboratoryData() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'laboratorylist').then((laboratory) => {
+    this.firebaseCollectionService.getDocuments('Doctor', 'laboratorylist').then((laboratory) => {
       this.laboratorylist = laboratory
       if (laboratory && laboratory.length > 0) {
         this.dataSource = new MatTableDataSource(this.laboratorylist);
@@ -67,19 +67,19 @@ export class LaboratoryComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('ClinicList', result.data, 'laboratorylist');
+        this.firebaseCollectionService.addDocument('Doctor', result.data, 'laboratorylist');
         this.getlaboratoryData()
       }
       if (result?.event === 'Update') {
         this.laboratorylist.forEach((element: any) => {
           if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('ClinicList', obj.id, result.data, 'laboratorylist');
+            this.firebaseCollectionService.updateDocument('Doctor', obj.id, result.data, 'laboratorylist');
             this.getlaboratoryData()
           }
         });
       }
       if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('ClinicList', obj.id, 'laboratorylist');
+        this.firebaseCollectionService.deleteDocument('Doctor', obj.id, 'laboratorylist');
         this.getlaboratoryData()
       }
     });

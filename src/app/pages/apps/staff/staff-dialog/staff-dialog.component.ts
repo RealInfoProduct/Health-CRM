@@ -42,8 +42,7 @@ export class StaffDialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<StaffDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
-    private firebaseCollectionService: FirebaseCollectionService
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;

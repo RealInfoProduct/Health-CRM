@@ -55,7 +55,7 @@ export class AddbilldialogComponent implements OnInit {
   }
 
   getappointmentdata() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'appointmentslist').then((appointment) => {
+    this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist').then((appointment) => {
       if (appointment && appointment.length > 0) {
         this.appointmentslist = appointment
       }

@@ -19,7 +19,7 @@ export class AppSideLoginComponent implements OnInit  {
     // {id:1 , typeName:'Admin'},
     {id:1 , typeName:'Doctor'},
     {id:2 , typeName:'Medical'},
-    {id:3 , typeName:'Patient'}
+    // {id:3 , typeName:'Patient'}
   ]
 
   constructor(

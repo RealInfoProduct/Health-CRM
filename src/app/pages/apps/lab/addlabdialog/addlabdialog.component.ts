@@ -60,7 +60,7 @@ export class AddlabdialogComponent implements OnInit {
   }
 
   getappointmentdata() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'appointmentslist').then((appointment) => {
+    this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist').then((appointment) => {
       if (appointment && appointment.length > 0) {
         this.appointmentslist = appointment
       }
@@ -68,7 +68,7 @@ export class AddlabdialogComponent implements OnInit {
   }
 
   getlaboratoryData() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'laboratorylist').then((laboratory) => {
+    this.firebaseCollectionService.getDocuments('Doctor', 'laboratorylist').then((laboratory) => {
       if (laboratory && laboratory.length > 0) {
         this.laboratorylist = laboratory
         console.log('Laboratory List:', this.laboratorylist);

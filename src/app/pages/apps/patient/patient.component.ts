@@ -66,7 +66,7 @@ export class PatientComponent implements OnInit {
 
 
   getappointmentdata() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'appointmentslist').then((appointment) => {
+    this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist').then((appointment) => {
       this.appointmentslist = appointment
       console.log('this.appointmentslist=====>>>',this.appointmentslist);
     }).catch((error) =>{
@@ -75,7 +75,7 @@ export class PatientComponent implements OnInit {
   }
 
   getdoctorsdata() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'doctorslist').then((doctors) => {
+    this.firebaseCollectionService.getDocuments('Doctor', 'doctorslist').then((doctors) => {
       this.doctorslist = doctors 
     }).catch((error) =>{
       console.error('Error fetching doctors:', error);
@@ -83,7 +83,7 @@ export class PatientComponent implements OnInit {
   }
 
   getlaboratoryData() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'laboratorylist').then((laboratory) => {
+    this.firebaseCollectionService.getDocuments('Doctor', 'laboratorylist').then((laboratory) => {
       this.laboratorylist = laboratory
     }).catch((error) => {
       console.error('Error fetching laboratory:', error);
@@ -91,7 +91,7 @@ export class PatientComponent implements OnInit {
   }
 
   getPatientData() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'patientlist').then((patient) => {
+    this.firebaseCollectionService.getDocuments('Doctor', 'patientlist').then((patient) => {
       this.patientlist = patient
       console.log('this.Patientlist=====',this.patientlist);
       if (patient && patient.length > 0) {
@@ -116,19 +116,19 @@ export class PatientComponent implements OnInit {
     })
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('ClinicList', result.data, 'patientlist')
+        this.firebaseCollectionService.addDocument('Doctor', result.data, 'patientlist')
         this.getPatientData()
       }
       if (result?.event === 'Update') {
         this.patientlist.forEach((element: any) => {
           if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('ClinicList', obj.id, result.data, 'patientlist');
+            this.firebaseCollectionService.updateDocument('Doctor', obj.id, result.data, 'patientlist');
             this.getPatientData()
           }
         })
       }
       if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('ClinicList', obj.id, 'patientlist');
+        this.firebaseCollectionService.deleteDocument('Doctor', obj.id, 'patientlist');
         this.getPatientData()
       }
     });

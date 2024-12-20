@@ -81,10 +81,12 @@ export class AppTopCardsComponent implements OnInit {
     this.getbilldata();
   }
 
+  
+
 
   getappointmentdata() {
     this.firebaseCollectionService
-      .getDocuments('ClinicList', 'appointmentslist')
+      .getDocuments('Doctor', 'appointmentslist')
       .then((appointment) => {
         this.appointmentslist = appointment || [];
         this.dataSource = new MatTableDataSource(this.appointmentslist);
@@ -100,7 +102,7 @@ export class AppTopCardsComponent implements OnInit {
 
   getMedicalData() {
     this.firebaseCollectionService
-      .getDocuments('ClinicList', 'medicallist')
+      .getDocuments('Doctor', 'medicallist')
       .then((medical) => {
         this.medicallist = medical || [];
         this.dataSource = new MatTableDataSource(this.medicallist);
@@ -116,7 +118,7 @@ export class AppTopCardsComponent implements OnInit {
 
   getlaboratoryData() {
     this.firebaseCollectionService
-      .getDocuments('ClinicList', 'laboratorylist')
+      .getDocuments('Doctor', 'laboratorylist')
       .then((laboratory) => {
         this.laboratorylist = laboratory || [];
         this.dataSource = new MatTableDataSource(this.laboratorylist);
@@ -146,7 +148,7 @@ export class AppTopCardsComponent implements OnInit {
 
   getbilldata() {
     this.firebaseCollectionService
-      .getDocuments('ClinicList', 'billlist')
+      .getDocuments('Doctor', 'billlist')
       .then((bill) => {
         this.billlist = bill;
 

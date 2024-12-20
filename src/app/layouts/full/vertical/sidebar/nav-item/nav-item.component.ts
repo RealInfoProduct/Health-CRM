@@ -100,24 +100,29 @@ userType:any = localStorage.getItem('usertype')
       item.route === '/apps/medicine'
     )) {
       return true; 
-    } if (this.userType === 'Patient' && (
+    } 
+    // if (this.userType === 'Patient' && (
+    //   item.route === '/dashboards/dashboard1' ||
+    //   item.route === '/dashboards/dashboard2' ||
+    //   item.route === '/apps/appointments' ||
+    //   // item.route === '/apps/doctors' ||
+    //   item.route === '/apps/bill' 
+    // )) 
+    //   {
+    //   return true; 
+    // } 
+    if (this.userType === 'Doctor' && (
       item.route === '/dashboards/dashboard1' ||
       item.route === '/dashboards/dashboard2' ||
       item.route === '/apps/appointments' ||
-      // item.route === '/apps/doctors' ||
-      item.route === '/apps/bill' 
-    )) 
-      {
-      return true; 
-    } if (this.userType === 'Doctor' && (
-      item.route === '/dashboards/dashboard1' ||
-      item.route === '/dashboards/dashboard2' ||
-      item.route === '/apps/appointments' ||
-      item.route === '/apps/doctors' ||
-      item.route === '/apps/patient' ||
+      item.route === '/apps/medical' ||
+      item.route === '/apps/laboratory' ||
+      item.route === '/apps/lab' ||
       item.route === '/apps/staff' ||
-      item.route === '/apps/medicine' ||
-      item.route === '/apps/medical' 
+      item.route === '/apps/patient' ||
+      // item.route === '/apps/medicine' ||
+      item.route === '/apps/doctors' ||
+      item.route === '/apps/bill' 
      )) 
       {
       return true; 

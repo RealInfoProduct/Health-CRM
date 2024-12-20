@@ -95,6 +95,20 @@
         </ng-container>
         </ng-container>
 
+
+        <div class="col-lg-6">
+            <mat-form-field appearance="outline" class="w-100 m-t-10">
+                <mat-label>Payment Method</mat-label>
+                <mat-select #dropdown formControlName="paymentMethod" placeholder="Select payment method">
+                    <mat-option [value]="item.name" *ngFor="let item of paymentMethodList">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                    *ngIf="addmedicineForm.get('paymentMethod').errors && addmedicineForm.get('paymentMethod').errors['required']">
+                    Payment method is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+
             <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Amount</mat-label>

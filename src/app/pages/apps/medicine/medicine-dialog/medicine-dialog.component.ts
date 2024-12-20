@@ -20,6 +20,11 @@ export class MedicineDialogComponent implements OnInit {
     { id: 3, name: 'Injectable' }
   ]
 
+  paymentMethodList = [
+    { id: 1, name: 'Cash' },
+    { id: 2, name: 'Net Banking' }
+  ]
+
   appointmentslist = []
 
   constructor(
@@ -50,15 +55,40 @@ export class MedicineDialogComponent implements OnInit {
     this.getappointmentdata()
   }
 
+  // getappointmentdata() {
+  //   this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist').then((appointment) => {
+  //     if (appointment && appointment.length > 0) {
+  //       this.appointmentslist = appointment
+  //     }
+  //   }).catch((error) => {
+  //     console.error('Error fetching laboratory:', error);
+  //   });
+  // }
+
   getappointmentdata() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'appointmentslist').then((appointment) => {
-      if (appointment && appointment.length > 0) {
-        this.appointmentslist = appointment
-      }
-    }).catch((error) => {
-      console.error('Error fetching laboratory:', error);
-    });
+    // Check if appointmentslist is already stored in localStorage
+    const storedAppointments = localStorage.getItem('appointmentsData');
+    
+    if (storedAppointments) {
+      // Parse the JSON string and assign it to appointmentslist
+      this.appointmentslist = JSON.parse(storedAppointments);
+      console.log('Loaded appointments from localStorage:', this.appointmentslist);
+    } else {
+      // Fetch from Firebase if not found in localStorage
+      this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist').then((appointment) => {
+        if (appointment && appointment.length > 0) {
+          this.appointmentslist = appointment;
+  
+          // Store the fetched data in localStorage
+          localStorage.setItem('appointmentslist', JSON.stringify(this.appointmentslist));
+          console.log('Fetched appointments from Firebase and stored in localStorage:', this.appointmentslist);
+        }
+      }).catch((error) => {
+        console.error('Error fetching appointments:', error);
+      });
+    }
   }
+  
 
   convertTimestamp(element: any): Date | null {
     if (element instanceof Timestamp) {
@@ -71,6 +101,7 @@ export class MedicineDialogComponent implements OnInit {
     this.addmedicineForm = this.fb.group({
       patientName: ['', Validators.required],
       medicine :this.fb.array([]),
+      paymentMethod: ['', Validators.required],
       amount: ['', Validators.required],
       discount: [0, Validators.required],
       gst: [5, Validators.required],
@@ -132,6 +163,7 @@ this.getMedicineFormArry().push(
     const payload = {
       patientName: this.addmedicineForm.value.patientName,
       medicine: this.addmedicineForm.value.medicine,
+      paymentMethod: this.addmedicineForm.value.paymentMethod,
       amount: this.addmedicineForm.value.amount,
       discount: this.addmedicineForm.value.discount,
       gst: this.addmedicineForm.value.gst,

@@ -97,7 +97,7 @@ export class PatientDialogComponent implements OnInit {
   
 
   getdoctorsdata() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'doctorslist').then((doctors) => {
+    this.firebaseCollectionService.getDocuments('Doctor', 'doctorslist').then((doctors) => {
       if (doctors && doctors.length > 0) {
         this.doctorslist = doctors
         console.log('this.doctorslist-----',this.doctorslist);
@@ -109,7 +109,7 @@ export class PatientDialogComponent implements OnInit {
   }
 
   getappointmentdata() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'appointmentslist').then((appointment) => {
+    this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist').then((appointment) => {
       if (appointment && appointment.length > 0) {
         this.appointmentslist = appointment
         console.log('this.appointmentslist====>>>',this.appointmentslist);
@@ -120,7 +120,7 @@ export class PatientDialogComponent implements OnInit {
   }
 
   getlaboratoryData() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'laboratorylist').then((laboratory) => {
+    this.firebaseCollectionService.getDocuments('Doctor', 'laboratorylist').then((laboratory) => {
       if (laboratory && laboratory.length > 0) {
         this.laboratorylist = laboratory
         console.log('Laboratory List:', this.laboratorylist);

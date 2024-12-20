@@ -43,7 +43,7 @@ export class MedicalComponent implements OnInit{
   }
 
   getMedicalData() {
-    this.firebaseCollectionService.getDocuments('ClinicList', 'medicallist').then((medical) => {
+    this.firebaseCollectionService.getDocuments('Doctor', 'medicallist').then((medical) => {
       this.medicallist = medical
       if (medical && medical.length > 0) {
         this.dataSource = new MatTableDataSource(this.medicallist);
@@ -71,19 +71,19 @@ export class MedicalComponent implements OnInit{
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('ClinicList', result.data, 'medicallist');
+        this.firebaseCollectionService.addDocument('Doctor', result.data, 'medicallist');
         this.getMedicalData()
       }
       if (result?.event === 'Update') {
         this.medicallist.forEach((element: any) => {
           if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('ClinicList', obj.id, result.data, 'medicallist');
+            this.firebaseCollectionService.updateDocument('Doctor', obj.id, result.data, 'medicallist');
             this.getMedicalData()
           }
         });
       }
       if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('ClinicList', obj.id, 'medicallist');
+        this.firebaseCollectionService.deleteDocument('Doctor', obj.id, 'medicallist');
         this.getMedicalData()
       }
     });
