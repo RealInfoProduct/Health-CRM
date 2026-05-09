@@ -53,7 +53,6 @@ export class MedicineComponent implements OnInit{
     // getappointmentdata() {
     //   this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist').then((appointment) => {
     //     this.appointmentslist = appointment
-    //     console.log('this.appointmentslist=====>>>>>',this.appointmentslist);
         
     //   }).catch((error) =>{
     //     console.error('Error fetching doctors:', error);
@@ -68,7 +67,6 @@ export class MedicineComponent implements OnInit{
         // Parse the JSON string and assign it to appointmentslist
         this.appointmentslist = JSON.parse(storedAppointments);
 
-        console.log('Loaded appointments from localStorage:', this.appointmentslist);
       } else {
         // Fetch from Firebase if not found in localStorage
         this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist').then((appointment) => {
@@ -77,7 +75,6 @@ export class MedicineComponent implements OnInit{
     
             // Store the fetched data in localStorage
             localStorage.setItem('appointmentslist', JSON.stringify(this.appointmentslist));
-            console.log('Fetched appointments from Firebase and stored in localStorage:', this.appointmentslist);
           }
         }).catch((error) => {
           console.error('Error fetching appointments:', error);
@@ -92,7 +89,6 @@ export class MedicineComponent implements OnInit{
       if(medicine && medicine.length > 0){
         this.dataSource = new MatTableDataSource(this.medicinelist)
         this.dataSource.paginator = this.paginator 
-        console.log('this.medicinelist=====>>>>>1',this.medicinelist);
         
       } else {
         this.medicinelist = [];
@@ -119,20 +115,18 @@ export class MedicineComponent implements OnInit{
     obj.action = action;
     const dialogRef = this.dialog.open(MedicineDialogComponent, {
       data: obj,
-      width: action === 'Delete' ? '25%' : '50%'
+      width: action === 'Delete' ? '25%' : '55%'
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
         this.firebaseCollectionService.addDocument('Medical', result.data ,'medicinelist')
         this.getmedicineData()
-        console.log("this.medicinelist=====>>>>>",this.medicinelist);
       }
       if (result.event === 'Update') {
         this.medicinelist.forEach((element: any) => {
           if (obj.id === element.id) {
             this.firebaseCollectionService.updateDocument('Medical', obj.id, result.data, 'medicinelist')
             this.getmedicineData()
-            console.log("this.medicinelist=====>>>>>",this.medicinelist);
           }
         })
         this.dataSource = new MatTableDataSource(this.medicinelist)

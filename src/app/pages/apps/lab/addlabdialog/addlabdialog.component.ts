@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
@@ -15,6 +15,8 @@ export class AddlabdialogComponent implements OnInit {
 
   appointmentslist: any =[]
   laboratorylist: any =[]
+  patientlist: any =[]
+   filteredPatients: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -28,35 +30,74 @@ export class AddlabdialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.addmedicallist()
+    this.createReport()
     if (this.action === 'Update') {
       this.addlabForm.controls['patientName'].setValue(this.local_data.patientName)
+      this.addlabForm.controls['date'].setValue( new Date(this.local_data.date.seconds * 1000))
       this.addlabForm.controls['mobileNumber'].setValue(this.local_data.mobileNumber)
       this.addlabForm.controls['age'].setValue(this.local_data.age)
       this.addlabForm.controls['gender'].setValue(this.local_data.gender)
-      this.addlabForm.controls['reportType'].setValue(this.local_data.reportType)
-      this.addlabForm.controls['reportName'].setValue(this.local_data.reportName)
-      this.addlabForm.controls['reportFee'].setValue(this.local_data.reportFee)
-      this.addlabForm.controls['disease'].setValue(this.local_data.disease)
       this.addlabForm.controls['laboratoryName'].setValue(this.local_data.laboratoryName)
     }
-    this.getlaboratoryData()
-    this.getappointmentdata()
-    
+    if (this.local_data.reports && this.local_data.reports.length > 0) {
+      this.local_data.reports.forEach((report: any) => {
+          const reportDate = report.date
+      ? new Date(report.date.seconds * 1000 + report.date.nanoseconds / 1000000)
+      : '';
+        this.reports.push(this.fb.group({
+          date: reportDate,
+          reportType: report.reportType,
+          reportName: report.reportName,
+          reportFee: report.reportFee,
+          disease: report.disease,
+        }));
+      });
+    }
+    this.getlaboratoryData();
+    this.getappointmentdata();
+    this.getPatientData();
+
     this.addlabForm.get('patientName')?.valueChanges.subscribe((selectedId) => {
-      const selectedPatient = this.appointmentslist.find((item: any) => item.id === selectedId);
+
+      const selectedPatient = this.patientlist.find((item: any) => item.id === selectedId);
       if (selectedPatient) {
         this.addlabForm.patchValue({
           mobileNumber: selectedPatient.mobileNumber,
           age: selectedPatient.age,
           gender: selectedPatient.gender,
-          reportType: '',
-          reportName: '',
-          reportFee: '',
-          disease: '',
-          laboratoryName: '',
+          laboratoryName: "",
         });
+          this.reports.clear();
+  if (selectedPatient.reports && selectedPatient.reports.length > 0) {
+      selectedPatient.reports.forEach((report: any) => {
+
+          const reportDate = report.date
+      ? new Date(report.date.seconds * 1000 + report.date.nanoseconds / 1000000)
+      : '';
+
+        this.reports.push(this.fb.group({
+          date: reportDate,
+          reportType: report.reportType || '',
+          reportName: report.reportName || '',
+          reportFee: report.reportFee || '',
+          disease: report.disease || '',
+        }));
+      });
+    }
       }
     });
+  }
+
+   getPatientData() {
+    this.firebaseCollectionService.getDocuments('Doctor', 'patientlist').then((patient) => {
+      if (patient && patient.length > 0) {
+      this.patientlist = patient.filter((item: any) =>
+          item.reports && item.reports.length > 0
+        );
+         this.filteredPatients = [...this.patientlist];
+      }
+      console.log("this.patientlist",this.patientlist);
+    })
   }
 
   getappointmentdata() {
@@ -71,7 +112,6 @@ export class AddlabdialogComponent implements OnInit {
     this.firebaseCollectionService.getDocuments('Doctor', 'laboratorylist').then((laboratory) => {
       if (laboratory && laboratory.length > 0) {
         this.laboratorylist = laboratory
-        console.log('Laboratory List:', this.laboratorylist);
       } 
     }).catch((error) => {
       console.error('Error fetching laboratory:', error);
@@ -80,33 +120,96 @@ export class AddlabdialogComponent implements OnInit {
 
   addmedicallist() {
     this.addlabForm = this.fb.group({
+      date:[new Date()],
       patientName: ['', Validators.required],
       mobileNumber: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
       age: ['', Validators.required],
       gender: ['', Validators.required],
-      reportType: ['', Validators.required],
-      reportName: ['', Validators.required],
-      reportFee: ['', Validators.required],
-      disease: ['', Validators.required],
-      laboratoryName: ['', Validators.required]
+      laboratoryName: ['', Validators.required],
+      reports: this.fb.array([])
     })
   }
 
   doAction(): void {
     const payload = {
+      date: this.addlabForm.value.date,
       patientName: this.addlabForm.value.patientName,
       mobileNumber: this.addlabForm.value.mobileNumber,
       age: this.addlabForm.value.age,
       gender: this.addlabForm.value.gender,
-      reportType: this.addlabForm.value.reportType,
-      reportName: this.addlabForm.value.reportName,
-      reportFee: this.addlabForm.value.reportFee,
-      disease: this.addlabForm.value.disease,
-      laboratoryName: this.addlabForm.value.laboratoryName
+      laboratoryName: this.addlabForm.value.laboratoryName,
+       reports: this.addlabForm.value.reports,
     }
+    console.log(payload);
+    
     this.dialogRef.close({ event: this.action, data: payload });
   }
 
+
+  get reports(): FormArray {
+    return this.addlabForm.get('reports') as FormArray;
+  }
+  
+  createReport(): FormGroup {
+    return this.fb.group({
+       date: [new Date()],
+      reportType: ['', Validators.required],
+      reportName: ['', Validators.required],
+      reportFee: ['', Validators.required],
+      disease: ['', Validators.required],
+    });
+  }
+  
+  removeReport(index: number) {
+    this.reports.removeAt(index);
+  }
+  
+  addReportDetail(){
+     this.reports.push(this.createReport());
+  }
+
+  getpatientName(patientid:any){
+     return this.appointmentslist.find((id: any) => id.id === patientid)?.firstName
+  }
+  getpatientNamelast(patientid:any){
+     return this.appointmentslist.find((id: any) => id.id === patientid)?.lastName
+  }
+
+
+filterPatients(event: any) {
+
+  const value = event.target.value
+    .toLowerCase()
+    .replace(/-/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  this.filteredPatients = this.patientlist.filter((item: any) => {
+
+    const firstName =
+      this.getpatientName(item.patientName) || '';
+
+    const lastName =
+      this.getpatientNamelast(item.patientName) || '';
+
+    // Display format
+    const fullName = `${firstName} ${lastName}`
+      .toLowerCase()
+      .replace(/-/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    return fullName.includes(value);
+  });
+}
+
+  onSelectOpen(isOpen: boolean, searchInput: HTMLInputElement) {
+    if (isOpen) {
+      searchInput.value = '';
+      this.filteredPatients = [...this.patientlist];
+    }
+  }
+  
 }
 
 

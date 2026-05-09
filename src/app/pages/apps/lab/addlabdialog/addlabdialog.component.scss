@@ -1,0 +1,37 @@
+.search-container input {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  outline: none;
+}
+
+.search-container input::placeholder {
+  color: #888;
+  opacity: 1;
+}
+
+.in-width {
+  width: 160px;
+  margin-right: 10px;
+  margin-left: 15px;
+}
+
+.m-width{
+    width: 160px;
+     margin-right: 10px;
+}
+
+.AR-width{
+    width: 50px;
+     margin-right: 10px;
+         display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.d-width{
+ width: 150px;
+     margin-right: 10px;
+}
+
+

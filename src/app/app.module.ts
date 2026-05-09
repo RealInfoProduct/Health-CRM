@@ -52,13 +52,13 @@ export function HttpLoaderFactory(http: HttpClient): any {
     NgScrollbarModule,
     FullComponent,
     AngularFireModule.initializeApp({
-      apiKey: "AIzaSyAkNzu76D86FNI8NgTYkHxlsSdSxW7S0r0",
-      authDomain: "health-clinic-5fc15.firebaseapp.com",
-      projectId: "health-clinic-5fc15",
-      storageBucket: "health-clinic-5fc15.appspot.com",
-      messagingSenderId: "106169864035",
-      appId: "1:106169864035:web:f23f353c7e5ad15c9d0d56",
-      measurementId: "G-TQYX0WG2JW"
+      apiKey: "AIzaSyCa-sJYnvvqqAX8rKPubwBLFQIEec86XVw",
+      authDomain: "health-clinic-aba2e.firebaseapp.com",
+      projectId: "health-clinic-aba2e",
+      storageBucket: "health-clinic-aba2e.firebasestorage.app",
+      messagingSenderId: "176073196111",
+      appId: "1:176073196111:web:ed809ab9aecfa3f25a603a",
+      measurementId: "G-KY56LB7H7R"
     }), // Initialize Firebase
     AngularFirestoreModule 
   ],

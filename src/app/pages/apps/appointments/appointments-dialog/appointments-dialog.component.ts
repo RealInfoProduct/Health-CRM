@@ -47,6 +47,7 @@ export class AppointmentsDialogComponent implements OnInit {
   ngOnInit(): void {
     this.addAppointmentsList()
     if (this.action === 'Update') {
+      this.appointmentsForm.controls['tokenNumber'].setValue(this.local_data.tokenNumber)
       this.appointmentsForm.controls['firstName'].setValue(this.local_data.firstName)
       this.appointmentsForm.controls['lastName'].setValue(this.local_data.lastName)
       this.appointmentsForm.controls['doctorName'].setValue(this.local_data.doctorName)
@@ -61,21 +62,23 @@ export class AppointmentsDialogComponent implements OnInit {
       this.appointmentsForm.controls['appointmentStatus'].setValue(this.local_data.appointmentStatus)
       this.appointmentsForm.controls['visitType'].setValue(this.local_data.visitType)
       this.appointmentsForm.controls['paymentMethod'].setValue(this.local_data.paymentMethod)
+    } else {
+      this.setAutoTokenNumber();
+      this.setCurrentTime();
     }
     this.getdoctorsdata()
   }
 
-  
+
   getdoctorsdata() {
     this.firebaseCollectionService.getDocuments('Doctor', 'doctorslist').then((doctors) => {
       if (doctors && doctors.length > 0) {
         this.doctorslist = doctors
-        console.log('this.doctorslist-----',this.doctorslist);
-      } 
-    }).catch((error) =>{
+      }
+    }).catch((error) => {
       console.error('Error fetching doctors:', error);
     })
-    
+
   }
 
   convertTimestamp(element: any): Date | null {
@@ -87,11 +90,12 @@ export class AppointmentsDialogComponent implements OnInit {
 
   addAppointmentsList() {
     this.appointmentsForm = this.fb.group({
+      tokenNumber: [''],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       doctorName: ['', Validators.required],
       gender: ['', Validators.required],
-      date: [new Date(), Validators.required],
+      date: [new Date()],
       time: ['', Validators.required],
       address: ['', Validators.required],
       mobileNumber: ['', Validators.required],
@@ -106,6 +110,7 @@ export class AppointmentsDialogComponent implements OnInit {
 
   doAction() {
     const payload = {
+      tokenNumber: this.appointmentsForm.value.tokenNumber,
       firstName: this.appointmentsForm.value.firstName,
       lastName: this.appointmentsForm.value.lastName,
       doctorName: this.appointmentsForm.value.doctorName,
@@ -122,5 +127,58 @@ export class AppointmentsDialogComponent implements OnInit {
       paymentMethod: this.appointmentsForm.value.paymentMethod
     }
     this.dialogRef.close({ event: this.action, data: payload });
+  }
+
+  setAutoTokenNumber() {
+    this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist')
+      .then((appointments: any[]) => {
+
+        const today = new Date().toDateString();
+
+        const todayAppointments = appointments.filter(appt => {
+          if (!appt.date) return false;
+
+          const apptDate = this.convertTimestamp(appt.date);
+          if (!apptDate) return false;
+
+          return apptDate.toDateString() === today;
+        });
+
+        let nextToken = 1;
+
+        if (todayAppointments.length > 0) {
+          const tokens = todayAppointments.map(a => Number(a.tokenNumber) || 0);
+          const maxToken = Math.max(...tokens);
+          nextToken = maxToken + 1;
+        }
+
+        this.appointmentsForm.patchValue({
+          tokenNumber: nextToken
+        });
+
+      })
+      .catch(err => {
+        console.error(err);
+        this.appointmentsForm.patchValue({ tokenNumber: 1 });
+      });
+  }
+
+  setCurrentTime() {
+    const now = new Date();
+
+    let hours = now.getHours();
+    const minutes = now.getMinutes();
+
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0 => 12
+
+    const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+
+    const timeString = `${hours}:${formattedMinutes} ${ampm}`;
+
+    this.appointmentsForm.patchValue({
+      time: timeString
+    });
   }
 }

@@ -25,7 +25,8 @@ export class MedicineDialogComponent implements OnInit {
     { id: 2, name: 'Net Banking' }
   ]
 
-  appointmentslist = []
+  appointmentslist:any = []
+  patientlist:any = []
 
   constructor(
     private fb: FormBuilder,
@@ -39,11 +40,15 @@ export class MedicineDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("this.patientlist",this.patientlist);
     this.addmedicallist()
+    this.getPatientData()
+    this.getappointmentdata()
     if (this.action === 'Update') {
       this.addmedicineForm.controls['patientName'].setValue(this.local_data.patientName)
       this.addmedicineForm.controls['amount'].setValue(this.local_data.amount)
       this.addmedicineForm.controls['discount'].setValue(this.local_data.discount)
+      this.addmedicineForm.controls['paymentMethod'].setValue(this.local_data.paymentMethod)
       this.addmedicineForm.controls['gst'].setValue(this.local_data.gst)
       this.addmedicineForm.controls['netamount'].setValue(this.local_data.netamount)
       this.local_data.medicine.forEach((element:any) => {
@@ -52,18 +57,43 @@ export class MedicineDialogComponent implements OnInit {
     }else{
       this.addMedicine()
     }
-    this.getappointmentdata()
+
+  this.addmedicineForm.get('patientName')?.valueChanges.subscribe((patientId) => {
+const selectedPatient = this.patientlist.find(
+  (patient) => patient.patientName === patientId
+);
+  if (selectedPatient) {
+    const medicineArray = this.getMedicineFormArry();
+    medicineArray.clear();
+    selectedPatient.medical?.forEach((med: any) => {
+
+      medicineArray.push(
+        this.fb.group({
+          date: med.date
+            ? new Date(med.date.seconds * 1000)
+            : '',
+          medicineName: med.medicineName || '',
+          companyName: med.CompanyName || '',
+          category: med.category || '',
+          qty: med.qty || '',
+          rate: med.rate || '',
+          time: med.time || ''
+        })
+      );
+
+    });
+  }
+});
   }
 
-  // getappointmentdata() {
-  //   this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist').then((appointment) => {
-  //     if (appointment && appointment.length > 0) {
-  //       this.appointmentslist = appointment
-  //     }
-  //   }).catch((error) => {
-  //     console.error('Error fetching laboratory:', error);
-  //   });
-  // }
+   getPatientData() {
+    this.firebaseCollectionService.getDocuments('Doctor', 'patientlist').then((patient) => {
+      if (patient && patient.length > 0) {
+        this.patientlist = patient 
+      }
+    })
+  }
+ 
 
   getappointmentdata() {
     // Check if appointmentslist is already stored in localStorage
@@ -88,7 +118,7 @@ export class MedicineDialogComponent implements OnInit {
       });
     }
   }
-  
+
 
   convertTimestamp(element: any): Date | null {
     if (element instanceof Timestamp) {
@@ -116,18 +146,44 @@ getMedicineFormArry(){
   return this.addmedicineForm.get('medicine') as FormArray
 }
 
-  addMedicine(medicine?:any){
-this.getMedicineFormArry().push(
-  this.fb.group({
+//   addMedicine(medicine?:any){
+// this.getMedicineFormArry().push(
+//   this.fb.group({
+//       date: [medicine?.date || '', Validators.required],
+//       medicineName: [medicine?.medicineName || '', Validators.required],
+//       companyName: [medicine?.companyName || '', Validators.required],
+//       category: [medicine?.category || '', Validators.required],
+//       qty: [medicine?.qty || '', Validators.required],
+//       rate: [medicine?.rate || '', Validators.required],
+//   })
+// )
+//   }
+
+addMedicine(medicine?: any) {
+
+  let medicineDate: Date | string = '';
+
+  if (medicine?.date) {
+
+    if (medicine.date.seconds) {
+      medicineDate = new Date(medicine.date.seconds * 1000);
+    } else {
+      medicineDate = medicine.date;
+    }
+  }
+
+  this.getMedicineFormArry().push(
+    this.fb.group({
+      date: [medicineDate, Validators.required],
       medicineName: [medicine?.medicineName || '', Validators.required],
-      companyName: [medicine?.companyName || '', Validators.required],
+      companyName: [medicine?.companyName || medicine?.CompanyName || '', Validators.required],
       category: [medicine?.category || '', Validators.required],
-      // pack: [medicine?.pack || '', Validators.required],
       qty: [medicine?.qty || '', Validators.required],
       rate: [medicine?.rate || '', Validators.required],
-  })
-)
-  }
+      time: [medicine?.time || '', Validators.required],
+    })
+  );
+}
 
   removemedicine(index:any){
     this.getMedicineFormArry().removeAt(index)
@@ -172,5 +228,4 @@ this.getMedicineFormArry().push(
     this.dialogRef.close({ event: this.action, data: payload });
     console.log('payload',payload);
   }
-
 }

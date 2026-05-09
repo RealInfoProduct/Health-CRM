@@ -57,7 +57,7 @@ import { AppEmployeeDialogContentComponent } from './employee/employee.component
 import { AppAddEmployeeComponent } from './employee/add/add.component';
 
 import { AppsRoutes } from './apps.routing';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import {
   AppTicketlistComponent,
   AppTicketDialogContentComponent,
@@ -95,6 +95,9 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { MatInputModule } from '@angular/material/input';
 import { StaffComponent } from './staff/staff.component';
 import { StaffDialogComponent } from './staff/staff-dialog/staff-dialog.component';
+import { LaboratoryViewComponent } from './patient/laboratory-view/laboratory-view.component';
+import { MedicalViewComponent } from './patient/medical-view/medical-view.component';
+import { ReportViewComponent } from './lab/report-view/report-view.component';
 
 
 
@@ -174,8 +177,11 @@ import { StaffDialogComponent } from './staff/staff-dialog/staff-dialog.componen
     AppointmentsDialogComponent,
     StaffComponent,
     StaffDialogComponent,
+    LaboratoryViewComponent,
+    MedicalViewComponent,
+    ReportViewComponent,
 
   ],
-  providers: [DatePipe],
+  providers: [  { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
 })
 export class AppsModule {}

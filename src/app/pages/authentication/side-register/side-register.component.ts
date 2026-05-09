@@ -45,7 +45,7 @@ export class AppSideRegisterComponent {
     firstName: this.form.value.firstName,
     lastName: this.form.value.lastName,
     mobileNumber: this.form.value.mobileNumber,
-    clinicName: this.form.value.clinicName,
+    clinicName: this.form.value.clinicName || '',
     medicalName: this.form.value.medicalName,
     address: this.form.value.address,
     email: this.form.value.email,

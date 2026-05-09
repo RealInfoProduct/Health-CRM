@@ -2,12 +2,29 @@
 <mat-dialog-content class="p-t-20" *ngIf="action !== 'Delete'; else elseTemplate">
     <form [formGroup]="addlabForm">
         <div class="row">
+    
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Date</mat-label>
+                            <input matInput formControlName="date" [matDatepicker]="picker" placeholder="Enter Date">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+            </div>
 
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Patient Name</mat-label>
-                    <mat-select #dropdown formControlName="patientName" placeholder="Enter patient name">
-                        <mat-option [value]="item.id" *ngFor="let item of appointmentslist">{{item.firstName}} {{item.lastName}} </mat-option>
+                    <mat-select #dropdown formControlName="patientName" placeholder="Enter patient name"
+                        (openedChange)="onSelectOpen($event, searchInput)">
+                        <mat-option class="search-option">
+                            <div class="search-container">
+                                <input #searchInput matInput type="text" placeholder="Search..." (click)="$event.stopPropagation()"
+                                    (keydown)="$event.stopPropagation()" (keyup)="filterPatients($event)" />
+                            </div>
+                        </mat-option>
+                        <mat-option [value]="item.id" *ngFor="let item of filteredPatients">{{getpatientName(item.patientName)}} -
+                            {{getpatientNamelast(item.patientName)}} </mat-option>
                     </mat-select>
                     <mat-error
                         *ngIf="addlabForm.get('patientName').errors && addlabForm.get('patientName').errors['required']">
@@ -15,16 +32,17 @@
                     </mat-error>
                 </mat-form-field>
             </div>
-
-            <div class="col-lg-6">
+    
+            <div class="col-lg-4">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Laboratory Name</mat-label>
                     <mat-select #dropdown formControlName="laboratoryName" placeholder="Enter laboratory name">
-                        <mat-option [value]="item.id" *ngFor="let item of laboratorylist">{{item.laboratoryName}}</mat-option>
+                        <mat-option [value]="item.id"
+                            *ngFor="let item of laboratorylist">{{item.laboratoryName}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
-
+    
             <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Mobile Number</mat-label>
@@ -40,7 +58,7 @@
                     </mat-error>
                 </mat-form-field>
             </div>
-
+    
             <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Age</mat-label>
@@ -51,50 +69,7 @@
                     </mat-error>
                 </mat-form-field>
             </div>
-
-            <div class="col-lg-6">
-                <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Report Type</mat-label>
-                    <input type="text" formControlName="reportType" placeholder="Enter report type" matInput require />
-                    <mat-error
-                        *ngIf="addlabForm.get('reportType').errors && addlabForm.get('reportType').errors['required']">
-                        Report type is required
-                    </mat-error>
-                </mat-form-field>
-            </div>
-
-            <div class="col-lg-6">
-                <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Report Name</mat-label>
-                    <input type="text" formControlName="reportName" placeholder="Enter report name" matInput required />
-                    <mat-error
-                        *ngIf="addlabForm.get('reportName').errors && addlabForm.get('reportName').errors['required']">
-                        Report name is required
-                    </mat-error>
-                </mat-form-field>
-            </div>
-
-            <div class="col-lg-6">
-                <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Report Fee</mat-label>
-                    <input type="number" formControlName="reportFee" placeholder="Enter report fee" matInput require min="0" />
-                    <mat-error
-                        *ngIf="addlabForm.get('reportFee').errors && addlabForm.get('reportFee').errors['required']">
-                        Report fee is required
-                    </mat-error>
-                </mat-form-field>
-            </div>
-
-            <div class="col-lg-6">
-                <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Disease</mat-label>
-                    <input type="text" formControlName="disease" placeholder="Enter disease" matInput require />
-                    <mat-error *ngIf="addlabForm.get('disease').errors && addlabForm.get('disease').errors['required']">
-                        Disease is required
-                    </mat-error>
-                </mat-form-field>
-            </div>
-
+    
             <div class="col-lg-6">
                 <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Gender</mat-label>
                 <mat-radio-group aria-label="Select an option" formControlName="gender">
@@ -105,7 +80,60 @@
                     </mat-error>
                 </mat-radio-group>
             </div>
+    
+            <div class="col-12" formArrayName="reports">
+                <div *ngFor="let report of reports.controls; let i = index" [formGroupName]="i" class="row">
+                     <div class="in-width">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Date</mat-label>
+                            <input matInput formControlName="date" [matDatepicker]="picker" placeholder="Enter date">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
 
+                    <div class="m-width">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Report Type</mat-label>
+                            <input type="text" formControlName="reportType" placeholder="Enter report type" matInput
+                                require />
+                        </mat-form-field>
+                    </div>
+    
+                    <div class="m-width">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Report Name</mat-label>
+                            <input type="text" formControlName="reportName" placeholder="Enter report name" matInput
+                                required />
+                        </mat-form-field>
+                    </div>
+    
+                    <div class="m-width">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Report Fee</mat-label>
+                            <input type="number" formControlName="reportFee" placeholder="Enter report fee" matInput require
+                                min="0" />
+                        </mat-form-field>
+                    </div>
+                    <div class="d-width">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Disease</mat-label>
+                            <input type="text" formControlName="disease" placeholder="Enter disease" matInput require />
+                        </mat-form-field>
+                    </div>
+    
+                    <div class="AR-width d-flex align-items-center">
+                        <a class="m-r-10 cursor-pointer">
+                            <i-tabler name="trash" (click)="removeReport(i)" class="icon-18"></i-tabler>
+                        </a>
+                        <a class="m-r-10 cursor-pointer">
+                            <i-tabler name="plus" (click)="addReportDetail()" class="icon-18"></i-tabler>
+                        </a>
+                    </div>
+    
+                </div>
+    
+            </div>
         </div>
     </form>
 </mat-dialog-content>

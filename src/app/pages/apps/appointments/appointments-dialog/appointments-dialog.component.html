@@ -3,7 +3,14 @@
     <form [formGroup]="appointmentsForm">
         <div class="row">
 
-            <div class="col-lg-6">
+            <div class="col-lg-2">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Token Number</mat-label>
+                    <input type="number" formControlName="tokenNumber" matInput readonly />
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-5">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>First Name</mat-label>
                     <input type="text" formControlName="firstName" placeholder="Enter first name" matInput />
@@ -14,7 +21,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-lg-6">
+            <div class="col-lg-5">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Last Name</mat-label>
                     <input type="text" formControlName="lastName" placeholder="Enter last name" matInput />

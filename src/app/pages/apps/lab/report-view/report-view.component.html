@@ -1,0 +1,83 @@
+<h2 mat-dialog-title class="m-b-24  b-b-1 p-b-20">View Report</h2>
+<mat-card class="cardWithShadow" >
+    <mat-card-content class="p-24">
+      <div class="table-responsive">
+        <table mat-table [dataSource]="viewLaboratoryDataSource" class="w-100">
+          <ng-container matColumnDef="srno">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No.</th>
+            <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+  
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Date</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="d-flex align-items-center">
+                <div class="m-l-16">
+                  <p class="mat-subtitle-1 f-s-16 m-t-0">
+                    {{ element.date?.toDate() | date:'dd/MM/yyyy' }}
+                  </p>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="reportName">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Report Name</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="d-flex align-items-center">
+                <div class="m-l-16">
+                  <p class="mat-subtitle-1 f-s-16 m-t-0">
+                    {{ element.reportName }}
+                  </p>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="reportType">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Report Type</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="d-flex align-items-center">
+                <div class="m-l-16">
+                  <p class="mat-subtitle-1 f-s-16 m-t-0">
+                    {{ element.reportType }}
+                  </p>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+           <ng-container matColumnDef="reportFee">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600 Reporttable">
+            Report Fee
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.reportFee }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="disease">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Disease
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.disease }}
+          </td>
+        </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr class="mat-row" style="text-align: center;" *matNoDataRow>
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              No record found
+            </td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-divider></mat-divider>
+    <div mat-dialog-actions class="p-x-24 p-b-24 m-t-10 justify-content-end">
+      <button mat-stroked-button color="warn" (click)="closeDialog()" class="m-l-8">Cancel</button>
+    </div>

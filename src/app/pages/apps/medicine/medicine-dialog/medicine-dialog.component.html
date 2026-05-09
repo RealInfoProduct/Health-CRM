@@ -18,76 +18,60 @@
             
         <ng-container formArrayName="medicine">
         <ng-container *ngFor="let item of getMedicineFormArry().controls; let i = index" [formGroupName]="i">
-            <div class="col-lg-6">
+            <div class="in-width">
+                <mat-form-field class="w-100 m-t-10" appearance="outline">
+                    <mat-label>Date</mat-label>
+                    <input matInput [matDatepicker]="touchpic" placeholder="Enter date" formControlName="date" />
+                    <mat-datepicker-toggle matIconSuffix [for]="touchpic"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #touchpic></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="in-width">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Medicine Name</mat-label>
                     <input type="text" formControlName="medicineName" placeholder="Enter medicine name" matInput
                         require />
-                    <mat-error
-                        *ngIf="item.get('medicineName').errors && item.get('medicineName').errors['required']">
-                        Medicine name is required
-                    </mat-error>
                 </mat-form-field>
             </div>
 
-            <div class="col-lg-6">
+            <div class="in-width">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Company Name</mat-label>
                     <input type="text" formControlName="companyName" placeholder="Enter company name" matInput
                         require />
-                    <mat-error
-                        *ngIf="item.get('companyName').errors && item.get('companyName').errors['required']">
-                        Company name is required
-                    </mat-error>
                 </mat-form-field>
             </div>
 
-            <div class="col-lg-6">
+            <div class="in-width">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Category</mat-label>
                     <mat-select #dropdown formControlName="category" placeholder="Enter category">
                         <mat-option [value]="item.name" *ngFor="let item of CategoryList">{{item.name}}</mat-option>
                     </mat-select>
-                    <mat-error
-                        *ngIf="item.get('category').errors && item.get('category').errors['required']">
-                        Category is required
-                    </mat-error>
                 </mat-form-field>
             </div>
 
-            <!-- <div class="col-lg-6">
+            <div class="t-width">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Pack</mat-label>
-                    <input type="text" formControlName="pack" placeholder="Enter pack" matInput require min="0" />
-                    <mat-error
-                        *ngIf="item.get('pack').errors && item.get('pack').errors['required']">
-                        Pack is required
-                    </mat-error>
+                    <mat-label>Time</mat-label>
+                    <input type="text" formControlName="time" placeholder="Enter time" matInput require />
                 </mat-form-field>
-            </div> -->
+            </div>
 
-            <div class="col-lg-6">
+            <div class="q-width">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Qty</mat-label>
                     <input type="number" formControlName="qty" placeholder="Enter qty" matInput require min="0" />
-                    <mat-error
-                        *ngIf="item.get('qty').errors && item.get('qty').errors['required']">
-                        Qty is required
-                    </mat-error>
                 </mat-form-field>
             </div>
 
-            <div class="col-lg-6">
+            <div class="r-width">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Rate</mat-label>
-                    <input type="number" formControlName="rate" placeholder="Enter rate" matInput require min="0" />
-                    <mat-error
-                        *ngIf="item.get('rate').errors && item.get('rate').errors['required']">
-                        Rate is required
-                    </mat-error>
+                    <input type="number" formControlName="rate" placeholder="Enter rate" matInput require min="0" />    
                 </mat-form-field>
             </div>
-             <div class="col-lg-2">
+             <div class="AR-width">
                 <a *ngIf="i === 0 && getMedicineFormArry().length < 5" (click)="addMedicine()"><i-tabler name="plus"
                     class="icon-18"></i-tabler></a>
             <a *ngIf="i !== 0" (click)="removemedicine(i)"><i-tabler name="trash" class="icon-18"></i-tabler></a>

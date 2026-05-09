@@ -229,6 +229,77 @@ export class  AuthService {
       throw error;
     }
   }
+  // async signIn(email: string, password: string, userType: string) {
+  //   try {
+  //     // Authenticate user with Firebase
+  //     const result: any = await this.afAuth.signInWithEmailAndPassword(email, password);
+  
+  //     // Fetch user data from Firestore
+  //     const userDoc = await this.firestore
+  //       .collection(this.getCollectionByUserType(userType)) // Use the userType to fetch from the correct collection
+  //       .doc(result.user?.uid)
+  //       .get(result.uid?.subCollectionName )
+  //       .toPromise();
+  
+  //     const userData: any = userDoc?.data();
+  
+  //     // Verify that user data exists
+  //     if (!userData) {
+  //       this.snackBar.open('User data not found!', 'Close', {
+  //         duration: 3000,
+  //         horizontalPosition: 'right',
+  //         verticalPosition: 'top',
+  //       });
+  //       throw new Error('User data not found.');
+  //     }
+  
+  //     // Check if account is active
+  //     if (userData.isDisabled) {
+  //       this.snackBar.open('This account is not active!', 'Close', {
+  //         duration: 3000,
+  //         horizontalPosition: 'right',
+  //         verticalPosition: 'top',
+  //       });
+  //       throw new Error('This account is not active.');
+  //     }
+  
+  //     // Check if userType matches
+  //     if (userData.userType !== userType) {
+  //       this.snackBar.open('Incorrect user type!', 'Close', {
+  //         duration: 3000,
+  //         horizontalPosition: 'right',
+  //         verticalPosition: 'top',
+  //       });
+  //       throw new Error('User type mismatch.');
+  //     }
+  
+  //     // Store user information in local storage
+  //     localStorage.setItem('uid', result.user?._delegate?.uid);
+  //     localStorage.setItem('userEmail', result.user?._delegate?.email);
+  //     localStorage.setItem('usertype', userData.userType);
+  
+  //     // Navigate to the dashboard and show success message
+  //     this.router.navigate(['/dashboards/dashboard1']);
+  //     this.snackBar.open('Login successful', 'Close', {
+  //       duration: 3000,
+  //       horizontalPosition: 'right',
+  //       verticalPosition: 'top',
+  //     });
+  
+  //     return result;
+  //   } catch (error) {
+  //     console.error('Error signing in', error);
+  
+  //     // Display error message
+  //     this.snackBar.open(`${error.message || 'An error occurred during login.'}`, 'Close', {
+  //       duration: 3000,
+  //       horizontalPosition: 'right',
+  //       verticalPosition: 'top',
+  //     });
+  
+  //     throw error;
+  //   }
+  // }
   
   
   
