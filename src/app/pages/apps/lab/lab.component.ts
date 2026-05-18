@@ -20,7 +20,7 @@ export class LabComponent implements OnInit {
     'id',
     'date',
     'patientName',
-    'laboratoryName',
+    // 'laboratoryName',
     'mobileNumber',
     'age',
     'gender',
@@ -92,7 +92,9 @@ export class LabComponent implements OnInit {
   }
 
   getlaboratoryData() {
-    this.firebaseCollectionService.getDocuments('Doctor', 'laboratorylist').then((laboratory) => {
+     const userId = localStorage.getItem('userId')
+  const clinicId = localStorage.getItem('clinicId')
+    this.firebaseCollectionService.getlaboratory(userId, clinicId, 'laboratorylist').then((laboratory) => {
       this.laboratorylist = laboratory
     }).catch((error) => {
       console.error('Error fetching laboratory:', error);
@@ -101,7 +103,10 @@ export class LabComponent implements OnInit {
 
 
   getlabdata() {
-    this.firebaseCollectionService.getDocuments('Doctor', 'lablist').then((lab) => {
+    const userId = localStorage.getItem('userId')
+  const clinicId = localStorage.getItem('clinicId')
+  const laboratoryId = localStorage.getItem('LaboratoryId')
+    this.firebaseCollectionService.getlab(userId, clinicId, laboratoryId, 'lablist').then((lab) => {
       this.lablist = lab
       if (lab && lab.length > 0) {
         this.dataSource = new MatTableDataSource(this.lablist)
@@ -124,7 +129,7 @@ export class LabComponent implements OnInit {
     obj.action = action;
     const dialogRef = this.dialog.open(AddlabdialogComponent, {
       data: obj,
-      width: action === 'Delete' ? '25%' : '50%'
+      width: action === 'Delete' ? '25%' : '55%'
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
@@ -133,12 +138,20 @@ export class LabComponent implements OnInit {
       } else if (result.event === 'Update') {
         this.lablist.forEach((element: any) => {
           if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('Doctor', obj.id, result.data, 'lablist');
+
+            const userId = localStorage.getItem('userId')
+            const clinicId = localStorage.getItem('clinicId')
+            const laboratoryId = localStorage.getItem('LaboratoryId')
+            this.firebaseCollectionService.updatelab(userId, clinicId, laboratoryId, obj.id, result.data);
             this.getlabdata()
           }
         });
       } else if (result.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('Doctor', obj.id, 'lablist');
+        
+            const userId = localStorage.getItem('userId')
+            const clinicId = localStorage.getItem('clinicId')
+            const laboratoryId = localStorage.getItem('LaboratoryId')
+        this.firebaseCollectionService.deletelab(userId, clinicId, laboratoryId, obj.id);
         this.getlabdata()
       }
     });

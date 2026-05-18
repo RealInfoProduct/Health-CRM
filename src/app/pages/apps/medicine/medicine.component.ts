@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { Timestamp } from 'firebase/firestore';
+import { MedicineViewComponent } from './medicine-view/medicine-view.component';
 
 @Component({
   selector: 'app-medicine',
@@ -19,12 +20,7 @@ export class MedicineComponent implements OnInit{
   medicineColumns: string[] = [
     'id',
     'patientName',
-    'medicineName',
-    'companyName',
-    'category',
-    // 'pack',
-    'qty',
-    'rate',
+    'mobileNumber',
     'paymentMethod',
     'amount',
     'disc',
@@ -84,7 +80,10 @@ export class MedicineComponent implements OnInit{
     
     
    getmedicineData(){
-    this.firebaseCollectionService.getDocuments('Medical','medicinelist').then((medicine) =>{
+    const userId = localStorage.getItem('userId')
+  const clinicId = localStorage.getItem('clinicId')
+  const medicalId = localStorage.getItem('MedicalId')
+    this.firebaseCollectionService.getMedicine(userId,clinicId,medicalId,'medicinelist').then((medicine) =>{
       this.medicinelist = medicine
       if(medicine && medicine.length > 0){
         this.dataSource = new MatTableDataSource(this.medicinelist)
@@ -115,24 +114,33 @@ export class MedicineComponent implements OnInit{
     obj.action = action;
     const dialogRef = this.dialog.open(MedicineDialogComponent, {
       data: obj,
-      width: action === 'Delete' ? '25%' : '55%'
+      width: action === 'Delete' ? '25%' : '60%'
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.firebaseCollectionService.addDocument('Medical', result.data ,'medicinelist')
+        const userId = localStorage.getItem('userId')
+        const clinicId = localStorage.getItem('clinicId')
+        const MedicineId = localStorage.getItem('MedicalId')
+        this.firebaseCollectionService.addMedicine(userId, clinicId,MedicineId, result.data)
         this.getmedicineData()
       }
       if (result.event === 'Update') {
         this.medicinelist.forEach((element: any) => {
           if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('Medical', obj.id, result.data, 'medicinelist')
+               const userId = localStorage.getItem('userId')
+        const clinicId = localStorage.getItem('clinicId')
+        const MedicineId = localStorage.getItem('MedicalId')
+            this.firebaseCollectionService.updateMedicine(userId, clinicId,MedicineId, obj.id, result.data)
             this.getmedicineData()
           }
         })
         this.dataSource = new MatTableDataSource(this.medicinelist)
       }
       if (result.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('Medical', obj.id, 'medicinelist')
+           const userId = localStorage.getItem('userId')
+        const clinicId = localStorage.getItem('clinicId')
+        const MedicineId = localStorage.getItem('MedicalId')
+        this.firebaseCollectionService.deleteMedicine(userId, clinicId,MedicineId, obj.id)
         this.getmedicineData()
       }
     });
@@ -141,4 +149,10 @@ export class MedicineComponent implements OnInit{
   getappointmentlist(medicineId: string): string {  
     return this.appointmentslist.find((appointmentObj:any) => appointmentObj.id === medicineId)?.firstName ;
   }
+
+  openMedical(obj: any) {
+      const dialogRef = this.dialog.open(MedicineViewComponent, {
+        data: obj,
+      })
+    }
 }

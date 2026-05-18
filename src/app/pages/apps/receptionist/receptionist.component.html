@@ -3,15 +3,15 @@
     <div class="row justify-content-between">
       <div class="col-lg-4">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
-          <input matInput placeholder="Search  Laboratory"  (keyup)="applyFilter($event)"/>
+          <input matInput placeholder="Search  Receptionist" (keyup)="applyFilter($any($event.target).value)" />
           <mat-icon matSuffix>
             <i-tabler name="search" class="icon-20"></i-tabler>
           </mat-icon>
         </mat-form-field>
       </div>
       <div class="col-lg-4 d-flex align-items-center justify-content-end">
-        <button mat-flat-button (click)="openLaboratoryDialog('Add', {})" color="primary">
-          Add Laboratory
+        <button mat-flat-button (click)="openMedicalDialog('Add', {})" color="primary">
+          Add Receptionist
         </button>
       </div>
     </div>
@@ -22,22 +22,19 @@
   <mat-card-content class="p-24">
     <div class="table-responsive">
       <table mat-table [dataSource]="dataSource" class="w-100">
+
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">No.</th>
-          <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          <td mat-cell *matCellDef="let element;  let i = index ">{{ i + 1 }}</td>
         </ng-container>
-        <ng-container matColumnDef="laboratoryName">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Laboratory Name
-          </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.laboratoryName }}</td>
-        </ng-container>
+
         <ng-container matColumnDef="ownerName">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Owner Name
+            Receptionist Name
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.firstName }} {{ element.middleName }} {{ element.lastName }}</td>
         </ng-container>
+
         <ng-container matColumnDef="mobileNumber">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
             Mobile Number
@@ -46,14 +43,16 @@
             {{ element.mobileNumber }}
           </td>
         </ng-container>
-        <ng-container matColumnDef="laboratoryEmail">
+
+        <ng-container matColumnDef="middleEmail">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Laboratory Email
+             Email
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.laboratoryEmail }}
+            {{ element.email }}
           </td>
         </ng-container>
+
         <ng-container matColumnDef="address">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
             Address
@@ -62,7 +61,7 @@
             {{ element.address }}
           </td>
         </ng-container>
-
+        
          <ng-container matColumnDef="userName">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
            User Name
@@ -82,18 +81,19 @@
             Action
           </th>
           <td mat-cell *matCellDef="let element" class="action-link">
-            <a (click)="openLaboratoryDialog('Update', element)" class="m-r-10 cursor-pointer"><i-tabler name="edit"
-                class="icon-18"></i-tabler></a>
-            <a (click)="openLaboratoryDialog('Delete', element )" class="m-r-10 cursor-pointer">
+            <a (click)="openMedicalDialog('Update', element)" class="m-r-10 cursor-pointer">
+              <i-tabler name="edit" class="icon-18"></i-tabler>
+            </a>
+            <a (click)="openMedicalDialog('Delete', element)" class="m-r-10 cursor-pointer">
               <i-tabler name="trash" class="icon-18"></i-tabler>
             </a>
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="laboratoryColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: laboratoryColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="receptionistColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: receptionistColumns"></tr>
         <tr class="mat-row" style="text-align: center;" *matNoDataRow>
-          <td class="mat-cell" [attr.colspan]="laboratoryColumns.length">
+          <td class="mat-cell" [attr.colspan]="receptionistColumns.length">
             No record found
           </td>
         </tr>

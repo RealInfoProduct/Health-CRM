@@ -20,27 +20,42 @@ export class LaboratoryComponent implements OnInit {
     'mobileNumber',
     'laboratoryEmail',
     'address',
+    'userName',
+    'password',
     'action'
   ];
 
   laboratorylist: any = []
+    userList: any = []
 
   dataSource = new MatTableDataSource(this.laboratorylist)
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-
+         userId = localStorage.getItem('userId')
+         clinicId = localStorage.getItem('clinicId')
   constructor(
     public dialog: MatDialog,
     private firebaseCollectionService: FirebaseCollectionService
   ) { }
 
-  ngOnInit(): void { 
-    this.dataSource.paginator = this.paginator;
-    this.getlaboratoryData()
-  }
+ ngOnInit(): void {
+  this.dataSource.paginator = this.paginator;
+
+  this.dataSource.filterPredicate = (data: any, filter: string) => {
+    const laboratoryName = (data.laboratoryName || '').toLowerCase();
+    return (
+      laboratoryName.includes(filter)
+    );
+  };
+
+  this.getlaboratoryData();
+  this.getuserdata()
+}
 
   getlaboratoryData() {
-    this.firebaseCollectionService.getDocuments('Doctor', 'laboratorylist').then((laboratory) => {
+    const userId = localStorage.getItem('userId')
+     const clinicId = localStorage.getItem('clinicId')
+    this.firebaseCollectionService.getlaboratory(userId, clinicId, 'laboratorylist').then((laboratory) => { 
       this.laboratorylist = laboratory
       if (laboratory && laboratory.length > 0) {
         this.dataSource = new MatTableDataSource(this.laboratorylist);
@@ -55,9 +70,24 @@ export class LaboratoryComponent implements OnInit {
     });
   }
 
-  applyFilter(filterValue: string): void {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    getuserdata(){
+    this.firebaseCollectionService.getDocuments('Admin', 'userlist').then((user) => {
+      if(user && user.length >0) {
+        this.userList = user 
+      }
+
+    })
   }
+
+
+  // applyFilter(filterValue: string): void {
+  //   this.dataSource.filter = filterValue.trim().toLowerCase();
+  // }
+
+applyFilter(event: Event) {
+  const filterValue = (event.target as HTMLInputElement).value;
+  this.dataSource.filter = filterValue.trim().toLowerCase();
+}
 
   openLaboratoryDialog(action: string, obj: any): void {
     obj.action = action;
@@ -65,21 +95,32 @@ export class LaboratoryComponent implements OnInit {
       data: obj,
       width: action === 'Delete' ? '25%' : '50%'
     });
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(async(result) => {
       if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('Doctor', result.data, 'laboratorylist');
+         const laboratoryId = await this.firebaseCollectionService.addlaboratory(this.userId,this.clinicId,result.data);
+          const payloda = {
+          id:"",
+         laboratory:laboratoryId,
+           userName:result.data.userName,
+           password:result.data.password,
+           userId:localStorage.getItem("userId"),
+           clinicId:localStorage.getItem("clinicId"),
+           userType:"Laboratory"
+        }
+         this.firebaseCollectionService.addDocument('Admin',  payloda,'userlist');
         this.getlaboratoryData()
+         this.getuserdata()
       }
       if (result?.event === 'Update') {
         this.laboratorylist.forEach((element: any) => {
           if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('Doctor', obj.id, result.data, 'laboratorylist');
+            this.firebaseCollectionService.updatelaboratory(this.userId,this.clinicId, obj.id, result.data);
             this.getlaboratoryData()
           }
         });
       }
       if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('Doctor', obj.id, 'laboratorylist');
+        this.firebaseCollectionService.deletelaboratory(this.userId,this.clinicId, obj.id);
         this.getlaboratoryData()
       }
     });

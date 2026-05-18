@@ -81,7 +81,7 @@ convertTimestamp(element : any): Date | null {
       staffName: ['', Validators.required],
       designation: ['', Validators.required],
       mobileNumber: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
-      email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
+      email: ['', [Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
       joiningDate: [new Date(), Validators.required],
       salary: ['', Validators.required],
       status: ['', Validators.required],

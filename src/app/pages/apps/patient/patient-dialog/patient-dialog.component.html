@@ -3,7 +3,7 @@
     <form [formGroup]="PatientForm">
         <div class="row">
         
-            <div class="col-lg-6">
+            <!-- <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Patient Name</mat-label>
                     <mat-select #dropdown formControlName="patientName" placeholder="Enter patient name" (openedChange)="onSelectOpen($event, searchInput)">
@@ -17,6 +17,16 @@
                         <mat-option *ngIf="appointmentslist.length === 0" disabled>No patients available</mat-option>
                     </mat-select>
                     <mat-error
+                        *ngIf="PatientForm.get('patientName').errors && PatientForm.get('patientName').errors['required']">
+                        Patient name is required
+                    </mat-error>
+                </mat-form-field>
+            </div> -->
+                 <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Patient Name</mat-label>
+                    <input type="text" placeholder="Enter patient name" formControlName="patientName" matInput />
+                     <mat-error
                         *ngIf="PatientForm.get('patientName').errors && PatientForm.get('patientName').errors['required']">
                         Patient name is required
                     </mat-error>
@@ -103,18 +113,16 @@
                 </mat-radio-group>
             </div>
 
-            <div class="col-lg-6">
+            <!-- <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Doctor Name</mat-label>
-                    <mat-select #dropdown formControlName="doctorName" placeholder="Enter doctor name">
-                        <mat-option [value]="item.id" *ngFor="let item of doctorslist">{{item.doctorsName}}</mat-option>
-                    </mat-select>
+                     <input type="text" placeholder="Enter doctor name" formControlName="doctorName" matInput />
                     <mat-error
                         *ngIf="PatientForm.get('doctorName').errors && PatientForm.get('doctorName').errors['required']">
                         Doctor name is required
                     </mat-error>
                 </mat-form-field>
-            </div>
+            </div> -->
 
             <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">

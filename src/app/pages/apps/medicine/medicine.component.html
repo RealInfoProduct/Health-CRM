@@ -10,9 +10,9 @@
         </mat-form-field>
       </div>
       <div class="col-lg-4 d-flex align-items-center justify-content-end">
-        <button mat-flat-button (click)="openMedicineDialog('Add', {})" color="primary">
+        <!-- <button mat-flat-button (click)="openMedicineDialog('Add', {})" color="primary">
           Add Medicine
-        </button>
+        </button> -->
       </div>
     </div>
   </mat-card-content>
@@ -31,38 +31,13 @@
         <ng-container matColumnDef="patientName">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600 Patienttable">Patient Name</th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ getappointmentlist(element.patientName) }}
+            {{ element.patientName }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="medicineName">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600 Medicinetable"> Medicine Name </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.medicine[0].medicineName }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="companyName">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Company Name </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.medicine[0].companyName }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="category">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Category </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.medicine[0].category }}</td>
-        </ng-container>
-
-        <!-- <ng-container matColumnDef="pack">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Pack </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.pack }}</td>
-        </ng-container> -->
-
-        <ng-container matColumnDef="qty">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Qty </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.medicine[0].qty }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="rate">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Rate </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.medicine[0].rate }}</td>
+        <ng-container matColumnDef="mobileNumber">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Mobile Number</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.mobileNumber }}</td>
         </ng-container>
 
         <ng-container matColumnDef="paymentMethod">
@@ -95,6 +70,9 @@
             Action
           </th>
           <td mat-cell *matCellDef="let element" class="action-link">
+             <a class="m-r-10 cursor-pointer" >
+              <i-tabler name="report-medical" class="icon-18" (click)="openMedical(element)"></i-tabler>
+            </a>
             <a (click)="openMedicineDialog('Update', element)" class="m-r-10 cursor-pointer">
               <i-tabler name="edit" class="icon-18"></i-tabler>
             </a>

@@ -20,19 +20,19 @@ export class DoctorsComponent implements OnInit {
     'id',
     'doctorsName',
     'department',
-    'availability',
     'mobileNumber',
     'degree',
     'experience',
     'consultationFee',
     'email',
-    'rating',
-    'clinicLocation',
     'joiningDate',
+    'userName',
+    'password',
     'action'
   ]
 
   doctorslist: any = []
+  userList: any = []
 
   userType:any = localStorage.getItem('usertype')
   
@@ -58,26 +58,15 @@ export class DoctorsComponent implements OnInit {
     }
     this.dataSource.paginator = this.paginator;
     this.getdoctorsdata()
+    this.getuserdata()
   }
-
-  // getdoctorsdata() {
-  //   this.firebaseCollectionService.getDocuments('ClinicList', 'doctorslist').then((doctors) => {  
-  //     this.doctorslist = doctors
-  //     if (doctors && doctors.length > 0) {
-  //       this.dataSource = new MatTableDataSource(this.doctorslist)
-        
-  //       this.dataSource.paginator = this.paginator
-  //     } else {
-  //       this.doctorslist = []
-  //       this.dataSource = new MatTableDataSource(this.doctorslist)
-  //       this.dataSource.paginator = this.paginator
-  //     }
-  //   })
-  // }
 
 
   getdoctorsdata() {
-    this.firebaseCollectionService.getDocuments('Doctor', 'doctorslist').then((doctors) => {  
+    // this.firebaseCollectionService.getDocuments('Admin', 'doctorslist').then((doctors) => {  
+     const userId = localStorage.getItem('userId')
+     const clinicId = localStorage.getItem('clinicId')
+    this.firebaseCollectionService.getDoctors(userId, clinicId,'doctorsList').then((doctors) => {  
       this.doctorslist = doctors
       if (doctors && doctors.length > 0) {
         this.dataSource = new MatTableDataSource(this.doctorslist)
@@ -88,6 +77,16 @@ export class DoctorsComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.doctorslist)
         this.dataSource.paginator = this.paginator
       }
+    })
+  }
+
+
+  getuserdata(){
+    this.firebaseCollectionService.getDocuments('Admin', 'userlist').then((user) => {
+      if(user && user.length >0) {
+        this.userList = user 
+      }
+
     })
   }
   
@@ -102,39 +101,39 @@ export class DoctorsComponent implements OnInit {
       data: obj,
       width: action === 'Delete' ? '25%' : '50%'
     });
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   if (result.event === 'Add') {
-    //     this.firebaseCollectionService.addDocument('Doctor', result.data, 'doctorslist');
-    //     this.getdoctorsdata()
-
-    //   } else if (result.event === 'Update') {
-    //     this.doctorslist.forEach((element: any) => {
-    //       if (obj.id === element.id) {
-    //         this.firebaseCollectionService.updateDocument('Doctor', obj.id, result.data, 'doctorslist');
-    //         this.getdoctorsdata()
-    //       }
-    //     });
-    //   } else if (result.event === 'Delete') {
-    //     this.firebaseCollectionService.deleteDocument('Doctor', obj.id, 'doctorslist');
-    //     this.getdoctorsdata()
-    //   }
-
-    // })
-
-     dialogRef.afterClosed().subscribe((result) => {
-      if (result.event === 'Add') {
-        this.firebaseCollectionService.addDocument('Doctor', result.data, 'doctorslist');
+     dialogRef.afterClosed().subscribe(async (result) => {
+      if (result?.event === 'Add') {
+        const userId = localStorage.getItem('userId')
+        const clinicId = localStorage.getItem('clinicId')
+  const doctorId = await this.firebaseCollectionService.addDoctor(userId, clinicId, result.data);
+     
+          
+        const payloda = {
+          id:"",
+          doctors:doctorId,
+           userName:result.data.userName,
+           password:result.data.password,
+           userId:localStorage.getItem("userId"),
+           clinicId:localStorage.getItem("clinicId"),
+           userType:"Doctor"
+        }
+         this.firebaseCollectionService.addDocument('Admin',  payloda,'userlist');
         this.getdoctorsdata()
+         this.getuserdata()
 
       } else if (result.event === 'Update') {
         this.doctorslist.forEach((element: any) => {
           if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('Doctor', obj.id, result.data, 'doctorslist');
+            const userId = localStorage.getItem('userId')
+            const clinicId = localStorage.getItem('clinicId')
+            this.firebaseCollectionService.updateDoctor(userId, clinicId, obj.id, result.data);
             this.getdoctorsdata()
           }
         });
       } else if (result.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('Doctor', obj.id, 'doctorslist');
+        const userId = localStorage.getItem('userId')
+        const clinicId = localStorage.getItem('clinicId')
+        this.firebaseCollectionService.deleteDoctor(userId,clinicId, obj.id);
         this.getdoctorsdata()
       }
 

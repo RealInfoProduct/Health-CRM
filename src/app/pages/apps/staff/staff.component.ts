@@ -57,7 +57,7 @@ export class StaffComponent implements OnInit {
   }
 
   getStaffData() {
-    this.firebaseCollectionService.getDocuments('Doctor', 'stafflist').then((staff) => {
+    this.firebaseCollectionService.getDocuments('clinicList', 'stafflist').then((staff) => {
       this.stafflist = staff
       console.log('this.stafflist=====',this.stafflist);
       if (staff && staff.length > 0) {
@@ -81,19 +81,19 @@ export class StaffComponent implements OnInit {
     })
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
-        this.firebaseCollectionService.addDocument('Doctor', result.data, 'stafflist')
+        this.firebaseCollectionService.addDocument('clinicList', result.data, 'stafflist')
         this.getStaffData()
       }
       if (result?.event === 'Update') {
         this.stafflist.forEach((element: any) => {
           if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('Doctor', obj.id, result.data, 'stafflist');
+            this.firebaseCollectionService.updateDocument('clinicList', obj.id, result.data, 'stafflist');
             this.getStaffData()
           }
         })
       }
       if (result?.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('Doctor', obj.id, 'stafflist');
+        this.firebaseCollectionService.deleteDocument('clinicList', obj.id, 'stafflist');
         this.getStaffData()
       }
     })

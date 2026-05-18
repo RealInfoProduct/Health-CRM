@@ -98,6 +98,11 @@ import { StaffDialogComponent } from './staff/staff-dialog/staff-dialog.componen
 import { LaboratoryViewComponent } from './patient/laboratory-view/laboratory-view.component';
 import { MedicalViewComponent } from './patient/medical-view/medical-view.component';
 import { ReportViewComponent } from './lab/report-view/report-view.component';
+import { ClicnkComponent } from './clicnk/clicnk.component';
+import { ClicnkDialogComponent } from './clicnk/clicnk-dialog/clicnk-dialog.component';
+import { ReceptionistComponent } from './receptionist/receptionist.component';
+import { ReceptionistDialogComponent } from './receptionist/receptionist-dialog/receptionist-dialog.component';
+import { MedicineViewComponent } from './medicine/medicine-view/medicine-view.component';
 
 
 
@@ -180,6 +185,11 @@ import { ReportViewComponent } from './lab/report-view/report-view.component';
     LaboratoryViewComponent,
     MedicalViewComponent,
     ReportViewComponent,
+    ClicnkComponent,
+    ClicnkDialogComponent,
+    ReceptionistComponent,
+    ReceptionistDialogComponent,
+    MedicineViewComponent,
 
   ],
   providers: [  { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],

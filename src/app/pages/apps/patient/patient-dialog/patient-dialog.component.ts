@@ -44,6 +44,7 @@ export class PatientDialogComponent implements OnInit {
   medicallist: any = []
   appointmentslist: any = []
   filteredPatients: any[] = [];
+  lablist: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -60,7 +61,7 @@ export class PatientDialogComponent implements OnInit {
 
     if (this.action === 'Update') {
       this.PatientForm.patchValue({
-        patientName: this.local_data.patientName,
+        patientName: `${this.local_data.firstName} ${this.local_data.lastName}`,
         mobileNumber: this.local_data.mobileNumber,
         address: this.local_data.address,
         bloodGroup: this.local_data.bloodGroup,
@@ -102,7 +103,8 @@ export class PatientDialogComponent implements OnInit {
     this.getlaboratoryData();
     this.getdoctorsdata();
     this.getappointmentdata();
-    this.getmedicineData();
+       this.getMedicalData()
+       this.getlabdata()
 
     this.PatientForm.get('patientName')?.valueChanges.subscribe((patientId) => {
       const selectedPatient = this.appointmentslist.find(
@@ -139,15 +141,13 @@ export class PatientDialogComponent implements OnInit {
 
   }
 
-  getmedicineData() {
-    this.firebaseCollectionService.getDocuments('Doctor', 'medicallist').then((medical) => {
+ getMedicalData() {
+     const userId = localStorage.getItem('userId')
+     const clinicId = localStorage.getItem('clinicId')
+    this.firebaseCollectionService.getMedical(userId, clinicId,'medicallist').then((medical) => {  
+      this.medicallist = medical
       if (medical && medical.length > 0) {
-        this.medicallist = medical
-        console.log(this.medicallist);
-
       }
-    }).catch((error) => {
-      console.error('Error fetching medical:', error);
     })
   }
 
@@ -163,13 +163,23 @@ export class PatientDialogComponent implements OnInit {
   }
 
   getlaboratoryData() {
-    this.firebaseCollectionService.getDocuments('Doctor', 'laboratorylist').then((laboratory) => {
+    const userId = localStorage.getItem('userId')
+     const clinicId = localStorage.getItem('clinicId')
+    this.firebaseCollectionService.getlaboratory(userId, clinicId, 'laboratorylist').then((laboratory) => { 
+      this.laboratorylist = laboratory
       if (laboratory && laboratory.length > 0) {
-        this.laboratorylist = laboratory
+
       }
-    }).catch((error) => {
-      console.error('Error fetching laboratory:', error);
-    });
+    })
+  }
+
+    getlabdata() {
+    this.firebaseCollectionService.getDocuments('Doctor', 'lablist').then((lab) => {
+      this.lablist = lab
+      if (lab && lab.length > 0) {
+
+      }
+    })
   }
 
   convertTimestamp(element: any): Date | null {
@@ -211,13 +221,15 @@ export class PatientDialogComponent implements OnInit {
       age: this.PatientForm.value.age,
       gender: this.PatientForm.value.gender,
       laboratoryName: this.PatientForm.value.laboratoryName,
-      medicalName: this.PatientForm.value.medicalName,
+      medicalName: this.PatientForm.value.medicalName || "",
       doctorName: this.PatientForm.value.doctorName,
       appointmentStatus: this.PatientForm.value.appointmentStatus,
       visitType: this.PatientForm.value.visitType,
       paymentMethod: this.PatientForm.value.paymentMethod,
       reports: this.PatientForm.value.reports,
       medical: this.PatientForm.value.medical,
+       userId:localStorage.getItem("userId"),
+      clinicId:localStorage.getItem("clinicId"),
     }
     console.log(payload);
     this.dialogRef.close({ event: this.action, data: payload });

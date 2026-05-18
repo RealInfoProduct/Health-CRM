@@ -30,6 +30,8 @@ import { DoctorsComponent } from './doctors/doctors.component';
 import { BillComponent } from './bill/bill.component';
 import { AppointmentsComponent } from './appointments/appointments.component';
 import { StaffComponent } from './staff/staff.component';
+import { ClicnkComponent } from './clicnk/clicnk.component';
+import { ReceptionistComponent } from './receptionist/receptionist.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -222,6 +224,28 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url:'/apps/bill' },
             { title: 'Bill' },
+          ],
+        },
+      },
+      {
+        path: 'clinic',
+        component: ClicnkComponent,
+        data: {
+          title: 'Clinic',
+          urls: [
+            { title: 'Dashboard', url:'/apps/clinic' },
+            { title: 'Clinic' },
+          ],
+        },
+      },
+      {
+        path: 'receptionist',
+        component: ReceptionistComponent,
+        data: {
+          title: 'Receptionist',
+          urls: [
+            { title: 'Dashboard', url:'/apps/receptionist' },
+            { title: 'Receptionist' },
           ],
         },
       },

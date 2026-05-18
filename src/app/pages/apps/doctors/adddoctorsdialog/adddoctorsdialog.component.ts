@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Timestamp } from 'firebase/firestore';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-adddoctorsdialog',
@@ -12,7 +13,7 @@ export class AdddoctorsdialogComponent implements OnInit {
   doctorsForm: FormGroup;
   action: string;
   local_data: any;
-
+  hidePassword: boolean = true;
   DepartmentList = [
     { id: 1, name: 'Urology' },
     { id: 2, name: 'Dentist' },
@@ -30,12 +31,13 @@ export class AdddoctorsdialogComponent implements OnInit {
     { id: 14, name: 'Nephrology' },
     { id: 15, name: 'Gynecology' }
   ]
-
+medicallist:any =[]
 
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<AdddoctorsdialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
+     private firebaseCollectionService: FirebaseCollectionService
   ) { 
     this.local_data = { ...data };
     this.action = this.local_data.action;
@@ -52,9 +54,11 @@ export class AdddoctorsdialogComponent implements OnInit {
       this.doctorsForm.controls['joiningDate'].setValue(this.convertTimestamp(this.local_data.joiningDate))
       this.doctorsForm.controls['experience'].setValue(this.local_data.experience)
       this.doctorsForm.controls['consultationFee'].setValue(this.local_data.consultationFee)
-      this.doctorsForm.controls['availability'].setValue(this.local_data.availability)
-      this.doctorsForm.controls['rating'].setValue(this.local_data.rating)
-      this.doctorsForm.controls['clinicLocation'].setValue(this.local_data.clinicLocation)
+      // this.doctorsForm.controls['availability'].setValue(this.local_data.availability)
+      // this.doctorsForm.controls['rating'].setValue(this.local_data.rating)
+      // this.doctorsForm.controls['clinicLocation'].setValue(this.local_data.clinicLocation)
+      this.doctorsForm.controls['userName'].setValue(this.local_data.userName)
+      this.doctorsForm.controls['password'].setValue(this.local_data.password)
     }
   }
   
@@ -71,18 +75,21 @@ export class AdddoctorsdialogComponent implements OnInit {
       department: ['', Validators.required],
       degree: ['', Validators.required],
       mobileNumber: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
-      email: ['', [Validators.required,Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
+      email: ['', [Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)]],
       joiningDate: [new Date(), Validators.required],
       experience: ['', Validators.required],
       consultationFee: ['', Validators.required],
-      availability: ['', Validators.required],
-      rating: ['', Validators.required],
-      clinicLocation: ['', Validators.required]
+      // availability: ['', Validators.required],
+      // rating: ['', Validators.required],
+      // clinicLocation: ['', Validators.required],
+      userName: ['', Validators.required],
+      password: ['', Validators.required],
     })
   }
 
   doAction(){ 
     const payload = {
+      id: this.local_data.id ? this.local_data.id : '',
     doctorsName:this.doctorsForm.value.doctorsName,
     department:this.doctorsForm.value.department,
     degree:this.doctorsForm.value.degree,
@@ -91,11 +98,18 @@ export class AdddoctorsdialogComponent implements OnInit {
     joiningDate: this.doctorsForm.value.joiningDate,
     experience: this.doctorsForm.value.experience,
     consultationFee: this.doctorsForm.value.consultationFee,
-    availability: this.doctorsForm.value.availability,
-    rating: this.doctorsForm.value.rating,
-    clinicLocation: this.doctorsForm.value.clinicLocation
+    // availability: this.doctorsForm.value.availability,
+    // rating: this.doctorsForm.value.rating,
+    // clinicLocation: this.doctorsForm.value.clinicLocation,
+    userName:this.doctorsForm.value.userName,
+    password:this.doctorsForm.value.password,
+    userId:localStorage.getItem("userId"),
+    clinicId:localStorage.getItem("clinicId"),
+     userType:"Doctor",
   }
   this.dialogRef.close({ event: this.action, data: payload });
 }
+
+
 
 }

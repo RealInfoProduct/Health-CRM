@@ -1,22 +1,21 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ReceptionistDialogComponent } from './receptionist-dialog/receptionist-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { AddmedicaldialogComponent } from './addmedicaldialog/addmedicaldialog.component';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
-  selector: 'app-medical',
-  templateUrl: './medical.component.html',
-  styleUrls: ['./medical.component.scss']
+  selector: 'app-receptionist',
+  templateUrl: './receptionist.component.html',
+  styleUrls: ['./receptionist.component.scss']
 })
-export class MedicalComponent implements OnInit{
+export class ReceptionistComponent implements OnInit{
   @ViewChild(MatTable, { static: true }) table: MatTable<any> = Object.create(null);
   searchText: any;
 
-  medicalColumns: string[] = [
+  receptionistColumns: string[] = [
     'id',
-    'medicalName',
     'ownerName',
     'mobileNumber',
     'middleEmail',
@@ -26,44 +25,41 @@ export class MedicalComponent implements OnInit{
     'action'
   ];
 
-  medicallist: any = []
+  receptionistList: any = []
   userList: any = []
 
-  dataSource = new MatTableDataSource(this.medicallist);
-
+  dataSource = new MatTableDataSource(this.receptionistList);
+  userId = localStorage.getItem('userId')
+  clinicId = localStorage.getItem('clinicId')
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(
     public dialog: MatDialog,
     private firebaseCollectionService: FirebaseCollectionService) { }
 
-
-
     ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
-    this.getMedicalData()
+    this.getReceptionistData()
     this.getuserdata()
   }
 
-  getMedicalData() {
-     const userId = localStorage.getItem('userId')
-     const clinicId = localStorage.getItem('clinicId')
-    this.firebaseCollectionService.getMedical(userId, clinicId,'medicallist').then((medical) => {  
-      this.medicallist = medical
-      if (medical && medical.length > 0) {
-        this.dataSource = new MatTableDataSource(this.medicallist);
+  getReceptionistData() {
+    this.firebaseCollectionService.getReceptionist(this.userId, this.clinicId,'Receptionistlist').then((receptionist) => {  
+      this.receptionistList = receptionist
+      if (receptionist && receptionist.length > 0) {
+        this.dataSource = new MatTableDataSource(this.receptionistList);
         this.dataSource.paginator = this.paginator;
       } else {
-        this.medicallist = [];
-        this.dataSource = new MatTableDataSource(this.medicallist);
+        this.receptionistList = [];
+        this.dataSource = new MatTableDataSource(this.receptionistList);
         this.dataSource.paginator = this.paginator;
       }
     }).catch((error) => {
-      console.error('Error fetching medical:', error);
+      console.error('Error fetching receptionist:', error);
     });
   }
 
-     getuserdata(){
+    getuserdata(){
     this.firebaseCollectionService.getDocuments('Admin', 'userlist').then((user) => {
       if(user && user.length >0) {
         this.userList = user 
@@ -72,49 +68,45 @@ export class MedicalComponent implements OnInit{
     })
   }
 
+
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   openMedicalDialog(action: string, obj: any): void {
     obj.action = action;
-    const dialogRef = this.dialog.open(AddmedicaldialogComponent, {
+    const dialogRef = this.dialog.open(ReceptionistDialogComponent, {
       data: obj,
       width: action === 'Delete' ? '25%' : '50%'
     });
     dialogRef.afterClosed().subscribe(async(result) => {
       if (result?.event === 'Add') {
-        const userId = localStorage.getItem('userId')
-        const clinicId = localStorage.getItem('clinicId')
-        const MedicalId = await  this.firebaseCollectionService.addMedical(userId, clinicId, result.data);
-          const payloda = {
+        const receptionistId = await this.firebaseCollectionService.addReceptionist(this.userId, this.clinicId, result.data);
+        
+        const payloda = {
           id:"",
-         Medical:MedicalId,
+          receptionist:receptionistId,
            userName:result.data.userName,
            password:result.data.password,
            userId:localStorage.getItem("userId"),
            clinicId:localStorage.getItem("clinicId"),
-           userType:"Medical"
+           userType:"Receptionist"
         }
          this.firebaseCollectionService.addDocument('Admin',  payloda,'userlist');
-        this.getMedicalData()
+        this.getReceptionistData()
         this.getuserdata()
       }
       if (result?.event === 'Update') {
-        this.medicallist.forEach((element: any) => {
+        this.receptionistList.forEach((element: any) => {
           if (obj.id === element.id) {
-            const userId = localStorage.getItem('userId')
-            const clinicId = localStorage.getItem('clinicId')
-            this.firebaseCollectionService.updateMedical(userId, clinicId, obj.id, result.data);
-            this.getMedicalData()
+            this.firebaseCollectionService.updateReceptionist(this.userId, this.clinicId, obj.id, result.data);
+            this.getReceptionistData()
           }
         });
       }
       if (result?.event === 'Delete') {
-         const userId = localStorage.getItem('userId')
-        const clinicId = localStorage.getItem('clinicId')
-        this.firebaseCollectionService.deleteMedical(userId, clinicId, obj.id);
-        this.getMedicalData()
+        this.firebaseCollectionService.deleteReceptionist(this.userId, this.clinicId, obj.id);
+        this.getReceptionistData()
       }
     });
   }

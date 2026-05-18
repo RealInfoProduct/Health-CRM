@@ -16,9 +16,12 @@ export class AppSideRegisterComponent {
   options = this.settings.getOptions();
 
   userTypeList = [
-    // {id:1 , typeName:'Admin'},
-    {id:1 , typeName:'Doctor'},
-    {id:2 , typeName:'Medical'},
+     {id:1 , typeName:'Admin'},
+    // {id:2 , typeName:'Doctor'},
+    // {id:3 , typeName:'Medical'},
+    // {id:4 , typeName:'Clinic'},
+    // {id:5 , typeName:'Laboratory'},
+    // {id:6 , typeName:'Receptionist'},
     // {id:3 , typeName:'Patient'}
   ]
 

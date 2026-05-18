@@ -48,7 +48,7 @@ export class AddlabdialogComponent implements OnInit {
           date: reportDate,
           reportType: report.reportType,
           reportName: report.reportName,
-          reportFee: report.reportFee,
+          reportFee: report.reportFee || 0,
           disease: report.disease,
         }));
       });
@@ -79,7 +79,7 @@ export class AddlabdialogComponent implements OnInit {
           date: reportDate,
           reportType: report.reportType || '',
           reportName: report.reportName || '',
-          reportFee: report.reportFee || '',
+          reportFee: report.reportFee || 0,
           disease: report.disease || '',
         }));
       });

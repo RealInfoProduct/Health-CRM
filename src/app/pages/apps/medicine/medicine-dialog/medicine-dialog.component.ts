@@ -46,10 +46,11 @@ export class MedicineDialogComponent implements OnInit {
     this.getappointmentdata()
     if (this.action === 'Update') {
       this.addmedicineForm.controls['patientName'].setValue(this.local_data.patientName)
+      this.addmedicineForm.controls['mobileNumber'].setValue(this.local_data.mobileNumber)
       this.addmedicineForm.controls['amount'].setValue(this.local_data.amount)
-      this.addmedicineForm.controls['discount'].setValue(this.local_data.discount)
+      this.addmedicineForm.controls['discount'].setValue(this.local_data.discount || 0)
       this.addmedicineForm.controls['paymentMethod'].setValue(this.local_data.paymentMethod)
-      this.addmedicineForm.controls['gst'].setValue(this.local_data.gst)
+      this.addmedicineForm.controls['gst'].setValue(this.local_data.gst || 0)
       this.addmedicineForm.controls['netamount'].setValue(this.local_data.netamount)
       this.local_data.medicine.forEach((element:any) => {
         this.addMedicine(element)
@@ -130,6 +131,7 @@ const selectedPatient = this.patientlist.find(
   addmedicallist() {
     this.addmedicineForm = this.fb.group({
       patientName: ['', Validators.required],
+      mobileNumber: ['', Validators.required],
       medicine :this.fb.array([]),
       paymentMethod: ['', Validators.required],
       amount: ['', Validators.required],
@@ -219,6 +221,7 @@ addMedicine(medicine?: any) {
     const payload = {
       patientName: this.addmedicineForm.value.patientName,
       medicine: this.addmedicineForm.value.medicine,
+      mobileNumber: this.addmedicineForm.value.mobileNumber,
       paymentMethod: this.addmedicineForm.value.paymentMethod,
       amount: this.addmedicineForm.value.amount,
       discount: this.addmedicineForm.value.discount,

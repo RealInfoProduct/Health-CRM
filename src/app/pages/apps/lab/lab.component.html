@@ -10,9 +10,9 @@
         </mat-form-field>
       </div>
       <div class="col-lg-4 d-flex align-items-center justify-content-end">
-        <button mat-flat-button (click)="openLabDialog('Add', {})" color="primary">
+        <!-- <button mat-flat-button (click)="openLabDialog('Add', {})" color="primary" >
           Add Lab
-        </button>
+        </button> -->
       </div>
     </div>
   </mat-card-content>
@@ -36,13 +36,13 @@
 
         <ng-container matColumnDef="patientName">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600 Patienttable"> Patient Name </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">{{ getAppointmentlist(element.patientName)  }}</td>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.patientName  }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="laboratoryName">
+        <!-- <ng-container matColumnDef="laboratoryName">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600 Laboratorytable">Laboratory Name</th>
           <td mat-cell *matCellDef="let element">{{getlaboratorylist(element.laboratoryName)  }}</td>
-        </ng-container>
+        </ng-container> -->
 
         <ng-container matColumnDef="mobileNumber">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600 Mobiletable">

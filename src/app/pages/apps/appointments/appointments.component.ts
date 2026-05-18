@@ -38,7 +38,6 @@ export class AppointmentsComponent implements OnInit {
 
   appointmentslist: any = []
   doctorslist: any = []
-  medicinelist: any = []
   originalAppointments: any[] = [];
 
   userType:any = localStorage.getItem('usertype')
@@ -63,7 +62,6 @@ export class AppointmentsComponent implements OnInit {
  
     this.getappointmentdata()
     this.getdoctorsdata()
-    this.getmedicineData()
   }
 
 filterDate(selectedDate: Date | null) {
@@ -94,21 +92,28 @@ filterDate(selectedDate: Date | null) {
   this.dataSource.paginator = this.paginator;
 }
 
-  getdoctorsdata() {
-    this.firebaseCollectionService.getDocuments('Doctor', 'doctorslist').then((doctors) => {
-      this.doctorslist = doctors 
-    }).catch((error) =>{
+getdoctorsdata() {
+      const userId = localStorage.getItem('userId')
+     const clinicId = localStorage.getItem('clinicId')
+    this.firebaseCollectionService.getDoctors(userId, clinicId,'doctorsList').then((doctors) => { 
+      if (doctors && doctors.length > 0) {
+        this.doctorslist = doctors
+      }
+    }).catch((error) => {
       console.error('Error fetching doctors:', error);
-    }) 
+    })
+
   }
 
   getappointmentdata() {
-    this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist').then((appointment) => {
+    const userId = localStorage.getItem('userId')
+        const clinicId = localStorage.getItem('clinicId')
+        const ReceptionistId = localStorage.getItem('ReceptionistId')
+    this.firebaseCollectionService.getAppointmentsList(userId, clinicId, ReceptionistId,'appointmentslist').then((appointment) => {
       this.appointmentslist = appointment
         this.originalAppointments = appointment
       if (appointment && appointment.length > 0) {
         this.dataSource = new MatTableDataSource(this.appointmentslist)
-        localStorage.setItem('appointmentsData', JSON.stringify(this.appointmentslist));
         console.log("this.appointmentslist",this.appointmentslist);
         
         this.dataSource.paginator = this.paginator
@@ -142,39 +147,41 @@ filterDate(selectedDate: Date | null) {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.firebaseCollectionService.addDocument('Doctor', result.data, 'appointmentslist');
-         this.firebaseCollectionService.addDocument('Medical', result.data ,'appointmentslist')
+        const userId = localStorage.getItem('userId')
+        const clinicId = localStorage.getItem('clinicId')
+        const ReceptionistId = localStorage.getItem('ReceptionistId')
+          const doctorId = result.data.doctorName;
+        this.firebaseCollectionService.addappointmentslist(userId, clinicId,ReceptionistId,result.data);
+         this.firebaseCollectionService.addpatient(userId, clinicId, doctorId, result.data)
+        
         this.getappointmentdata()
-        this.getmedicineData()
       } else if (result.event === 'Update') {
         this.appointmentslist.forEach((element: any) => {
           if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('Doctor', obj.id, result.data, 'appointmentslist');
-            this.firebaseCollectionService.updateDocument('Medical', obj.id, result.data, 'appointmentslist')
+            const userId = localStorage.getItem('userId')
+         const clinicId = localStorage.getItem('clinicId')
+            const ReceptionistId = localStorage.getItem('ReceptionistId')
+            const doctorId = result.data.doctorName;
+            this.firebaseCollectionService.updateAppointmentsList(userId, clinicId,ReceptionistId, obj.id, result.data);
+              this.firebaseCollectionService.updatepatient(userId, clinicId, doctorId, obj.id, result.data);
+              
             this.getappointmentdata()
-            this.getmedicineData()
           }
         });
       } else if (result.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument('Doctor', obj.id, 'appointmentslist');
-          this.firebaseCollectionService.deleteDocument('Medical', obj.id, 'appointmentslist')
+          const userId = localStorage.getItem('userId')
+         const clinicId = localStorage.getItem('clinicId')
+            const ReceptionistId = localStorage.getItem('ReceptionistId')
+             const doctorId = result.data.doctorName;
+        this.firebaseCollectionService.deleteAppointmentsList(userId, clinicId,ReceptionistId, obj.id);
+         this.firebaseCollectionService.deletepatient(userId, clinicId, doctorId, obj.id);
         this.getappointmentdata()
-        this.getmedicineData()
       }
 
     })
   }
 
-   getmedicineData(){
-    this.firebaseCollectionService.getDocuments('Medical','medicinelist').then((medicine) =>{
-      if(medicine && medicine.length > 0){
-        this.medicinelist = medicine
-     
-      }
-    }).catch((error) => {
-      console.error('Error fetching medical:', error);
-    });
-   } 
+ 
 
   getDoctorslist(doctorId: string): string {  
     return this.doctorslist.find((doctorObj:any) => doctorObj.id === doctorId)?.doctorsName ;

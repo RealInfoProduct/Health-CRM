@@ -46,12 +46,8 @@
             <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Email</mat-label>
-                    <input type="text" formControlName="email" placeholder="Enter email" matInput
-                        require />
-                    <mat-error
-                        *ngIf="StaffForm.get('email').errors && StaffForm.get('email').errors['required']">
-                        Email is required
-                    </mat-error>
+                    <input type="text" formControlName="email" placeholder="Enter email" matInput />
+        
                     <mat-error
                         *ngIf="StaffForm.get('email').errors && StaffForm.get('email').errors['pattern']">
                         Please enter a valid email

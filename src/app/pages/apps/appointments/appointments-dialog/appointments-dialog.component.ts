@@ -71,7 +71,9 @@ export class AppointmentsDialogComponent implements OnInit {
 
 
   getdoctorsdata() {
-    this.firebaseCollectionService.getDocuments('Doctor', 'doctorslist').then((doctors) => {
+      const userId = localStorage.getItem('userId')
+     const clinicId = localStorage.getItem('clinicId')
+    this.firebaseCollectionService.getDoctors(userId, clinicId,'doctorsList').then((doctors) => { 
       if (doctors && doctors.length > 0) {
         this.doctorslist = doctors
       }
@@ -110,6 +112,7 @@ export class AppointmentsDialogComponent implements OnInit {
 
   doAction() {
     const payload = {
+         id: this.local_data.id ? this.local_data.id : '',
       tokenNumber: this.appointmentsForm.value.tokenNumber,
       firstName: this.appointmentsForm.value.firstName,
       lastName: this.appointmentsForm.value.lastName,
@@ -124,14 +127,19 @@ export class AppointmentsDialogComponent implements OnInit {
       age: this.appointmentsForm.value.age,
       appointmentStatus: this.appointmentsForm.value.appointmentStatus,
       visitType: this.appointmentsForm.value.visitType,
-      paymentMethod: this.appointmentsForm.value.paymentMethod
+      paymentMethod: this.appointmentsForm.value.paymentMethod,
+       userId:localStorage.getItem("userId"),
+       clinicId:localStorage.getItem("clinicId"),
+      ReceptionistId: localStorage.getItem('ReceptionistId')
     }
     this.dialogRef.close({ event: this.action, data: payload });
   }
 
   setAutoTokenNumber() {
-    this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist')
-      .then((appointments: any[]) => {
+      const userId = localStorage.getItem('userId')
+        const clinicId = localStorage.getItem('clinicId')
+        const ReceptionistId = localStorage.getItem('ReceptionistId')
+    this.firebaseCollectionService.getAppointmentsList(userId, clinicId, ReceptionistId,'appointmentslist').then((appointments) => {
 
         const today = new Date().toDateString();
 

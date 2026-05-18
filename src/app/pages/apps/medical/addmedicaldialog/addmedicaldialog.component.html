@@ -66,11 +66,7 @@
             <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Medical Email</mat-label>
-                    <input type="text" formControlName="middleEmail" placeholder="Enter medical email" matInput require />
-                    <mat-error
-                        *ngIf="addmedicalForm.get('middleEmail').errors && addmedicalForm.get('middleEmail').errors['required']">
-                        Medical email is required
-                    </mat-error>
+                    <input type="text" formControlName="middleEmail" placeholder="Enter medical email" matInput  />
                     <mat-error
                         *ngIf="addmedicalForm.get('middleEmail').errors && addmedicalForm.get('middleEmail').errors['pattern']">
                         Please enter a valid email
@@ -86,6 +82,38 @@
                         *ngIf="addmedicalForm.get('address').errors && addmedicalForm.get('address').errors['required']">
                         Address is required
                     </mat-error>
+                </mat-form-field>
+            </div>
+             <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 ">User Name</mat-label>
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <input type="text" formControlName="userName" placeholder="Enter User Name" matInput require />
+                    <mat-error class="error-message"
+                        *ngIf="addmedicalForm.get('userName').errors &&  addmedicalForm.get('userName').errors['required']">
+                        User Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600">Password</mat-label>
+
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+
+                    <input [type]="hidePassword ? 'password' : 'text'" formControlName="password"
+                        placeholder="Enter Password" matInput required />
+
+                    <!-- Show/Hide Button -->
+                    <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+                        <mat-icon>
+                            {{ hidePassword ? 'visibility_off' : 'visibility' }}
+                        </mat-icon>
+                    </button>
+
+                    <mat-error class="error-message" *ngIf="addmedicalForm.get('password')?.errors?.['required']">
+                        Password is required
+                    </mat-error>
+
                 </mat-form-field>
             </div>
         </div>

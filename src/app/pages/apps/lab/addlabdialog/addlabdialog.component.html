@@ -12,7 +12,7 @@
                         </mat-form-field>
             </div>
 
-            <div class="col-lg-4">
+            <!-- <div class="col-lg-4">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Patient Name</mat-label>
                     <mat-select #dropdown formControlName="patientName" placeholder="Enter patient name"
@@ -31,9 +31,19 @@
                         Doctor name is required
                     </mat-error>
                 </mat-form-field>
+            </div> -->
+               <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Patient Name</mat-label>
+                    <input type="text" formControlName="patientName" placeholder="Enter patient name"
+                        matInput require  />
+                    <mat-error *ngIf="addlabForm.get('patientName').errors && addlabForm.get('patientName').errors['required']">
+                        Patient Name is required
+                    </mat-error>
+                </mat-form-field>
             </div>
     
-            <div class="col-lg-4">
+            <!-- <div class="col-lg-4">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Laboratory Name</mat-label>
                     <mat-select #dropdown formControlName="laboratoryName" placeholder="Enter laboratory name">
@@ -41,9 +51,18 @@
                             *ngFor="let item of laboratorylist">{{item.laboratoryName}}</mat-option>
                     </mat-select>
                 </mat-form-field>
-            </div>
-    
-            <div class="col-lg-6">
+            </div>-->
+               <!-- <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Laboratory Name</mat-label>
+                    <input type="number" formControlName="laboratoryName" placeholder="Enter laboratory name"
+                       matInput require  />
+                    <mat-error *ngIf="addlabForm.get('laboratoryName').errors && addlabForm.get('laboratoryName').errors['required']">
+                        Laboratory Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div> -->
+            <div class="col-lg-4">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Mobile Number</mat-label>
                     <input type="number" formControlName="mobileNumber" placeholder="Enter mobile number" matInput require
