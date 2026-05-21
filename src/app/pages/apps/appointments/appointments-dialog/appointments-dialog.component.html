@@ -10,7 +10,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-lg-5">
+            <!-- <div class="col-lg-5">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>First Name</mat-label>
                     <input type="text" formControlName="firstName" placeholder="Enter first name" matInput />
@@ -19,7 +19,35 @@
                         First name is required
                     </mat-error>
                 </mat-form-field>
-            </div>
+            </div> -->
+
+            <div class="col-lg-5">
+    <mat-form-field appearance="outline" class="w-100 m-t-10">
+        <mat-label>First Name</mat-label>
+
+        <input
+            type="text"
+            formControlName="firstName"
+            placeholder="Enter first name"
+            matInput
+            [matAutocomplete]="auto" />
+
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onPatientSelected($event)">
+            <mat-option
+                *ngFor="let patient of filteredPatients"
+                [value]="patient.firstName">
+
+                {{ patient.firstName }} {{ patient.lastName }}
+            </mat-option>
+        </mat-autocomplete>
+
+        <mat-error
+            *ngIf="appointmentsForm.get('firstName').errors &&
+                   appointmentsForm.get('firstName').errors['required']">
+            First name is required
+        </mat-error>
+    </mat-form-field>
+</div>
 
             <div class="col-lg-5">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">

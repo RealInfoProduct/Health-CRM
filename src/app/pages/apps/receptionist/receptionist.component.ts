@@ -27,6 +27,7 @@ export class ReceptionistComponent implements OnInit{
 
   receptionistList: any = []
   userList: any = []
+  originalReceptionist: any = [];
 
   dataSource = new MatTableDataSource(this.receptionistList);
   userId = localStorage.getItem('userId')
@@ -46,6 +47,7 @@ export class ReceptionistComponent implements OnInit{
   getReceptionistData() {
     this.firebaseCollectionService.getReceptionist(this.userId, this.clinicId,'Receptionistlist').then((receptionist) => {  
       this.receptionistList = receptionist
+       this.originalReceptionist = receptionist;
       if (receptionist && receptionist.length > 0) {
         this.dataSource = new MatTableDataSource(this.receptionistList);
         this.dataSource.paginator = this.paginator;

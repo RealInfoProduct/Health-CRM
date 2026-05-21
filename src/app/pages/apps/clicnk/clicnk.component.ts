@@ -29,6 +29,7 @@ export class ClicnkComponent implements OnInit {
   ]
 
    clinicList: any = []
+   userList:any =[]
 
   userType:any = localStorage.getItem('usertype')
   userId:any = localStorage.getItem('userId')
@@ -52,6 +53,7 @@ export class ClicnkComponent implements OnInit {
   ngOnInit(): void {
     this.dataSource.paginator = this.paginator;
     this.getclicnkdata()
+    this.getuserdata()
   }
 
   getclicnkdata() {
@@ -68,6 +70,16 @@ export class ClicnkComponent implements OnInit {
       }
     })
   }
+
+   getuserdata(){
+    this.firebaseCollectionService.getDocuments('Admin', 'userlist').then((user) => {
+      if(user && user.length >0) {
+        this.userList = user 
+        console.log(this.userList);
+      }
+
+    })
+  }
   
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -81,20 +93,45 @@ export class ClicnkComponent implements OnInit {
       width: action === 'Delete' ? '25%' : '50%'
     });
 
-     dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.firebaseCollectionService.addDocument('Admin',  result.data,'clinicList');
-        this.getclicnkdata()
+
+        this.firebaseCollectionService
+          .addDocument('Admin', result.data, 'clinicList')
+          .then((res: any) => {
+
+            console.log(res); // check firebase response
+
+            const payload = {
+              id: "",
+              userName: result.data.userName,
+              password: result.data.password,
+              userId: result.data.userId,
+              clinicId: res.id, // firebase generated id
+              userType: "Clinic"
+            };
+
+            this.firebaseCollectionService
+              .addDocument('Admin', payload, 'userlist')
+              .then(() => {
+                this.getclicnkdata();
+                this.getuserdata();
+              });
+
+          })
+          .catch((error: any) => {
+            console.log(error);
+          });
 
       } else if (result.event === 'Update') {
-        this. clinicList.forEach((element: any) => {
+        this.clinicList.forEach((element: any) => {
           if (obj.id === element.id) {
-            this.firebaseCollectionService.updateDocument('Admin', obj.id, result.data,'clinicList');
+            this.firebaseCollectionService.updateDocument('Admin', obj.id, result.data, 'clinicList');
             this.getclicnkdata()
           }
         });
       } else if (result.event === 'Delete') {
-        this.firebaseCollectionService.deleteDocument( 'Admin', obj.id,'clinicList');
+        this.firebaseCollectionService.deleteDocument('Admin', obj.id, 'clinicList');
         this.getclicnkdata()
       }
 

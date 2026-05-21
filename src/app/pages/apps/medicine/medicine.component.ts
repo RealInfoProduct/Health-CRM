@@ -6,6 +6,7 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
 import { MatPaginator } from '@angular/material/paginator';
 import { Timestamp } from 'firebase/firestore';
 import { MedicineViewComponent } from './medicine-view/medicine-view.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-medicine',
@@ -31,29 +32,56 @@ export class MedicineComponent implements OnInit{
 
   medicinelist: any = []
   appointmentslist: any = []
-
+  dateMedicineForm: FormGroup;
+  originalMedicine: any[] = [];
   dataSource = new MatTableDataSource(this.medicinelist);
+  userId = localStorage.getItem('userId')
+  clinicId = localStorage.getItem('clinicId')
+  medicalId = localStorage.getItem('MedicalId')
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(
+     private fb: FormBuilder,
     public dialog: MatDialog,
     private firebaseCollectionService:FirebaseCollectionService) { }
 
     ngOnInit(): void {
+        this.dateMedicineForm = this.fb.group({
+      start: [new Date()],
+    });
       this.dataSource.paginator = this.paginator
       this.getmedicineData()
       this. getappointmentdata()
     }
 
-    // getappointmentdata() {
-    //   this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist').then((appointment) => {
-    //     this.appointmentslist = appointment
-        
-    //   }).catch((error) =>{
-    //     console.error('Error fetching doctors:', error);
-    //   }) 
-    // }
+   filterDate(selectedDate: Date | null) {
+
+
+  const targetDate = selectedDate ? new Date(selectedDate) : new Date();
+
+  targetDate.setHours(0, 0, 0, 0);
+
+  const filtered = this.originalMedicine.filter((item: any) => {
+
+    let itemDate: Date | null = null;
+
+    if (item.createdAt?.toDate) {
+      itemDate = item.createdAt.toDate(); 
+    } else {
+      itemDate = new Date(item.createdAt);
+    }
+
+    if (!itemDate) return false;
+
+    itemDate.setHours(0, 0, 0, 0);
+
+    return itemDate.getTime() === targetDate.getTime();
+  });
+
+  this.dataSource = new MatTableDataSource(filtered);
+  this.dataSource.paginator = this.paginator;
+}
 
     getappointmentdata() {
       // Check if appointmentslist is already stored in localStorage
@@ -80,11 +108,21 @@ export class MedicineComponent implements OnInit{
     
     
    getmedicineData(){
-    const userId = localStorage.getItem('userId')
-  const clinicId = localStorage.getItem('clinicId')
-  const medicalId = localStorage.getItem('MedicalId')
-    this.firebaseCollectionService.getMedicine(userId,clinicId,medicalId,'medicinelist').then((medicine) =>{
+
+    this.firebaseCollectionService.getMedicine(this.userId,this.clinicId,this.medicalId,'medicinelist').then((medicine) =>{
+       // =========================
+      // SORT BY LATEST TIME
+      // =========================
+      medicine.sort((a: any, b: any) => {
+
+        const dateA = new Date(`${a.createdAt} ${a.time}`);
+        const dateB = new Date(`${b.createdAt} ${b.time}`);
+
+        return dateB.getTime() - dateA.getTime();
+      });
       this.medicinelist = medicine
+      console.log(this.medicinelist);
+      this.originalMedicine = medicine
       if(medicine && medicine.length > 0){
         this.dataSource = new MatTableDataSource(this.medicinelist)
         this.dataSource.paginator = this.paginator 
@@ -94,8 +132,7 @@ export class MedicineComponent implements OnInit{
         this.dataSource = new MatTableDataSource(this.medicinelist);
         this.dataSource.paginator = this.paginator;
       }
-    }).catch((error) => {
-      console.error('Error fetching medical:', error);
+     this.filterDate(null);
     });
    } 
 
@@ -118,29 +155,20 @@ export class MedicineComponent implements OnInit{
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        const userId = localStorage.getItem('userId')
-        const clinicId = localStorage.getItem('clinicId')
-        const MedicineId = localStorage.getItem('MedicalId')
-        this.firebaseCollectionService.addMedicine(userId, clinicId,MedicineId, result.data)
+        this.firebaseCollectionService.addMedicine(this.userId,this.clinicId,this.medicalId, result.data)
         this.getmedicineData()
       }
       if (result.event === 'Update') {
         this.medicinelist.forEach((element: any) => {
           if (obj.id === element.id) {
-               const userId = localStorage.getItem('userId')
-        const clinicId = localStorage.getItem('clinicId')
-        const MedicineId = localStorage.getItem('MedicalId')
-            this.firebaseCollectionService.updateMedicine(userId, clinicId,MedicineId, obj.id, result.data)
+            this.firebaseCollectionService.updateMedicine(this.userId,this.clinicId,this.medicalId, obj.id, result.data)
             this.getmedicineData()
           }
         })
         this.dataSource = new MatTableDataSource(this.medicinelist)
       }
       if (result.event === 'Delete') {
-           const userId = localStorage.getItem('userId')
-        const clinicId = localStorage.getItem('clinicId')
-        const MedicineId = localStorage.getItem('MedicalId')
-        this.firebaseCollectionService.deleteMedicine(userId, clinicId,MedicineId, obj.id)
+        this.firebaseCollectionService.deleteMedicine(this.userId,this.clinicId,this.medicalId, obj.id)
         this.getmedicineData()
       }
     });

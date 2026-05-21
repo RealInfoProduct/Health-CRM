@@ -79,6 +79,9 @@
                         *ngIf="receptionistForm.get('userName').errors &&  receptionistForm.get('userName').errors['required']">
                         User Name is required
                     </mat-error>
+                      <mat-error class="error-message" *ngIf="receptionistForm.get('userName')?.errors?.['userNameExists']">
+                        User Name already exists
+                    </mat-error>
                 </mat-form-field>
             </div>
 
@@ -99,6 +102,9 @@
 
                     <mat-error class="error-message" *ngIf="receptionistForm.get('password')?.errors?.['required']">
                         Password is required
+                    </mat-error>
+                    <mat-error class="error-message" *ngIf="receptionistForm.get('password')?.errors?.['passwordExists']">
+                        Password already exists
                     </mat-error>
 
                 </mat-form-field>

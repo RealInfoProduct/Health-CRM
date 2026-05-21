@@ -5,6 +5,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { ReportViewComponent } from './report-view/report-view.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-lab',
@@ -31,16 +32,26 @@ export class LabComponent implements OnInit {
   appointmentslist: any = []
   laboratorylist: any = []
   patientlist: any = []
+  dateMedicineForm: FormGroup;
+  originalMedicine: any[] = [];
+
+  userId = localStorage.getItem('userId')
+  clinicId = localStorage.getItem('clinicId')
+  laboratoryId = localStorage.getItem('LaboratoryId')
 
   dataSource = new MatTableDataSource(this.lablist)
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(
+     private fb: FormBuilder,
     public dialog: MatDialog,
     private firebaseCollectionService: FirebaseCollectionService
   ) { }
 
   ngOnInit(): void {
+     this.dateMedicineForm = this.fb.group({
+      start: [new Date()],
+    });
     this.dataSource.paginator = this.paginator;
     this.getlabdata()
     this.getappointmentdata()
@@ -72,6 +83,34 @@ export class LabComponent implements OnInit {
   };
 }
 
+   filterDate(selectedDate: Date | null) {
+
+
+  const targetDate = selectedDate ? new Date(selectedDate) : new Date();
+
+  targetDate.setHours(0, 0, 0, 0);
+
+  const filtered = this.originalMedicine.filter((item: any) => {
+
+    let itemDate: Date | null = null;
+
+    if (item.date?.toDate) {
+      itemDate = item.date.toDate(); 
+    } else {
+      itemDate = new Date(item.date);
+    }
+
+    if (!itemDate) return false;
+
+    itemDate.setHours(0, 0, 0, 0);
+
+    return itemDate.getTime() === targetDate.getTime();
+  });
+
+  this.dataSource = new MatTableDataSource(filtered);
+  this.dataSource.paginator = this.paginator;
+}
+
   getappointmentdata() {
     this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist').then((appointment) => {
       this.appointmentslist = appointment
@@ -92,9 +131,7 @@ export class LabComponent implements OnInit {
   }
 
   getlaboratoryData() {
-     const userId = localStorage.getItem('userId')
-  const clinicId = localStorage.getItem('clinicId')
-    this.firebaseCollectionService.getlaboratory(userId, clinicId, 'laboratorylist').then((laboratory) => {
+    this.firebaseCollectionService.getlaboratory(this.userId, this.clinicId, 'laboratorylist').then((laboratory) => {
       this.laboratorylist = laboratory
     }).catch((error) => {
       console.error('Error fetching laboratory:', error);
@@ -103,11 +140,21 @@ export class LabComponent implements OnInit {
 
 
   getlabdata() {
-    const userId = localStorage.getItem('userId')
-  const clinicId = localStorage.getItem('clinicId')
-  const laboratoryId = localStorage.getItem('LaboratoryId')
-    this.firebaseCollectionService.getlab(userId, clinicId, laboratoryId, 'lablist').then((lab) => {
+    this.firebaseCollectionService.getlab(this.userId, this.clinicId, this.laboratoryId, 'lablist').then((lab) => {
+        // =========================
+      // SORT BY LATEST TIME
+      // =========================
+      lab.sort((a: any, b: any) => {
+
+        const dateA = new Date(`${a.date} ${a.time}`);
+        const dateB = new Date(`${b.date} ${b.time}`);
+
+        return dateB.getTime() - dateA.getTime();
+      });
       this.lablist = lab
+        this.originalMedicine = lab
+        console.log("this.originalMedicine",this.originalMedicine);
+        
       if (lab && lab.length > 0) {
         this.dataSource = new MatTableDataSource(this.lablist)
         this.dataSource.paginator = this.paginator
@@ -117,7 +164,7 @@ export class LabComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.lablist)
         this.dataSource.paginator = this.paginator
       }
-        console.log("this.lablist",this.lablist);
+          this.filterDate(null);
     })
   }
 
@@ -133,25 +180,17 @@ export class LabComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.firebaseCollectionService.addDocument('Doctor', result.data, 'lablist');
+        this.firebaseCollectionService.addlab(this.userId, this.clinicId, this.laboratoryId, result.data);
         this.getlabdata()
       } else if (result.event === 'Update') {
         this.lablist.forEach((element: any) => {
           if (obj.id === element.id) {
-
-            const userId = localStorage.getItem('userId')
-            const clinicId = localStorage.getItem('clinicId')
-            const laboratoryId = localStorage.getItem('LaboratoryId')
-            this.firebaseCollectionService.updatelab(userId, clinicId, laboratoryId, obj.id, result.data);
+            this.firebaseCollectionService.updatelab(this.userId, this.clinicId, this.laboratoryId, obj.id, result.data);
             this.getlabdata()
           }
         });
       } else if (result.event === 'Delete') {
-        
-            const userId = localStorage.getItem('userId')
-            const clinicId = localStorage.getItem('clinicId')
-            const laboratoryId = localStorage.getItem('LaboratoryId')
-        this.firebaseCollectionService.deletelab(userId, clinicId, laboratoryId, obj.id);
+        this.firebaseCollectionService.deletelab(this.userId, this.clinicId, this.laboratoryId, obj.id);
         this.getlabdata()
       }
     });

@@ -9,7 +9,16 @@
           </mat-icon>
         </mat-form-field>
       </div>
-      <div class="col-lg-4 d-flex align-items-center justify-content-end">
+      <div class="col-lg-3" [formGroup]="dateMedicineForm">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Select Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="start"   (dateChange)="filterDate($event.value)">
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+        <div class="col-lg-3"></div>
+      <div class="col-lg-2 d-flex align-items-center justify-content-end">
         <!-- <button mat-flat-button (click)="openLabDialog('Add', {})" color="primary" >
           Add Lab
         </button> -->

@@ -92,6 +92,9 @@
                         *ngIf="addmedicalForm.get('userName').errors &&  addmedicalForm.get('userName').errors['required']">
                         User Name is required
                     </mat-error>
+                     <mat-error class="error-message" *ngIf="addmedicalForm.get('userName')?.errors?.['userNameExists']">
+                        User Name already exists
+                    </mat-error>
                 </mat-form-field>
             </div>
 
@@ -112,6 +115,9 @@
 
                     <mat-error class="error-message" *ngIf="addmedicalForm.get('password')?.errors?.['required']">
                         Password is required
+                    </mat-error>
+                    <mat-error class="error-message" *ngIf="addmedicalForm.get('password')?.errors?.['passwordExists']">
+                        Password already exists
                     </mat-error>
 
                 </mat-form-field>

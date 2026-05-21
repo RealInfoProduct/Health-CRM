@@ -180,6 +180,8 @@ export class  AuthService {
     localStorage.removeItem('usertype');
     localStorage.removeItem('clinicId');
     localStorage.removeItem('ReceptionistId');
+    localStorage.removeItem('LaboratoryId');
+    localStorage.removeItem('MedicalId');
     localStorage.removeItem('doctorId');
   }
   // Sign out

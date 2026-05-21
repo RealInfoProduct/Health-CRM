@@ -43,7 +43,9 @@ export class AppointmentsComponent implements OnInit {
   userType:any = localStorage.getItem('usertype')
   dataSource = new MatTableDataSource(this.appointmentslist)
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
-
+  userId = localStorage.getItem('userId')
+  clinicId = localStorage.getItem('clinicId')
+  ReceptionistId = localStorage.getItem('ReceptionistId')
   constructor(
      private fb: FormBuilder,
     public dialog: MatDialog,
@@ -110,6 +112,9 @@ getdoctorsdata() {
         const clinicId = localStorage.getItem('clinicId')
         const ReceptionistId = localStorage.getItem('ReceptionistId')
     this.firebaseCollectionService.getAppointmentsList(userId, clinicId, ReceptionistId,'appointmentslist').then((appointment) => {
+            appointment.sort((a: any, b: any) => {
+        return Number(b.tokenNumber) - Number(a.tokenNumber);
+      });
       this.appointmentslist = appointment
         this.originalAppointments = appointment
       if (appointment && appointment.length > 0) {
@@ -134,10 +139,54 @@ getdoctorsdata() {
     return null;
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+ applyFilter(event: Event) {
+
+  const filterValue = (event.target as HTMLInputElement)
+    .value
+    .toLowerCase()
+    .trim();
+
+  if (!filterValue) {
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const currentDateData = this.originalAppointments.filter((item: any) => {
+
+      let itemDate: Date;
+
+      if (item.date?.toDate) {
+        itemDate = item.date.toDate();
+      } else {
+        itemDate = new Date(item.date);
+      }
+
+      itemDate.setHours(0, 0, 0, 0);
+
+      return itemDate.getTime() === today.getTime();
+    });
+
+    this.dataSource.data = currentDateData;
+    return;
   }
+
+
+  this.dataSource.data = this.appointmentslist.filter((item: any) => {
+
+    const fullName =
+      `${item.firstName || ''} ${item.lastName || ''}`
+        .toLowerCase()
+        .trim();
+
+    const mobile =
+      `${item.mobileNumber || ''}`;
+
+    return (
+      fullName.includes(filterValue) ||
+      mobile.includes(filterValue)
+    );
+  });
+}
 
   openAppointmentsDialog(action: string, obj: any): void {
     obj.action = action;
@@ -147,34 +196,28 @@ getdoctorsdata() {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        const userId = localStorage.getItem('userId')
-        const clinicId = localStorage.getItem('clinicId')
-        const ReceptionistId = localStorage.getItem('ReceptionistId')
+       
           const doctorId = result.data.doctorName;
-        this.firebaseCollectionService.addappointmentslist(userId, clinicId,ReceptionistId,result.data);
-         this.firebaseCollectionService.addpatient(userId, clinicId, doctorId, result.data)
+        this.firebaseCollectionService.addappointmentslist(this.userId, this.clinicId,this.ReceptionistId,result.data);
+         this.firebaseCollectionService.addpatient(this.userId, this.clinicId, doctorId, result.data)
         
         this.getappointmentdata()
       } else if (result.event === 'Update') {
         this.appointmentslist.forEach((element: any) => {
           if (obj.id === element.id) {
-            const userId = localStorage.getItem('userId')
-         const clinicId = localStorage.getItem('clinicId')
-            const ReceptionistId = localStorage.getItem('ReceptionistId')
-            const doctorId = result.data.doctorName;
-            this.firebaseCollectionService.updateAppointmentsList(userId, clinicId,ReceptionistId, obj.id, result.data);
-              this.firebaseCollectionService.updatepatient(userId, clinicId, doctorId, obj.id, result.data);
+        
+            // const doctorId = result.data.doctorName;
+            this.firebaseCollectionService.updateAppointmentsList(this.userId, this.clinicId,this.ReceptionistId, obj.id, result.data);
+              // this.firebaseCollectionService.updatepatient(userId, clinicId, doctorId, obj.id, result.data);
               
             this.getappointmentdata()
           }
         });
       } else if (result.event === 'Delete') {
-          const userId = localStorage.getItem('userId')
-         const clinicId = localStorage.getItem('clinicId')
-            const ReceptionistId = localStorage.getItem('ReceptionistId')
-             const doctorId = result.data.doctorName;
-        this.firebaseCollectionService.deleteAppointmentsList(userId, clinicId,ReceptionistId, obj.id);
-         this.firebaseCollectionService.deletepatient(userId, clinicId, doctorId, obj.id);
+        
+            //  const doctorId = result.data.doctorName;
+        this.firebaseCollectionService.deleteAppointmentsList(this.userId, this.clinicId,this.ReceptionistId, obj.id);
+        //  this.firebaseCollectionService.deletepatient(userId, clinicId, doctorId, obj.id);
         this.getappointmentdata()
       }
 

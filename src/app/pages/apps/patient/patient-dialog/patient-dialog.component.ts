@@ -220,7 +220,7 @@ export class PatientDialogComponent implements OnInit {
       time: this.PatientForm.value.time,
       age: this.PatientForm.value.age,
       gender: this.PatientForm.value.gender,
-      laboratoryName: this.PatientForm.value.laboratoryName,
+      laboratoryName: this.PatientForm.value.laboratoryName ||"",
       medicalName: this.PatientForm.value.medicalName || "",
       doctorName: this.PatientForm.value.doctorName,
       appointmentStatus: this.PatientForm.value.appointmentStatus,
@@ -231,7 +231,7 @@ export class PatientDialogComponent implements OnInit {
        userId:localStorage.getItem("userId"),
       clinicId:localStorage.getItem("clinicId"),
     }
-    console.log(payload);
+    console.log("payload",payload);
     this.dialogRef.close({ event: this.action, data: payload });
 
   }

@@ -7,6 +7,7 @@ import { FirebaseCollectionService } from 'src/app/services/firebase-collection.
 import { Timestamp } from 'firebase/firestore';
 import { MedicalViewComponent } from './medical-view/medical-view.component';
 import { LaboratoryViewComponent } from './laboratory-view/laboratory-view.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-patient',
@@ -31,7 +32,7 @@ export class PatientComponent implements OnInit {
     'gender',
     'appointmentStatus',
     'visitType',
-    'paymentMethod',
+    // 'paymentMethod',
     'action'
   ];
 
@@ -43,11 +44,14 @@ export class PatientComponent implements OnInit {
   medicallist: any = []
   medicinelist: any = []
   userType:any =''
+  datePatientForm: FormGroup;
+  originalPatient: any[] = [];
 
   dataSource = new MatTableDataSource(this.patientlist)
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(
+     private fb: FormBuilder,
     public dialog: MatDialog,
     private firebaseCollectionService: FirebaseCollectionService
   ) { }
@@ -59,20 +63,63 @@ export class PatientComponent implements OnInit {
     return null;
   }
 
-  // applyFilter(event: Event) {
-  //   const filterValue = (event.target as HTMLInputElement).value;
-  //   this.dataSource.filter = filterValue.trim().toLowerCase();
-  // }
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
+applyFilter(event: Event) {
 
-    this.dataSource.data = this.patientlist.filter((item: any) => {
-      const name = this.getappointmentlist(item.patientName) || ''; // or wherever name exists
-      return name.toLowerCase().includes(filterValue);
+  const filterValue = (event.target as HTMLInputElement)
+    .value
+    .toLowerCase()
+    .trim();
+
+  // =========================
+  // IF SEARCH EMPTY
+  // =========================
+  if (!filterValue) {
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const currentDateData = this.originalPatient.filter((item: any) => {
+
+      let itemDate: Date;
+
+      if (item.date?.toDate) {
+        itemDate = item.date.toDate();
+      } else {
+        itemDate = new Date(item.date);
+      }
+
+      itemDate.setHours(0, 0, 0, 0);
+
+      return itemDate.getTime() === today.getTime();
     });
+
+    this.dataSource.data = currentDateData;
+    return;
   }
 
+  // =========================
+  // SEARCH FILTER
+  // =========================
+  this.dataSource.data = this.patientlist.filter((item: any) => {
+
+    const fullName =
+      `${item.firstName || ''} ${item.lastName || ''}`
+        .toLowerCase();
+
+    const mobile =
+      `${item.mobileNumber || ''}`;
+
+    return (
+      fullName.includes(filterValue) ||
+      mobile.includes(filterValue)
+    );
+  });
+}
+
   ngOnInit(): void {
+      this.datePatientForm = this.fb.group({
+      start: [new Date()],
+    });
     this.getPatientData()
     this.getlaboratoryData()
     this.getdoctorsdata()
@@ -80,6 +127,35 @@ export class PatientComponent implements OnInit {
     this.getMedicalData()
      this.userType = localStorage.getItem('usertype');
   }
+
+  filterDate(selectedDate: Date | null) {
+
+
+  const targetDate = selectedDate ? new Date(selectedDate) : new Date();
+
+  targetDate.setHours(0, 0, 0, 0);
+
+  const filtered = this.originalPatient.filter((item: any) => {
+
+    let itemDate: Date | null = null;
+
+    if (item.date?.toDate) {
+      itemDate = item.date.toDate(); 
+    } else {
+      itemDate = new Date(item.date);
+    }
+
+    if (!itemDate) return false;
+
+    itemDate.setHours(0, 0, 0, 0);
+
+    return itemDate.getTime() === targetDate.getTime();
+  });
+
+  this.dataSource = new MatTableDataSource(filtered);
+  this.dataSource.paginator = this.paginator;
+}
+
 
 
   getappointmentdata() {
@@ -116,7 +192,6 @@ export class PatientComponent implements OnInit {
     const clinicId = localStorage.getItem('clinicId')
 
     this.medicinelist = []
-    debugger
     const medical = await this.firebaseCollectionService
       .getMedical(userId, clinicId, 'medicallist')
 
@@ -133,7 +208,6 @@ export class PatientComponent implements OnInit {
       }
     }
 
-    console.log('FINAL medicinelist =>', this.medicinelist)
   }
 
 
@@ -165,27 +239,92 @@ async getlaboratoryData() {
   console.log('FINAL LABLIST =>', this.lablist)
 }
 
-  getPatientData() {
-       const userId = localStorage.getItem('userId')
+getPatientData() {
+  const userId = localStorage.getItem('userId')
      const clinicId = localStorage.getItem('clinicId')
      const doctorId = localStorage.getItem('doctorId')
+  this.firebaseCollectionService
+    .getpatient(userId, clinicId, doctorId, 'patientlist')
+    .then((patient) => {
 
-    this.firebaseCollectionService.getpatient( userId, clinicId, doctorId, 'patientlist').then((patient) => {
-      this.patientlist = patient
-      if (patient && patient.length > 0) {
-        this.dataSource = new MatTableDataSource(this.patientlist);
-        this.dataSource.paginator = this.paginator
-        console.log("this.patientlist",this.patientlist);
-      } else {
-        this.patientlist = [];
-        this.dataSource = new MatTableDataSource(this.patientlist);
+      // =========================
+      // SORT BY DATE & TIME
+      // =========================
+      patient.sort((a: any, b: any) => {
 
-        this.dataSource.paginator = this.paginator
-      }
-    }).catch((error) => {
-      console.error('Error fetching laboratory:', error);
+        const getDateTime = (item: any) => {
+
+          let dateObj: Date;
+
+          // =========================
+          // FIREBASE TIMESTAMP
+          // =========================
+          if (item.date?.seconds) {
+
+            dateObj = new Date(item.date.seconds * 1000);
+
+          }
+
+          // =========================
+          // STRING DATE (DD/MM/YYYY)
+          // =========================
+          else if (typeof item.date === 'string') {
+
+            const [day, month, year] = item.date.split('/');
+
+            dateObj = new Date(`${year}-${month}-${day}`);
+
+          }
+
+          // =========================
+          // NORMAL DATE
+          // =========================
+          else {
+
+            dateObj = new Date(item.date);
+
+          }
+
+          // =========================
+          // ADD TIME
+          // =========================
+          if (item.time) {
+
+            const time = item.time.match(/(\d+):(\d+)\s?(AM|PM)/i);
+
+            if (time) {
+
+              let hours = parseInt(time[1], 10);
+              const minutes = parseInt(time[2], 10);
+              const modifier = time[3].toUpperCase();
+
+              if (modifier === 'PM' && hours < 12) {
+                hours += 12;
+              }
+
+              if (modifier === 'AM' && hours === 12) {
+                hours = 0;
+              }
+
+              dateObj.setHours(hours, minutes, 0, 0);
+            }
+          }
+
+          return dateObj.getTime();
+        };
+
+        return getDateTime(b) - getDateTime(a);
+      });
+
+      this.patientlist = patient;
+      this.originalPatient = patient;
+
+      this.dataSource = new MatTableDataSource(this.patientlist);
+      this.dataSource.paginator = this.paginator;
+
+      this.filterDate(null);
     });
-  }
+}
 
 
   openPatientDialog(action: string, obj: any) {
@@ -202,306 +341,212 @@ async getlaboratoryData() {
         this.firebaseCollectionService.addpatient(userId, clinicId, doctorId, result.data)
         this.getPatientData()
       }
-    //   if (result?.event === 'Update') {
-    //     this.patientlist.forEach((element: any) => {
-    //       if (obj.id === element.id) {
-    //          const userId = localStorage.getItem('userId')
-    //  const clinicId = localStorage.getItem('clinicId')
-    //  const doctorId = localStorage.getItem('doctorId')
-    //         const laboratoryId = result.data.laboratoryName
-    //         this.firebaseCollectionService.updatepatient(userId, clinicId, doctorId, obj.id, result.data);
-    //         this.firebaseCollectionService.addlab(userId, clinicId, laboratoryId, result.data)
-    //         this.getPatientData()
-    //       }
-    //     })
-    //     const lab = this.lablist?.find((l: any) => l.patientName === obj.patientName && l.mobileNumber === obj.mobileNumber);
-    //     if (lab) {
+      // if (result?.event === 'Update') {
 
-    //       const oldReports = lab.reports ? [...lab.reports] : [];
+      //   const userId = localStorage.getItem('userId');
+      //   const clinicId = localStorage.getItem('clinicId');
+      //   const doctorId = localStorage.getItem('doctorId');
 
-    //       let newReportsData = result.data?.reports || result.data;
+      //   // =========================
+      //   // UPDATE PATIENT
+      //   // =========================
 
-    //       const incoming = Array.isArray(newReportsData)
-    //         ? newReportsData
-    //         : newReportsData
-    //           ? [newReportsData]
-    //           : [];
+      //   this.firebaseCollectionService.updatepatient(
+      //     userId,
+      //     clinicId,
+      //     doctorId,
+      //     obj.id,
+      //     result.data
+      //   );
+      //   this.getPatientData()
+      //   // =====================================================
+      //   // REPORTS / LAB SECTION
+      //   // =====================================================
 
-    //       incoming.forEach((newReport: any) => {
+      //   if (result.data?.reports) {
 
-    //         // 👉 MATCH condition (important)
-    //         const index = oldReports.findIndex((old: any) =>
-    //           old.reportName === newReport.reportName &&
-    //           old.reportType === newReport.reportType
-    //         );
+      //     const laboratoryId = result.data?.laboratoryName;
 
-    //         if (index !== -1) {
-    //           // 🔄 UPDATE existing object
-    //           oldReports[index] = {
-    //             ...oldReports[index],
-    //             ...newReport,
-    //             updatedAt: new Date().toISOString()
-    //           };
-    //         } else {
-    //           // ➕ ADD new object
-    //           oldReports.push({
-    //             ...newReport,
-    //             createdAt: new Date().toISOString()
-    //           });
-    //         }
-    //       });
+      //     const existingLab = this.lablist?.find(
+      //       (l: any) =>
+      //         l.patientName === obj.patientName &&
+      //         l.mobileNumber === obj.mobileNumber
+      //     );
 
-    //       const updatedLab = {
-    //         ...lab,
-    //         reports: oldReports
-    //       };
-    //       const userId = localStorage.getItem('userId')
-    //       const clinicId = localStorage.getItem('clinicId')
-    //       const laboratoryId = lab.laboratoryId
-    //       this.firebaseCollectionService.updatelab(userId,clinicId,laboratoryId,lab.id,updatedLab).then(() => {
-    //       });
-    //     }
+      //     if (existingLab) {
 
-    //   //   const medi = this.medicinelist?.find((m: any)=> m.patientName === obj.patientName)
-    //   //  if (medi) {
+      //       const oldReports = existingLab.reports
+      //         ? [...existingLab.reports]
+      //         : [];
 
-    //   //     const oldReports = medi.medicine ? [...medi.medicine] : [];
+      //       const incomingReports = Array.isArray(result.data.reports)
+      //         ? result.data.reports
+      //         : [result.data.reports];
 
-    //   //     let newReportsData = result.data?.medicine || result.data;
+      //       incomingReports.forEach((newReport: any) => {
 
-    //   //     const incoming = Array.isArray(newReportsData)
-    //   //       ? newReportsData
-    //   //       : newReportsData
-    //   //         ? [newReportsData]
-    //   //         : [];
+      //         const index = oldReports.findIndex((old: any) =>
+      //           old.reportName === newReport.reportName &&
+      //           old.reportType === newReport.reportType
+      //         );
 
-    //   //     incoming.forEach((newReport: any) => {
+      //         if (index !== -1) {
 
-    //   //       // 👉 MATCH condition (important)
-    //   //       const index = oldReports.findIndex((old: any) =>
-    //   //         old.reportName === newReport.reportName &&
-    //   //         old.reportType === newReport.reportType
-    //   //       );
+      //           // UPDATE REPORT
+      //           oldReports[index] = {
+      //             ...oldReports[index],
+      //             ...newReport,
+      //             updatedAt: new Date().toISOString()
+      //           };
 
-    //   //       if (index !== -1) {
-    //   //         // 🔄 UPDATE existing object
-    //   //         oldReports[index] = {
-    //   //           ...oldReports[index],
-    //   //           ...newReport,
-    //   //           updatedAt: new Date().toISOString()
-    //   //         };
-    //   //       } else {
-    //   //         // ➕ ADD new object
-    //   //         oldReports.push({
-    //   //           ...newReport,
-    //   //           createdAt: new Date().toISOString()
-    //   //         });
-    //   //       }
-    //   //     });
+      //         } else {
 
-    //   //     const updatedLab = {
-    //   //       ...medi,
-    //   //       medicine: oldReports
-    //   //     };
+      //           // ADD REPORT
+      //           oldReports.push({
+      //             ...newReport,
+      //             createdAt: new Date().toISOString()
+      //           });
+      //         }
+      //       });
 
-    //   //     this.firebaseCollectionService.updateDocument(
-    //   //       'Medical',
-    //   //       medi.id,
-    //   //       updatedLab,
-    //   //       'medicinelist'
-    //   //     ).then(() => {
-    //   //       this.getmedicineData();
-    //   //     });
-    //   //   }
-    //   }
-    if (result?.event === 'Update') {
+      //       const updatedLab = {
+      //         ...existingLab,
+      //         reports: oldReports,
+      //         updatedAt: new Date().toISOString()
+      //       };
 
-  // =========================
-  // UPDATE PATIENT
-  // =========================
-  this.patientlist.forEach((element: any) => {
+      //       // UPDATE LAB
+      //       this.firebaseCollectionService.updatelab(
+      //         userId,
+      //         clinicId,
+      //         laboratoryId,
+      //         existingLab.id,
+      //         updatedLab
+      //       ).then(() => {
+      //         console.log('Lab updated successfully');
+      //         this.getlaboratoryData()
+      //       });
 
-    if (obj.id === element.id) {
+      //     } else {
 
-      const userId = localStorage.getItem('userId');
-      const clinicId = localStorage.getItem('clinicId');
-      const doctorId = localStorage.getItem('doctorId');
+      //       // ADD LAB FIRST TIME
+      //       const addLabData = {
+      //         ...result.data,
+      //         createdAt: new Date().toISOString()
+      //       };
 
-      const laboratoryId = result.data.laboratoryName;
-      // update patient
-      this.firebaseCollectionService.updatepatient(
-        userId,
-        clinicId,
-        doctorId,
-        obj.id,
-        result.data
-      );
+      //       this.firebaseCollectionService.addlab(
+      //         userId,
+      //         clinicId,
+      //         laboratoryId,
+      //         addLabData
+      //       ).then(() => {
+      //         console.log('Lab added successfully');
+      //         this.getlaboratoryData()
+      //       });
+      //     }
+      //   }
+      //   // =====================================================
+      //   // MEDICINE SECTION
+      //   // =====================================================
 
-      // =========================
-      // LABORATORY SECTION
-      // =========================
+      //   if (result.data?.medical) {
 
-      // check existing lab record
-      const existingLab = this.lablist?.find(
-        (l: any) =>
-          l.patientName === obj.patientName &&
-          l.mobileNumber === obj.mobileNumber
-      );
+      //     const medicalId = result.data?.medicalName;
 
-      if (existingLab) {
+      //     if (!medicalId) {
+      //       console.error('medicalId is missing');
+      //       return;
+      //     }
 
-        // old reports
-        const oldReports = existingLab.reports
-          ? [...existingLab.reports]
-          : [];
+      //     const fullPatientName =
+      //       `${obj.firstName || ''} ${obj.lastName || ''}`.trim();
 
-        // incoming reports
-        let newReportsData = result.data?.reports || result.data;
+      //     const medi = this.medicinelist?.find(
+      //       (m: any) =>
+      //         m.patientName?.trim().toLowerCase() ===
+      //         fullPatientName.toLowerCase()
+      //     );
 
-        const incoming = Array.isArray(newReportsData)
-          ? newReportsData
-          : newReportsData
-            ? [newReportsData]
-            : [];
+      //     if (medi) {
 
-        incoming.forEach((newReport: any) => {
+      //       const oldMedicine = Array.isArray(medi.medicine)
+      //         ? medi.medicine.filter((x: any) => x)
+      //         : [];
 
-          // match existing report
-          const index = oldReports.findIndex((old: any) =>
-            old.reportName === newReport.reportName &&
-            old.reportType === newReport.reportType
-          );
+      //       const incomingMedicine = Array.isArray(result.data.medical)
+      //         ? result.data.medical.filter((x: any) => x)
+      //         : [result.data.medical];
 
-          if (index !== -1) {
+      //       incomingMedicine.forEach((newMedicine: any) => {
 
-            // update existing report
-            oldReports[index] = {
-              ...oldReports[index],
-              ...newReport,
-              updatedAt: new Date().toISOString()
-            };
+      //         if (!newMedicine?.medicineName) return;
 
-          } else {
+      //         const index = oldMedicine.findIndex(
+      //           (old: any) =>
+      //             old?.medicineName === newMedicine.medicineName
+      //         );
 
-            // add new report
-            oldReports.push({
-              ...newReport,
-              createdAt: new Date().toISOString()
-            });
-          }
-        });
+      //         if (index !== -1) {
 
-        // updated lab object
-        const updatedLab = {
-          ...existingLab,
-          ...result.data,
-          reports: oldReports,
-          updatedAt: new Date().toISOString()
-        };
+      //           oldMedicine[index] = {
+      //             ...oldMedicine[index],
+      //             ...newMedicine,
+      //             updatedAt: new Date().toISOString()
+      //           };
 
-        // update existing lab document
-        this.firebaseCollectionService.updatelab(
-          userId,
-          clinicId,
-          laboratoryId,
-          existingLab.id,
-          updatedLab
-        ).then(() => {
-          console.log('Lab updated successfully');
-        });
+      //         } else {
 
-      } else {
+      //           oldMedicine.push({
+      //             ...newMedicine,
+      //             createdAt: new Date().toISOString()
+      //           });
+      //         }
+      //       });
 
-        // =========================
-        // FIRST TIME ADD LAB
-        // =========================
+      //       const updatedMedicine = {
+      //         ...medi,
+      //         medicine: oldMedicine,
+      //         updatedAt: new Date().toISOString()
+      //       };
 
-        const addLabData = {
-          ...result.data,
-          createdAt: new Date().toISOString()
-        };
+      //       this.firebaseCollectionService.updateMedicine(
+      //         userId,
+      //         clinicId,
+      //         medicalId,
+      //         medi.id,
+      //         updatedMedicine
+      //       );
 
-        this.firebaseCollectionService.addlab(
-          userId,
-          clinicId,
-          laboratoryId,
-          addLabData
-        ).then(() => {
-          console.log('Lab added successfully');
-        });
-      }
+      //     } else {
 
-      // refresh patient data
-      this.getPatientData();
-    }
-  });
+      //       const addMedicineData = {
 
+      //         patientName: fullPatientName,
 
+      //         mobileNumber: obj.mobileNumber,
 
+      //         userId: localStorage.getItem("userId"),
 
-  // =========================
-  // MEDICINE SECTION
-  // =========================
+      //         clinicId: localStorage.getItem("clinicId"),
 
-//   const medi = this.medicinelist?.find(
-//     (m: any) => m.patientName === obj.patientName
-//   );
+      //         medicine: Array.isArray(result.data.medical)
+      //           ? result.data.medical.filter((x: any) => x)
+      //           : [result.data.medical],
 
-//   if (medi) {
+      //         createdAt: new Date().toISOString()
+      //       };
 
-//     const oldMedicine = medi.medicine
-//       ? [...medi.medicine]
-//       : [];
-
-//     let newMedicineData = result.data?.medicine || result.data;
-
-//     const incomingMedicine = Array.isArray(newMedicineData)
-//       ? newMedicineData
-//       : newMedicineData
-//         ? [newMedicineData]
-//         : [];
-
-//     incomingMedicine.forEach((newMedicine: any) => {
-
-//       const index = oldMedicine.findIndex((old: any) =>
-//         old.medicineName === newMedicine.medicineName
-//       );
-
-//       if (index !== -1) {
-
-//         oldMedicine[index] = {
-//           ...oldMedicine[index],
-//           ...newMedicine,
-//           updatedAt: new Date().toISOString()
-//         };
-
-//       } else {
-
-//         oldMedicine.push({
-//           ...newMedicine,
-//           createdAt: new Date().toISOString()
-//         });
-//       }
-//     });
-
-//     const updatedMedicine = {
-//       ...medi,
-//       medicine: oldMedicine
-//     };
-
-//     this.firebaseCollectionService.updateDocument(
-//       'Medical',
-//       medi.id,
-//       updatedMedicine,
-//       'medicinelist'
-//     ).then(() => {
-// console.log('Medicine added successfully');
-      
-//     });
-//   }
-}
-
-if (result?.event === 'Update') {
+      //       this.firebaseCollectionService.addMedicine(
+      //         userId,
+      //         clinicId,
+      //         medicalId,
+      //         addMedicineData
+      //       );
+      //     }
+      //   }
+      // }
+      if (result?.event === 'Update') {
 
   const userId = localStorage.getItem('userId');
   const clinicId = localStorage.getItem('clinicId');
@@ -519,13 +564,29 @@ if (result?.event === 'Update') {
     result.data
   );
 
+  this.getPatientData();
+
+  // =====================================================
+  // CHECK CHANGES
+  // =====================================================
+
+  const hasReports =
+    Array.isArray(result.data?.reports)
+      ? result.data.reports.length > 0
+      : !!result.data?.reports;
+
+  const hasMedical =
+    Array.isArray(result.data?.medical)
+      ? result.data.medical.length > 0
+      : !!result.data?.medical;
+
   // =====================================================
   // REPORTS / LAB SECTION
   // =====================================================
 
-  if (result.data?.reports) {
+  if (hasReports) {
 
-    const laboratoryId = result.data.laboratoryName;
+    const laboratoryId = result.data?.laboratoryName;
 
     const existingLab = this.lablist?.find(
       (l: any) =>
@@ -533,135 +594,199 @@ if (result?.event === 'Update') {
         l.mobileNumber === obj.mobileNumber
     );
 
-    if (existingLab) {
+    // CHECK REPORT CHANGES
+    const newReports = JSON.stringify(result.data?.reports || []);
+    const oldReportsData = JSON.stringify(existingLab?.reports || []);
 
-      const oldReports = existingLab.reports
-        ? [...existingLab.reports]
-        : [];
+    const isReportsChanged = newReports !== oldReportsData;
 
-      const incomingReports = Array.isArray(result.data.reports)
-        ? result.data.reports
-        : [result.data.reports];
+    // ONLY CALL IF REPORTS CHANGED
+    if (isReportsChanged) {
 
-      incomingReports.forEach((newReport: any) => {
+      if (existingLab) {
 
-        const index = oldReports.findIndex((old: any) =>
-          old.reportName === newReport.reportName &&
-          old.reportType === newReport.reportType
-        );
+        const oldReports = Array.isArray(existingLab.reports)
+          ? [...existingLab.reports]
+          : [];
 
-        if (index !== -1) {
+        const incomingReports = Array.isArray(result.data.reports)
+          ? result.data.reports
+          : [result.data.reports];
 
-          // UPDATE REPORT
-          oldReports[index] = {
-            ...oldReports[index],
-            ...newReport,
-            updatedAt: new Date().toISOString()
-          };
+        incomingReports.forEach((newReport: any) => {
 
-        } else {
+          if (!newReport) return;
 
-          // ADD REPORT
-          oldReports.push({
-            ...newReport,
-            createdAt: new Date().toISOString()
-          });
-        }
-      });
+          const index = oldReports.findIndex(
+            (old: any) =>
+              old.reportName === newReport.reportName &&
+              old.reportType === newReport.reportType
+          );
 
-      const updatedLab = {
-        ...existingLab,
-        reports: oldReports,
-        updatedAt: new Date().toISOString()
-      };
+          if (index !== -1) {
 
-      // UPDATE LAB
-      this.firebaseCollectionService.updatelab(
-        userId,
-        clinicId,
-        laboratoryId,
-        existingLab.id,
-        updatedLab
-      ).then(() => {
-        console.log('Lab updated successfully');
-          this.getlaboratoryData()
-      });
+            // UPDATE REPORT
+            oldReports[index] = {
+              ...oldReports[index],
+              ...newReport,
+              updatedAt: new Date().toISOString()
+            };
 
-    } else {
+          } else {
 
-      // ADD LAB FIRST TIME
-      const addLabData = {
-        ...result.data,
-        createdAt: new Date().toISOString()
-      };
+            // ADD REPORT
+            oldReports.push({
+              ...newReport,
+              createdAt: new Date().toISOString()
+            });
+          }
+        });
 
-      this.firebaseCollectionService.addlab(
-        userId,
-        clinicId,
-        laboratoryId,
-        addLabData
-      ).then(() => {
-        console.log('Lab added successfully');
-          this.getlaboratoryData()
-      });
+        const updatedLab = {
+          ...existingLab,
+          reports: oldReports,
+          updatedAt: new Date().toISOString()
+        };
+
+        // UPDATE LAB
+        this.firebaseCollectionService.updatelab(
+          userId,
+          clinicId,
+          laboratoryId,
+          existingLab.id,
+          updatedLab
+        ).then(() => {
+
+          console.log('Lab updated successfully');
+
+          this.getlaboratoryData();
+
+        });
+
+      } else {
+
+        // ADD LAB FIRST TIME
+        const addLabData = {
+
+          ...result.data,
+
+          createdAt: new Date().toISOString()
+
+        };
+
+        this.firebaseCollectionService.addlab(
+          userId,
+          clinicId,
+          laboratoryId,
+          addLabData
+        ).then(() => {
+
+          console.log('Lab added successfully');
+
+          this.getlaboratoryData();
+
+        });
+      }
     }
   }
-// =====================================================
+
+  // =====================================================
+  // MEDICINE SECTION
+  // =====================================================
+
+ // =====================================================
 // MEDICINE SECTION
 // =====================================================
 
-if (result.data?.medical) {
+if (hasMedical) {
 
-  const medicalId = result.data.medicalName;
+  const medicalId = result.data?.medicalName;
+
+  if (!medicalId) {
+
+    console.error('medicalId is missing');
+
+    return;
+  }
+
+  const fullPatientName =
+    `${obj.firstName || ''} ${obj.lastName || ''}`.trim();
 
   const medi = this.medicinelist?.find(
-    (m: any) => m.patientName === obj.patientName
+    (m: any) =>
+      m.patientName?.trim().toLowerCase() ===
+      fullPatientName.toLowerCase()
   );
 
   if (medi) {
 
+    // EXISTING OLD MEDICINE
     const oldMedicine = Array.isArray(medi.medicine)
-      ? medi.medicine.filter((x: any) => x)
+      ? [...medi.medicine]
       : [];
 
-    // FIXED HERE
+    // NEW INCOMING MEDICINE
     const incomingMedicine = Array.isArray(result.data.medical)
-      ? result.data.medical.filter((x: any) => x)
+      ? result.data.medical
       : [result.data.medical];
 
     incomingMedicine.forEach((newMedicine: any) => {
 
       if (!newMedicine?.medicineName) return;
 
-      const index = oldMedicine.findIndex((old: any) =>
-        old?.medicineName === newMedicine.medicineName
+      // FIND OLD MEDICINE
+      const index = oldMedicine.findIndex(
+        (old: any) =>
+          old?.medicineName?.trim().toLowerCase() ===
+          newMedicine?.medicineName?.trim().toLowerCase()
       );
+
+      // =========================
+      // UPDATE OLD MEDICINE
+      // =========================
 
       if (index !== -1) {
 
-        // UPDATE MEDICINE
         oldMedicine[index] = {
+
           ...oldMedicine[index],
+
           ...newMedicine,
+
           updatedAt: new Date().toISOString()
+
         };
 
-      } else {
+      }
 
-        // ADD MEDICINE
+      // =========================
+      // ADD NEW MEDICINE
+      // =========================
+
+      else {
+
         oldMedicine.push({
+
           ...newMedicine,
+
           createdAt: new Date().toISOString()
+
         });
       }
     });
 
+    // FINAL UPDATED DATA
     const updatedMedicine = {
+
       ...medi,
+
       medicine: oldMedicine,
+
       updatedAt: new Date().toISOString()
+
     };
 
+    // UPDATE API
     this.firebaseCollectionService.updateMedicine(
       userId,
       clinicId,
@@ -669,26 +794,35 @@ if (result.data?.medical) {
       medi.id,
       updatedMedicine
     ).then(() => {
+this.getMedicalData()
       console.log('Medicine updated successfully');
-      this.getMedicalData()
+
     });
 
-  } else {
+  }
 
-    // ADD MEDICINE FIRST TIME
+  // =====================================================
+  // ADD FIRST TIME
+  // =====================================================
+
+  else {
 
     const addMedicineData = {
-      patientName: obj.patientName,
-      mobileNumber: obj.mobileNumber,
-      userId: localStorage.getItem("userId"),
-      clinicId: localStorage.getItem("clinicId"),
 
-      // FIXED HERE
+      patientName: fullPatientName,
+
+      mobileNumber: obj.mobileNumber,
+
+      userId: userId,
+
+      clinicId: clinicId,
+
       medicine: Array.isArray(result.data.medical)
-        ? result.data.medical.filter((x: any) => x)
+        ? result.data.medical
         : [result.data.medical],
 
       createdAt: new Date().toISOString()
+
     };
 
     this.firebaseCollectionService.addMedicine(
@@ -697,8 +831,9 @@ if (result.data?.medical) {
       medicalId,
       addMedicineData
     ).then(() => {
+this.getMedicalData()
       console.log('Medicine added successfully');
-       this.getMedicalData()
+
     });
   }
 }

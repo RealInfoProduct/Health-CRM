@@ -5,7 +5,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { Timestamp } from 'firebase/firestore';
-import { log } from 'node:console';
+
 
 @Component({
   selector: 'app-doctors',
@@ -34,6 +34,8 @@ export class DoctorsComponent implements OnInit {
   doctorslist: any = []
   userList: any = []
 
+  userId = localStorage.getItem('userId')
+  clinicId = localStorage.getItem('clinicId')
   userType:any = localStorage.getItem('usertype')
   
   dataSource = new MatTableDataSource(this.doctorslist)
@@ -63,10 +65,7 @@ export class DoctorsComponent implements OnInit {
 
 
   getdoctorsdata() {
-    // this.firebaseCollectionService.getDocuments('Admin', 'doctorslist').then((doctors) => {  
-     const userId = localStorage.getItem('userId')
-     const clinicId = localStorage.getItem('clinicId')
-    this.firebaseCollectionService.getDoctors(userId, clinicId,'doctorsList').then((doctors) => {  
+    this.firebaseCollectionService.getDoctors(this.userId, this.clinicId,'doctorsList').then((doctors) => {  
       this.doctorslist = doctors
       if (doctors && doctors.length > 0) {
         this.dataSource = new MatTableDataSource(this.doctorslist)
@@ -85,6 +84,7 @@ export class DoctorsComponent implements OnInit {
     this.firebaseCollectionService.getDocuments('Admin', 'userlist').then((user) => {
       if(user && user.length >0) {
         this.userList = user 
+        console.log(this.userList);
       }
 
     })
@@ -103,37 +103,29 @@ export class DoctorsComponent implements OnInit {
     });
      dialogRef.afterClosed().subscribe(async (result) => {
       if (result?.event === 'Add') {
-        const userId = localStorage.getItem('userId')
-        const clinicId = localStorage.getItem('clinicId')
-  const doctorId = await this.firebaseCollectionService.addDoctor(userId, clinicId, result.data);
-     
-          
+        const doctorId = await this.firebaseCollectionService.addDoctor(this.userId, this.clinicId, result.data);
         const payloda = {
-          id:"",
-          doctors:doctorId,
-           userName:result.data.userName,
-           password:result.data.password,
-           userId:localStorage.getItem("userId"),
-           clinicId:localStorage.getItem("clinicId"),
-           userType:"Doctor"
+          id: "",
+          doctors: doctorId,
+          userName: result.data.userName,
+          password: result.data.password,
+          userId: localStorage.getItem("userId"),
+          clinicId: localStorage.getItem("clinicId"),
+          userType: "Doctor"
         }
-         this.firebaseCollectionService.addDocument('Admin',  payloda,'userlist');
+        this.firebaseCollectionService.addDocument('Admin', payloda, 'userlist');
         this.getdoctorsdata()
-         this.getuserdata()
+        this.getuserdata()
 
       } else if (result.event === 'Update') {
         this.doctorslist.forEach((element: any) => {
           if (obj.id === element.id) {
-            const userId = localStorage.getItem('userId')
-            const clinicId = localStorage.getItem('clinicId')
-            this.firebaseCollectionService.updateDoctor(userId, clinicId, obj.id, result.data);
+            this.firebaseCollectionService.updateDoctor(this.userId, this.clinicId, obj.id, result.data);
             this.getdoctorsdata()
           }
         });
       } else if (result.event === 'Delete') {
-        const userId = localStorage.getItem('userId')
-        const clinicId = localStorage.getItem('clinicId')
-        this.firebaseCollectionService.deleteDoctor(userId,clinicId, obj.id);
+        this.firebaseCollectionService.deleteDoctor(this.userId, this.clinicId, obj.id);
         this.getdoctorsdata()
       }
 

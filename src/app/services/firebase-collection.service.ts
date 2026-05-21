@@ -169,16 +169,69 @@ export class FirebaseCollectionService {
   //     this.spinnerService.setSpinner(false);
   //   }
   // }
+// async addDocument(
+//   collectionName: string,
+//   documentData: any,
+//   subCollectionName?: string
+// ) {
+//   this.spinnerService.setSpinner(true);
+
+//   const clinicId: any = localStorage.getItem('userId');
+
+//   try {
+//     let collectionRef: any = this.firestore
+//       .collection(collectionName)
+//       .doc(clinicId);
+
+//     if (subCollectionName) {
+//       collectionRef = collectionRef.collection(subCollectionName);
+//     }
+
+//     // Create document reference with auto ID
+//     const docRef = collectionRef.doc();
+
+//     // Set same ID inside document data
+//     const data = {
+//       ...documentData,
+//       id: docRef.ref.id,
+//     };
+
+//     // Save document
+//     await docRef.set(data);
+
+//     this.snackBar.open('Document added successfully', 'Close', {
+//       duration: 3000,
+//       horizontalPosition: 'right',
+//       verticalPosition: 'top',
+//     });
+
+//   } catch (error: any) {
+
+//     this.snackBar.open(`Error adding document: ${error.message}`, 'Close', {
+//       duration: 3000,
+//       horizontalPosition: 'right',
+//       verticalPosition: 'top',
+//     });
+
+//     throw error;
+
+//   } finally {
+//     this.spinnerService.setSpinner(false);
+//   }
+// }
+
 async addDocument(
   collectionName: string,
   documentData: any,
   subCollectionName?: string
 ) {
+
   this.spinnerService.setSpinner(true);
 
   const clinicId: any = localStorage.getItem('userId');
 
   try {
+
     let collectionRef: any = this.firestore
       .collection(collectionName)
       .doc(clinicId);
@@ -204,6 +257,9 @@ async addDocument(
       horizontalPosition: 'right',
       verticalPosition: 'top',
     });
+
+    // IMPORTANT
+    return data;
 
   } catch (error: any) {
 
@@ -1141,7 +1197,7 @@ async deletepatient(
       .doc(clinicId)
       .collection('doctorsList')
       .doc(doctorId)
-      .collection('patientslist')
+      .collection('patientlist')
       .doc(patientId);
 
     await ref.delete();

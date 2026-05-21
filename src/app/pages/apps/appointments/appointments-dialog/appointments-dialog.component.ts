@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Timestamp } from 'firebase/firestore';
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
@@ -33,6 +34,8 @@ export class AppointmentsDialogComponent implements OnInit {
   ]
 
   doctorslist: any = []
+appointmentslist: any[] = [];
+filteredPatients: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -67,8 +70,58 @@ export class AppointmentsDialogComponent implements OnInit {
       this.setCurrentTime();
     }
     this.getdoctorsdata()
+   this.getappointmentdata()
+  this.appointmentsForm.get('firstName')?.valueChanges.subscribe(value => {
+    this.filterPatients(value);
+  });
   }
 
+  filterPatients(value: string) {
+
+  const filterValue = value.toLowerCase();
+  this.filteredPatients = this.appointmentslist.filter(patient =>
+    patient.firstName.toLowerCase().includes(filterValue)
+  );
+}
+
+onPatientSelected(event: MatAutocompleteSelectedEvent) {
+
+  const selectedFirstName = event.option.value;
+
+  const selectedPatient = this.appointmentslist.find(
+    patient => patient.firstName === selectedFirstName
+  );
+
+  if (selectedPatient) {
+
+    this.appointmentsForm.patchValue({
+
+      firstName: selectedPatient.firstName || '',
+      lastName: selectedPatient.lastName || '',
+      mobileNumber: selectedPatient.mobileNumber || '',
+      doctorName: selectedPatient.doctorName || '',
+      address: selectedPatient.address || '',
+      age: selectedPatient.age || '',
+      gender: selectedPatient.gender || '',
+      bloodGroup: selectedPatient.bloodGroup || '',
+      email: selectedPatient.email || ''
+
+    });
+
+  }
+}
+
+getappointmentdata() {
+    const userId = localStorage.getItem('userId')
+        const clinicId = localStorage.getItem('clinicId')
+        const ReceptionistId = localStorage.getItem('ReceptionistId')
+    this.firebaseCollectionService.getAppointmentsList(userId, clinicId, ReceptionistId,'appointmentslist').then((appointment) => {
+      if (appointment && appointment.length > 0) {
+        this.appointmentslist = appointment
+
+      }
+    })
+  }
 
   getdoctorsdata() {
       const userId = localStorage.getItem('userId')
@@ -82,6 +135,8 @@ export class AppointmentsDialogComponent implements OnInit {
     })
 
   }
+
+
 
   convertTimestamp(element: any): Date | null {
     if (element instanceof Timestamp) {

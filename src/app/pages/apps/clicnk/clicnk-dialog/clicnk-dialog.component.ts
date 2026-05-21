@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Timestamp } from 'firebase/firestore';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 
 @Component({
   selector: 'app-clicnk-dialog',
@@ -18,14 +19,16 @@ hidePassword: boolean = true;
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<ClicnkDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
+         private firebaseCollectionService: FirebaseCollectionService
   ) { 
     this.local_data = { ...data };
     this.action = this.local_data.action;
   }
-
+userList:any =[]
   ngOnInit(): void {
     this.adddoctorslist()
+    this.getuserdata()
     if (this.action === 'Update') {
       this.clinicForm.controls['clicnkName'].setValue(this.local_data.clicnkName)
       this.clinicForm.controls['degree'].setValue(this.local_data.degree)
@@ -44,6 +47,17 @@ hidePassword: boolean = true;
     }
     return null;
       }
+
+        getuserdata(){
+    this.firebaseCollectionService.getDocuments('Admin', 'userlist').then((user) => {
+      if(user && user.length >0) {
+        this.userList = user 
+        console.log(this.userList);
+              this.setDuplicateValidators();
+      }
+
+    })
+  }
 
   adddoctorslist() {
     this.clinicForm = this.fb.group({
@@ -77,5 +91,52 @@ hidePassword: boolean = true;
 
   this.dialogRef.close({ event: this.action, data: payload });
 }
+
+userNameExistsValidator(userList: any[]): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!control.value || !userList) return null;
+
+    const input = control.value.trim().toLowerCase();
+
+    const exists = userList.some(
+      (u: any) => (u.userName || '').trim().toLowerCase() === input
+    );
+
+    return exists ? { userNameExists: true } : null;
+  };
+}
+
+passwordExistsValidator(userList: any[]): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!control.value || !userList) return null;
+
+    const input = control.value.trim().toLowerCase();
+
+    const exists = userList.some(
+      (u: any) => (u.password || '').trim().toLowerCase() === input
+    );
+
+    return exists ? { passwordExists: true } : null;
+  };
+}
+
+setDuplicateValidators() {
+  const userNameControl = this.clinicForm.get('userName');
+  const passwordControl = this.clinicForm.get('password');
+
+  userNameControl?.setValidators([
+    Validators.required,
+    this.userNameExistsValidator(this.userList)
+  ]);
+
+  passwordControl?.setValidators([
+    Validators.required,
+    this.passwordExistsValidator(this.userList)
+  ]);
+
+  userNameControl?.updateValueAndValidity();
+  passwordControl?.updateValueAndValidity();
+}
+
 
 }
