@@ -15,17 +15,6 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 // icons
 import { TablerIconsModule } from 'angular-tabler-icons';
 import * as TablerIcons from 'angular-tabler-icons/icons';
-
-//Contact
-import { AppContactDialogContentComponent } from './contact/contact.component';
-import { AppContactComponent } from './contact/contact.component';
-//Courses
-import { AppCoursesComponent } from './courses/courses.component';
-import { AppCourseDetailComponent } from './courses/course-detail/course-detail.component';
-
-// Permission
-import { AppPermissionComponent } from './permission/permission.component';
-
 //Calendar
 
 import { CalendarModule, DateAdapter } from 'angular-calendar';
@@ -94,11 +83,6 @@ import { MedicineViewComponent } from './medicine/medicine-view/medicine-view.co
   ],
   exports: [TablerIconsModule,MedicineComponent,MedicalComponent],
   declarations: [
-    AppPermissionComponent,
-    AppContactComponent,
-    AppContactDialogContentComponent,
-    AppCoursesComponent,
-    AppCourseDetailComponent,
     MedicalComponent,
     AddmedicaldialogComponent,
     LaboratoryComponent,

@@ -1,10 +1,6 @@
 import { Routes } from '@angular/router';
 
 // import { AppChatComponent } from './chat/chat.component';
-import { AppPermissionComponent } from './permission/permission.component';
-import { AppContactComponent } from './contact/contact.component';
-import { AppCoursesComponent } from './courses/courses.component';
-import { AppCourseDetailComponent } from './courses/course-detail/course-detail.component';
 import { MedicalComponent } from './medical/medical.component';
 import { LaboratoryComponent } from './laboratory/laboratory.component';
 import { LabComponent } from './lab/lab.component';
@@ -22,18 +18,7 @@ export const AppsRoutes: Routes = [
   {
     path: '',
     children: [
-    
-      {
-        path: 'permission',
-        component: AppPermissionComponent,
-        data: {
-          title: 'Roll Base Access',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Roll Base Access' },
-          ],
-        },
-      },
+
       {
         path: 'appointments',
         component: AppointmentsComponent,
@@ -166,39 +151,7 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-      {
-        path: 'contacts',
-        component: AppContactComponent,
-        data: {
-          title: 'Contacts',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Contacts' },
-          ],
-        },
-      },
-      {
-        path: 'courses',
-        component: AppCoursesComponent,
-        data: {
-          title: 'Courses',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Courses' },
-          ],
-        },
-      },
-      {
-        path: 'courses/coursesdetail/:id',
-        component: AppCourseDetailComponent,
-        data: {
-          title: 'Course Detail',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Course Detail' },
-          ],
-        },
-      },
+     
     ],
   },
 ];
