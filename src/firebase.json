@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/gadicure/browser",
+    "public": "dist/gadicure",
     "ignore": [
       "firebase.json",
       "**/.*",
