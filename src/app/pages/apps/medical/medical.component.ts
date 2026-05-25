@@ -33,11 +33,11 @@ export class MedicalComponent implements OnInit{
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(
+  constructor
+  (
     public dialog: MatDialog,
-    private firebaseCollectionService: FirebaseCollectionService) { }
-
-
+    private firebaseCollectionService: FirebaseCollectionService
+  ) { }
 
     ngOnInit(): void {
     this.dataSource.paginator = this.paginator;

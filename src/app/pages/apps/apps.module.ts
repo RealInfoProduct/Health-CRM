@@ -55,6 +55,9 @@ import { ClicnkDialogComponent } from './clicnk/clicnk-dialog/clicnk-dialog.comp
 import { ReceptionistComponent } from './receptionist/receptionist.component';
 import { ReceptionistDialogComponent } from './receptionist/receptionist-dialog/receptionist-dialog.component';
 import { MedicineViewComponent } from './medicine/medicine-view/medicine-view.component';
+import { PurchaseComponent } from './purchase/purchase.component';
+import { PurchaseDialogComponent } from './purchase/purchase-dialog/purchase-dialog.component';
+import { PurchaseViewComponent } from './purchase/purchase-view/purchase-view.component';
 
 
 
@@ -110,6 +113,9 @@ import { MedicineViewComponent } from './medicine/medicine-view/medicine-view.co
     ReceptionistComponent,
     ReceptionistDialogComponent,
     MedicineViewComponent,
+    PurchaseComponent,
+    PurchaseDialogComponent,
+    PurchaseViewComponent,
 
   ],
   providers: [  { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],

@@ -7,7 +7,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Doctors Name</mat-label>
                     <input type="text" formControlName="doctorsName" placeholder="Enter doctors name" matInput require />
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="doctorsForm.get('doctorsName').errors && doctorsForm.get('doctorsName').errors['required']">
                         Doctors name is required
                     </mat-error>
@@ -20,7 +20,7 @@
                     <mat-select #dropdown formControlName="department" placeholder="Enter department">
                         <mat-option [value]="item.name" *ngFor="let item of DepartmentList">{{item.name}}</mat-option>
                     </mat-select>
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="doctorsForm.get('department').errors && doctorsForm.get('department').errors['required']">
                         Department is required
                     </mat-error>
@@ -31,7 +31,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Degree</mat-label>
                     <input type="text" formControlName="degree" placeholder="Enter degree" matInput require />
-                    <mat-error *ngIf="doctorsForm.get('degree').errors && doctorsForm.get('degree').errors['required']">
+                    <mat-error class="error-message" *ngIf="doctorsForm.get('degree').errors && doctorsForm.get('degree').errors['required']">
                         Degree is required
                     </mat-error>
                 </mat-form-field>
@@ -42,11 +42,11 @@
                     <mat-label>Mobile Number</mat-label>
                     <input type="number" formControlName="mobileNumber" placeholder="Enter mobile number" matInput require
                         onKeyPress="if(this.value.length==10) return false;" min="0" />
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="doctorsForm.get('mobileNumber').errors && doctorsForm.get('mobileNumber').errors['required']">
                         Mobile number is required
                     </mat-error>
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="doctorsForm.get('mobileNumber').errors && doctorsForm.get('mobileNumber').errors['pattern']">
                         Please enter a valid 10-digit
                     </mat-error>
@@ -57,7 +57,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Email</mat-label>
                     <input type="text" formControlName="email" placeholder="Enter email" matInput  />
-                    <mat-error *ngIf="doctorsForm.get('email').errors && doctorsForm.get('email').errors['pattern']">
+                    <mat-error class="error-message" *ngIf="doctorsForm.get('email').errors && doctorsForm.get('email').errors['pattern']">
                         Please enter a valid email
                     </mat-error>
                 </mat-form-field>
@@ -70,7 +70,7 @@
                         formControlName="joiningDate" />
                     <mat-datepicker-toggle matIconSuffix [for]="touchpic"></mat-datepicker-toggle>
                     <mat-datepicker touchUi #touchpic></mat-datepicker>
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="doctorsForm.get('joiningDate')?.invalid && doctorsForm.get('joiningDate')?.touched">
                         Joining date is required
                     </mat-error>
@@ -82,7 +82,7 @@
                     <mat-label>Experience (Years)</mat-label>
                     <input type="number" formControlName="experience" placeholder="Enter experience" matInput require
                         min="0" />
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="doctorsForm.get('experience').errors && doctorsForm.get('experience').errors['required']">
                         Experience is required
                     </mat-error>
@@ -94,7 +94,7 @@
                     <mat-label>Consultation Fee</mat-label>
                     <input type="number" formControlName="consultationFee" placeholder="Enter consultation fee" matInput
                         require min="0" />
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="doctorsForm.get('consultationFee').errors && doctorsForm.get('consultationFee').errors['required']">
                         Consultation fee is required
                     </mat-error>
@@ -105,10 +105,10 @@
                 <mat-label class="mat-subtitle-2 f-w-600 ">User Name</mat-label>
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <input type="text" formControlName="userName" placeholder="Enter User Name" matInput require />
-                    <mat-error class="error-message" *ngIf="doctorsForm.get('userName').errors &&  doctorsForm.get('userName').errors['required']">
+                    <mat-error  class="error-message" *ngIf="doctorsForm.get('userName').errors &&  doctorsForm.get('userName').errors['required']">
                         User Name is required
                     </mat-error>
-                    <mat-error class="error-message" *ngIf="doctorsForm.get('userName')?.errors?.['userNameExists']">
+                    <mat-error  class="error-message" *ngIf="doctorsForm.get('userName')?.errors?.['userNameExists']">
                         User Name already exists
                     </mat-error>
                     </mat-form-field>
@@ -129,7 +129,7 @@
                         </mat-icon>
                     </button>
             
-                    <mat-error class="error-message" *ngIf="doctorsForm.get('password')?.errors?.['required']">
+                    <mat-error  class="error-message" *ngIf="doctorsForm.get('password')?.errors?.['required']">
                         Password is required
                     </mat-error>
                     <mat-error class="error-message" *ngIf="doctorsForm.get('password')?.errors?.['passwordExists']">

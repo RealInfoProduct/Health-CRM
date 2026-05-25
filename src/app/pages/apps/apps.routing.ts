@@ -13,6 +13,7 @@ import { AppointmentsComponent } from './appointments/appointments.component';
 import { StaffComponent } from './staff/staff.component';
 import { ClicnkComponent } from './clicnk/clicnk.component';
 import { ReceptionistComponent } from './receptionist/receptionist.component';
+import { PurchaseComponent } from './purchase/purchase.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -27,6 +28,17 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/apps/appointments' },
             { title: 'Appointments' },
+          ],
+        },
+      },
+      {
+        path: 'purchase',
+        component: PurchaseComponent,
+        data: {
+          title: 'Purchase',
+          urls: [
+            { title: 'Dashboard', url: '/apps/purchase' },
+            { title: 'Purchase' },
           ],
         },
       },

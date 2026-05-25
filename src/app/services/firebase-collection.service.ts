@@ -1598,4 +1598,174 @@ async getMedicine(
     this.spinnerService.setSpinner(false);
   }
 }
+
+// new purchase
+async addpurchase(adminId: string, clinicId: string,  MedicineId: string, purchaseData: any) {
+  this.spinnerService.setSpinner(true);
+
+  try {
+    const medicine = this.firestore
+      .collection('Admin')
+      .doc(adminId)
+      .collection('clinicList')
+      .doc(clinicId)
+      .collection('medicallist')
+      .doc(MedicineId)
+      .collection('purchaselist');
+const newpurchaselistRef = medicine.ref.doc();
+
+    const data = {
+      ...purchaseData,
+      id: newpurchaselistRef.id
+    };
+    await newpurchaselistRef.set(data);
+
+    this.snackBar.open('Purchase added successfully', 'Close', {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
+  return newpurchaselistRef.id;
+
+  } catch (error: any) {
+
+    console.error(error);
+
+    this.snackBar.open(`Error: ${error.message}`, 'Close');
+
+    return null;
+
+  } finally {
+
+    this.spinnerService.setSpinner(false);
+  }
+}
+async updatepurchase(
+  adminId: string,
+  clinicId: string,
+  medicalId: string,
+  purchaseId: string,
+  purchaseData: any
+) {
+
+  this.spinnerService.setSpinner(true);
+
+  try {
+
+    const ref = this.firestore
+      .collection('Admin')
+      .doc(adminId)
+      .collection('clinicList')
+      .doc(clinicId)
+      .collection('medicallist')
+      .doc(medicalId)
+      .collection('purchaselist')
+      .doc(purchaseId);
+
+    await ref.update(purchaseData);
+
+    this.snackBar.open('Purchase updated successfully', 'Close', {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
+
+  } catch (error: any) {
+
+    this.snackBar.open(
+      `Error updating Purchase: ${error.message}`,
+      'Close',
+      {
+        duration: 3000,
+      }
+    );
+
+    throw error;
+
+  } finally {
+
+    this.spinnerService.setSpinner(false);
+
+  }
+}
+
+async deletepurchase(
+  adminId: string,
+  clinicId: string,
+  medicalId: string,
+ purchaseId: string
+) {
+
+  this.spinnerService.setSpinner(true);
+
+  try {
+
+    const ref = this.firestore
+      .collection('Admin')
+      .doc(adminId)
+      .collection('clinicList')
+      .doc(clinicId)
+      .collection('medicallist')
+      .doc(medicalId)
+      .collection('purchaselist')
+      .doc(purchaseId);
+
+    await ref.delete();
+
+    this.snackBar.open('Purchase deleted successfully', 'Close', {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
+
+  } catch (error: any) {
+
+    this.snackBar.open(
+      `Error deleting purchase: ${error.message}`,
+      'Close',
+      {
+        duration: 3000,
+      }
+    );
+
+    throw error;
+
+  } finally {
+
+    this.spinnerService.setSpinner(false);
+
+  }
+}
+
+async getpurchase(
+  adminId: string,
+  clinicId: string,
+  medicalId: string,
+  collectionName: string
+) {
+
+  this.spinnerService.setSpinner(true);
+
+  try {
+
+    const snapshot = await this.firestore
+      .collection('Admin')
+      .doc(adminId)
+      .collection('clinicList')
+      .doc(clinicId)
+      .collection('medicallist')
+      .doc(medicalId)
+      .collection(collectionName)
+      .get()
+      .toPromise();
+
+    return snapshot.docs.map((doc: any) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+  } finally {
+    this.spinnerService.setSpinner(false);
+  }
+}
 }

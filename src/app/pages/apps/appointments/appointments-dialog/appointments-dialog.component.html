@@ -14,7 +14,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>First Name</mat-label>
                     <input type="text" formControlName="firstName" placeholder="Enter first name" matInput />
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="appointmentsForm.get('firstName').errors && appointmentsForm.get('firstName').errors['required']">
                         First name is required
                     </mat-error>
@@ -22,38 +22,31 @@
             </div> -->
 
             <div class="col-lg-5">
-    <mat-form-field appearance="outline" class="w-100 m-t-10">
-        <mat-label>First Name</mat-label>
-
-        <input
-            type="text"
-            formControlName="firstName"
-            placeholder="Enter first name"
-            matInput
-            [matAutocomplete]="auto" />
-
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onPatientSelected($event)">
-            <mat-option
-                *ngFor="let patient of filteredPatients"
-                [value]="patient.firstName">
-
-                {{ patient.firstName }} {{ patient.lastName }}
-            </mat-option>
-        </mat-autocomplete>
-
-        <mat-error
-            *ngIf="appointmentsForm.get('firstName').errors &&
-                   appointmentsForm.get('firstName').errors['required']">
-            First name is required
-        </mat-error>
-    </mat-form-field>
-</div>
-
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>First Name</mat-label>
+            
+                    <input type="text" formControlName="firstName" placeholder="Enter first name" matInput
+                        [matAutocomplete]="auto" />
+            
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onPatientSelected($event)">
+                        <mat-option *ngFor="let patient of filteredPatients" [value]="patient.firstName">
+            
+                            {{ patient.firstName }} {{ patient.lastName }}
+                        </mat-option>
+                    </mat-autocomplete>
+            
+                    <mat-error class="error-message" class="error-message" *ngIf="appointmentsForm.get('firstName').errors &&
+                               appointmentsForm.get('firstName').errors['required']">
+                        First name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            
             <div class="col-lg-5">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Last Name</mat-label>
                     <input type="text" formControlName="lastName" placeholder="Enter last name" matInput />
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="appointmentsForm.get('lastName').errors && appointmentsForm.get('lastName').errors['required']">
                         Last name is required
                     </mat-error>
@@ -66,7 +59,7 @@
                     <mat-select #dropdown formControlName="doctorName" placeholder="Enter doctor name">
                         <mat-option [value]="item.id" *ngFor="let item of doctorslist">{{item.doctorsName}}</mat-option>
                     </mat-select>
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="appointmentsForm.get('doctorName').errors && appointmentsForm.get('doctorName').errors['required']">
                         Doctor name is required
                     </mat-error>
@@ -78,7 +71,7 @@
                 <mat-radio-group aria-label="Select an option" formControlName="gender">
                     <mat-radio-button value="male">Male </mat-radio-button>
                     <mat-radio-button value="female">Female </mat-radio-button>
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="appointmentsForm.get('gender')?.invalid && appointmentsForm.get('gender')?.touched">
                         Gender is required
                     </mat-error>
@@ -92,7 +85,7 @@
                         placeholder="Select time" />
                     <ngx-mat-timepicker-toggle [for]="timepicker" matSuffix></ngx-mat-timepicker-toggle>
                     <ngx-mat-timepicker #timepicker></ngx-mat-timepicker>
-                    <mat-error *ngIf="appointmentsForm.get('time')?.invalid && appointmentsForm.get('time')?.touched">
+                    <mat-error class="error-message" *ngIf="appointmentsForm.get('time')?.invalid && appointmentsForm.get('time')?.touched">
                         Time is required
                     </mat-error>
                 </mat-form-field>
@@ -104,7 +97,7 @@
                     <input matInput [matDatepicker]="touchpic" placeholder="Select date" formControlName="date" />
                     <mat-datepicker-toggle matIconSuffix [for]="touchpic"></mat-datepicker-toggle>
                     <mat-datepicker touchUi #touchpic></mat-datepicker>
-                    <mat-error *ngIf="appointmentsForm.get('date')?.invalid && appointmentsForm.get('date')?.touched">
+                    <mat-error class="error-message" *ngIf="appointmentsForm.get('date')?.invalid && appointmentsForm.get('date')?.touched">
                         Date is required
                     </mat-error>
                 </mat-form-field>
@@ -114,7 +107,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Address</mat-label>
                     <input type="text" placeholder="Enter address" formControlName="address" matInput />
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="appointmentsForm.get('address').errors && appointmentsForm.get('address').errors['required']">
                         Address is required
                     </mat-error>
@@ -126,7 +119,7 @@
                     <mat-label>Mobile Number</mat-label>
                     <input type="number" formControlName="mobileNumber" placeholder="Enter mobile number" matInput require
                         onKeyPress="if(this.value.length==10) return false;" min="0" />
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="appointmentsForm.get('mobileNumber').errors && appointmentsForm.get('mobileNumber').errors['required']">
                         Mobile number is required
                     </mat-error>
@@ -151,7 +144,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Age</mat-label>
                     <input type="number" placeholder="Enter age" formControlName="age" matInput />
-                    <mat-error *ngIf="appointmentsForm.get('age').errors && appointmentsForm.get('age').errors['required']">
+                    <mat-error class="error-message" *ngIf="appointmentsForm.get('age').errors && appointmentsForm.get('age').errors['required']">
                         Age is required
                     </mat-error>
                 </mat-form-field>
@@ -164,7 +157,7 @@
                         <mat-option [value]="item.name"
                             *ngFor="let item of appointmentStatusList">{{item.name}}</mat-option>
                     </mat-select>
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="appointmentsForm.get('appointmentStatus').errors && appointmentsForm.get('appointmentStatus').errors['required']">
                         Appointment status is required
                     </mat-error>
@@ -177,7 +170,7 @@
                     <mat-select #dropdown formControlName="visitType" placeholder="Select visit type">
                         <mat-option [value]="item.name" *ngFor="let item of visitTypeList">{{item.name}}</mat-option>
                     </mat-select>
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="appointmentsForm.get('visitType').errors && appointmentsForm.get('visitType').errors['required']">
                         Visit type is required
                     </mat-error>
@@ -190,7 +183,7 @@
                     <mat-select #dropdown formControlName="paymentMethod" placeholder="Select payment method">
                         <mat-option [value]="item.name" *ngFor="let item of paymentMethodList">{{item.name}}</mat-option>
                     </mat-select>
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="appointmentsForm.get('paymentMethod').errors && appointmentsForm.get('paymentMethod').errors['required']">
                         Payment method is required
                     </mat-error>

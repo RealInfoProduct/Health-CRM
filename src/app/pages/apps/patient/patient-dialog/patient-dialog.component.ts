@@ -44,6 +44,7 @@ export class PatientDialogComponent implements OnInit {
   medicallist: any = []
   appointmentslist: any = []
   filteredPatients: any[] = [];
+  purchaselist: any[] = [];
   lablist: any[] = [];
 
   constructor(
@@ -56,10 +57,11 @@ export class PatientDialogComponent implements OnInit {
     this.action = this.local_data.action;
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.PatientFormlist();
 
     if (this.action === 'Update') {
+        await this.loadMedicineData(this.local_data.medicalName);
       this.PatientForm.patchValue({
         patientName: `${this.local_data.firstName} ${this.local_data.lastName}`,
         mobileNumber: this.local_data.mobileNumber,
@@ -129,6 +131,16 @@ export class PatientDialogComponent implements OnInit {
     });
   }
 
+
+  async loadMedicineData(medicalId: any) {
+
+  const userId = localStorage.getItem('userId');
+  const clinicId = localStorage.getItem('clinicId');
+
+  this.purchaselist = await this.firebaseCollectionService
+    .getMedicine(userId, clinicId, medicalId, 'purchaselist');
+
+}
 
   getdoctorsdata() {
     this.firebaseCollectionService.getDocuments('Doctor', 'doctorslist').then((doctors) => {
@@ -290,15 +302,67 @@ export class PatientDialogComponent implements OnInit {
     this.medical.push(this.createMedical());
   }
 
-  onMedicalChange(event: any) {
-    if (event.value) {
-      if (this.medical.length === 0) {
-        this.addMedicalDetail()
-      }
-    } else {
-      this.medical.clear();
+  // onMedicalChange(event: any) {
+  //   if (event.value) {
+  //     if (this.medical.length === 0) {
+  //       this.addMedicalDetail()
+  //     }
+  //   } else {
+  //     this.medical.clear();
+  //   }
+  // }
+
+  async onMedicalChange(event: any) {
+  const medicalId = event.value;
+
+  if (medicalId) {
+
+    const userId = localStorage.getItem('userId');
+    const clinicId = localStorage.getItem('clinicId');
+    const medicine = await this.firebaseCollectionService
+    .getMedicine(userId, clinicId, medicalId, 'purchaselist');
+    
+    this.purchaselist = medicine;
+    
+    if (this.medical.length === 0) {
+      this.addMedicalDetail();
     }
+    
+  } else {
+    this.medical.clear();
   }
+}
+
+onMedicineSelect(medicineName: any, index: number) {
+  
+  let selectedMedicine: any;
+  
+  this.purchaselist.forEach((purchase: any) => {
+    
+    const found = purchase.medicine.find(
+      (m: any) => m.medicineName === medicineName
+    );
+    debugger
+
+    if (found) {
+      selectedMedicine = found;
+    }
+
+  });
+
+  if (selectedMedicine) {
+
+    const medicalGroup = this.medical.at(index) as FormGroup;
+
+    medicalGroup.patchValue({
+      medicineName: selectedMedicine.medicineName,
+      CompanyName: selectedMedicine.companyName,
+      category: selectedMedicine.medicineType
+    });
+
+  }
+
+}
 
   filterPatients(event: any) {
     const value = event.target.value

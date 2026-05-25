@@ -9,7 +9,7 @@
                     <mat-select #dropdown formControlName="patientName" placeholder="Enter patient name">
                         <mat-option [value]="item.id" *ngFor="let item of appointmentslist">{{item.firstName}} {{item.lastName}} </mat-option>
                     </mat-select>
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="billForm.get('patientName').errors && billForm.get('patientName').errors['required']">
                         Doctor name is required
                     </mat-error>
@@ -22,7 +22,7 @@
                     <mat-select #dropdown formControlName="status" placeholder="Enter status">
                         <mat-option [value]="item.name" *ngFor="let item of statusList">{{item.name}}</mat-option>
                     </mat-select>
-                    <mat-error *ngIf="billForm.get('status').errors && billForm.get('status').errors['required']">
+                    <mat-error class="error-message" *ngIf="billForm.get('status').errors && billForm.get('status').errors['required']">
                         Payment status is required
                     </mat-error>
                 </mat-form-field>
@@ -34,7 +34,7 @@
                     <input matInput [matDatepicker]="touchpic" placeholder="Enter date" formControlName="admissionDate" />
                     <mat-datepicker-toggle matIconSuffix [for]="touchpic"></mat-datepicker-toggle>
                     <mat-datepicker touchUi #touchpic></mat-datepicker>
-                    <mat-error *ngIf="billForm.get('admissionDate')?.invalid && billForm.get('admissionDate')?.touched">
+                    <mat-error class="error-message" *ngIf="billForm.get('admissionDate')?.invalid && billForm.get('admissionDate')?.touched">
                         Admission date is required
                     </mat-error>
                 </mat-form-field>
@@ -47,7 +47,7 @@
                         formControlName="dischargeDate" />
                     <mat-datepicker-toggle matIconSuffix [for]="dischargeDate"></mat-datepicker-toggle>
                     <mat-datepicker touchUi #dischargeDate></mat-datepicker>
-                    <mat-error *ngIf="billForm.get('dischargeDate')?.invalid && billForm.get('dischargeDate')?.touched">
+                    <mat-error class="error-message" *ngIf="billForm.get('dischargeDate')?.invalid && billForm.get('dischargeDate')?.touched">
                         Discharge date is required
                     </mat-error>
                 </mat-form-field>
@@ -60,7 +60,7 @@
                         <mat-option [value]="item.name"
                             *ngFor="let item of paymentMethodList">{{item.name}}</mat-option>
                     </mat-select>
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="billForm.get('paymentMethod').errors && billForm.get('paymentMethod').errors['required']">
                         Payment method is required
                     </mat-error>
@@ -71,7 +71,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Total</mat-label>
                     <input type="number" formControlName="total" placeholder="Enter total" matInput require min="0" />
-                    <mat-error *ngIf="billForm.get('total').errors && billForm.get('total').errors['required']">
+                    <mat-error class="error-message" *ngIf="billForm.get('total').errors && billForm.get('total').errors['required']">
                         Total is required
                     </mat-error>
                 </mat-form-field>
@@ -81,7 +81,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Discount %</mat-label>
                     <input type="number" formControlName="discount" placeholder="Enter discount" matInput require min="0" />
-                    <mat-error *ngIf="billForm.get('discount').errors && billForm.get('discount').errors['required']">
+                    <mat-error class="error-message" *ngIf="billForm.get('discount').errors && billForm.get('discount').errors['required']">
                         Discount is required
                     </mat-error>
                 </mat-form-field>
@@ -91,7 +91,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Tax %</mat-label>
                     <input type="number" formControlName="tax" placeholder="Enter tax" matInput require min="0" />
-                    <mat-error *ngIf="billForm.get('tax').errors && billForm.get('tax').errors['required']">
+                    <mat-error class="error-message" *ngIf="billForm.get('tax').errors && billForm.get('tax').errors['required']">
                         Tax is required
                     </mat-error>
                 </mat-form-field>
@@ -101,7 +101,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Final Total</mat-label>
                     <input type="number" formControlName="finalTotal" placeholder="Enter final total" matInput require />
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="billForm.get('finalTotal').errors && billForm.get('finalTotal').errors['required']">
                         Final total is required
                     </mat-error>

@@ -1,0 +1,142 @@
+<h2 class="f-w-500 p-b-20 b-b-1" mat-dialog-title><strong>{{action}} Medical</strong></h2>
+<mat-dialog-content class="p-t-20" *ngIf="action !== 'Delete'; else elseTemplate">
+    <form [formGroup]="purchaseForm">
+        <div class="row">
+
+            <div class="col-lg-6">
+                <mat-form-field class="w-100 m-t-10" appearance="outline">
+                    <mat-label>Purchase Date</mat-label>
+                    <input matInput [matDatepicker]="touchpic" placeholder="Enter Purchase date" formControlName="purchaseDate" />
+                    <mat-datepicker-toggle matIconSuffix [for]="touchpic"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #touchpic></mat-datepicker>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Supplier Name</mat-label>
+                    <input type="text" matInput formControlName="supplierName" placeholder="Enter Supplier name"
+                        [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let Supplier of filteredCompanies" [value]="Supplier">
+                            {{ Supplier }}
+                        </mat-option>
+                    </mat-autocomplete>
+                   <mat-error class="error-message" *ngIf="purchaseForm.get('supplierName')?.errors?.['required']">
+                        Supplier name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            
+            
+
+            <div class="col-12" formArrayName="medicine">
+                <div *ngFor="let report of getmedicine().controls; let i = index" [formGroupName]="i" class="row">
+            
+                    <div class="w-medicine">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Medicine Name</mat-label>
+                            <input type="text" matInput formControlName="medicineName" placeholder="Enter Medicine name"
+                                [matAutocomplete]="medicineAuto">
+                            <mat-autocomplete #medicineAuto="matAutocomplete">
+                                <mat-option *ngFor="let medicine of filteredMedicines[i]" [value]="medicine">
+                                    {{ medicine }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+            
+                    <div class="w-medicine">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Company Name</mat-label>
+                            <input type="text" matInput formControlName="companyName" placeholder="Enter Company Name"
+                                [matAutocomplete]="CompanyName">
+                            <mat-autocomplete #CompanyName="matAutocomplete">
+                                <mat-option *ngFor="let companyName of filteredCompany[i]" [value]="companyName">
+                                    {{ companyName }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+            
+                    <div class="w-medicine">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Medicine Type</mat-label>
+                            <mat-select #dropdown formControlName="medicineType" placeholder="Enter Medicine Type">
+                                <mat-option [value]="item.name" *ngFor="let item of medicineTypeList">{{item.name}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+            
+                    <div class="w-medicine-qty">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Qty</mat-label>
+                            <input type="number" formControlName="qty" placeholder="Enter Qty" matInput requir />
+            
+                        </mat-form-field>
+                    </div>
+                    
+                    <div class="w-medicine-Unit">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Unit</mat-label>
+                    
+                            <input type="text" formControlName="unit" matInput [matAutocomplete]="autoUnit" placeholder="Enter Unit" />
+                    
+                            <mat-autocomplete #autoUnit="matAutocomplete">
+                                <mat-option *ngFor="let unit of filteredUnits[i]" [value]="unit">
+                                    {{ unit }}
+                                </mat-option>
+                            </mat-autocomplete>
+                    
+                        </mat-form-field>
+                    </div>
+                    
+                    <!-- <div class="w-medicine">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Unit</mat-label>
+                            <mat-select #dropdown formControlName="unit" placeholder="Enter Unit">
+                                <mat-option [value]="item.name" *ngFor="let item of unitList">{{item.name}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div> -->
+            
+                    <div class="w-medicine-price">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Price</mat-label>
+                            <input type="number" formControlName="price" placeholder="Enter Price" matInput requir />
+            
+                        </mat-form-field>
+                    </div>
+            
+                    <div class="w-medicine-add d-flex align-items-center">
+                        <a class="m-r-10 cursor-pointer" *ngIf="getmedicine().length > 1">
+                            <i-tabler name="trash" (click)="removeReport(i)" class="icon-18"></i-tabler>
+                        </a>
+                        <a class="m-r-10 cursor-pointer">
+                            <i-tabler name="plus" (click)="addReportDetail()" class="icon-18"></i-tabler>
+                        </a>
+                    </div>
+            
+                </div>
+            
+            </div>
+
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions class="p-24 justify-content-end">
+    <button mat-stroked-button color="warn" mat-dialog-close>
+        Cancel
+    </button>
+    <button mat-flat-button (click)="doAction()" [mat-dialog-close]="true" mat-flat-button color="primary"
+        [disabled]="action !== 'Delete' && purchaseForm.invalid">
+        {{action}}
+    </button>
+</mat-dialog-actions>
+<ng-template #elseTemplate>
+    <div class="p-x-24">
+        <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
+    </div>
+    <mat-divider></mat-divider>
+</ng-template>

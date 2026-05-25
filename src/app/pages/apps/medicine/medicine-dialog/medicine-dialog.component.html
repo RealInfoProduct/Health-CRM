@@ -9,7 +9,7 @@
                     <mat-select #dropdown formControlName="patientName" placeholder="Enter patient name">
                         <mat-option [value]="item.id" *ngFor="let item of appointmentslist">{{item.firstName}} {{item.lastName}}</mat-option>
                     </mat-select>
-                    <mat-error
+                   <mat-error class="error-message"
                         *ngIf="addmedicineForm.get('patientName').errors && addmedicineForm.get('patientName').errors['required']">
                         Patient name is required
                     </mat-error>
@@ -101,7 +101,7 @@
                 <mat-select #dropdown formControlName="paymentMethod" placeholder="Select payment method">
                     <mat-option [value]="item.name" *ngFor="let item of paymentMethodList">{{item.name}}</mat-option>
                 </mat-select>
-                <mat-error
+               <mat-error class="error-message"
                     *ngIf="addmedicineForm.get('paymentMethod').errors && addmedicineForm.get('paymentMethod').errors['required']">
                     Payment method is required
                 </mat-error>
@@ -112,7 +112,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Amount</mat-label>
                     <input type="number" formControlName="amount" placeholder="Enter amount" matInput require min="0" />
-                    <mat-error
+                   <mat-error class="error-message"
                         *ngIf="addmedicineForm.get('amount').errors && addmedicineForm.get('amount').errors['required']">
                         Amount is required
                     </mat-error>
@@ -124,7 +124,7 @@
                     <mat-label>Discount %</mat-label>
                     <input type="number" formControlName="discount" placeholder="Enter discount" matInput require
                         min="0" />
-                    <mat-error
+                   <mat-error class="error-message"
                         *ngIf="addmedicineForm.get('discount').errors && addmedicineForm.get('discount').errors['required']">
                         Discount is required
                     </mat-error>
@@ -135,7 +135,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>GST %</mat-label>
                     <input type="number" formControlName="gst" placeholder="Enter GST" matInput require min="0" />
-                    <mat-error
+                   <mat-error class="error-message"
                         *ngIf="addmedicineForm.get('gst').errors && addmedicineForm.get('gst').errors['required']">
                         GST is required
                     </mat-error>
@@ -147,7 +147,7 @@
                     <mat-label>NetAmount</mat-label>
                     <input type="number" formControlName="netamount" placeholder="Enter netamount" matInput require
                         min="0" />
-                    <mat-error
+                   <mat-error class="error-message"
                         *ngIf="addmedicineForm.get('netamount').errors && addmedicineForm.get('netamount').errors['required']">
                         Netamount is required
                     </mat-error>

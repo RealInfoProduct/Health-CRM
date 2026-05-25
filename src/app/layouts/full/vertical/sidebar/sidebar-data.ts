@@ -59,6 +59,12 @@ export const navItems: NavItem[] = [
     route: '/apps/staff',
     // allowedUserTypes: ['Admin','Doctor'],
   },
+  {
+    displayName: 'Purchase',
+    iconName: 'file-invoice',
+    route: '/apps/purchase',
+    // allowedUserTypes: ['Admin','Doctor'],
+  },
   // {
   //   displayName: 'My Report',
   //   iconName: 'file-report',

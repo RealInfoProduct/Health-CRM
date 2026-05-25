@@ -7,7 +7,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Staff Name</mat-label>
                     <input type="text" placeholder="Enter staff name" formControlName="staffName" matInput />
-                    <mat-error
+                   <mat-error class="error-message"
                         *ngIf="StaffForm.get('staffName').errors && StaffForm.get('staffName').errors['required']">
                         Staff name is required
                     </mat-error>
@@ -20,7 +20,7 @@
                     <mat-select #dropdown formControlName="designation" placeholder="Enter designation">
                         <mat-option [value]="item.name" *ngFor="let item of Stafflist">{{item.name }}</mat-option>
                     </mat-select>
-                    <mat-error
+                   <mat-error class="error-message"
                         *ngIf="StaffForm.get('designation').errors && StaffForm.get('designation').errors['required']">
                         Designation is required
                     </mat-error>
@@ -32,11 +32,11 @@
                     <mat-label >Mobile Number</mat-label>
                     <input type="number" placeholder="Mobile Number" formControlName="mobileNumber"
                         onKeyPress="if(this.value.length==10) return false;" matInput min="0" />
-                    <mat-error
+                   <mat-error class="error-message"
                         *ngIf="StaffForm.get('mobileNumber').errors && StaffForm.get('mobileNumber').errors['required']">
                         Mobile number is required
                     </mat-error>
-                    <mat-error
+                   <mat-error class="error-message"
                         *ngIf="StaffForm.get('mobileNumber').errors && StaffForm.get('mobileNumber').errors['pattern']">
                         Please enter a valid 10-digit
                     </mat-error>
@@ -48,7 +48,7 @@
                     <mat-label>Email</mat-label>
                     <input type="text" formControlName="email" placeholder="Enter email" matInput />
         
-                    <mat-error
+                   <mat-error class="error-message"
                         *ngIf="StaffForm.get('email').errors && StaffForm.get('email').errors['pattern']">
                         Please enter a valid email
                     </mat-error>
@@ -61,7 +61,7 @@
                     <input matInput [matDatepicker]="touchpic" placeholder="Enter joining date" formControlName="joiningDate" />
                     <mat-datepicker-toggle matIconSuffix [for]="touchpic"></mat-datepicker-toggle>
                     <mat-datepicker touchUi #touchpic></mat-datepicker>
-                    <mat-error *ngIf="StaffForm.get('joiningDate').errors && StaffForm.get('joiningDate').errors['required']">
+                   <mat-error class="error-message" *ngIf="StaffForm.get('joiningDate').errors && StaffForm.get('joiningDate').errors['required']">
                         Joining date is required
                     </mat-error>
                 </mat-form-field>
@@ -71,7 +71,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Salary</mat-label>
                     <input type="number" placeholder="Enter salary" formControlName="salary" matInput min="0" />
-                    <mat-error 
+                   <mat-error class="error-message" 
                     *ngIf="StaffForm.get('salary').errors && StaffForm.get('salary').errors['required']">
                     Salary is required
                     </mat-error>
@@ -84,7 +84,7 @@
                     <mat-select #dropdown formControlName="status" placeholder="Enter status">
                         <mat-option [value]="item.name" *ngFor="let item of Statuslist">{{item.name }}</mat-option>
                     </mat-select>
-                    <mat-error
+                   <mat-error class="error-message"
                         *ngIf="StaffForm.get('status').errors && StaffForm.get('status').errors['required']">
                         Status is required
                     </mat-error>
@@ -97,7 +97,7 @@
                     <mat-select #dropdown formControlName="shift" placeholder="Enter shift">
                         <mat-option [value]="item.name" *ngFor="let item of Shiftlist">{{item.name }}</mat-option>
                     </mat-select>
-                    <mat-error
+                   <mat-error class="error-message"
                         *ngIf="StaffForm.get('shift').errors && StaffForm.get('shift').errors['required']">
                         Shift is required
                     </mat-error>
@@ -108,7 +108,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Experience (Years)</mat-label>
                     <input type="number" placeholder="Enter experience" formControlName="experience" matInput min="0" />
-                    <mat-error 
+                   <mat-error class="error-message" 
                     *ngIf="StaffForm.get('experience').errors && StaffForm.get('experience').errors['required']">
                     Experience  is required
                     </mat-error>
@@ -120,7 +120,7 @@
                 <mat-radio-group aria-label="Select an option" formControlName="gender">
                     <mat-radio-button value="male">Male </mat-radio-button>
                     <mat-radio-button value="female">Female </mat-radio-button>
-                    <mat-error *ngIf="StaffForm.get('gender')?.invalid && StaffForm.get('gender')?.touched">
+                   <mat-error class="error-message" *ngIf="StaffForm.get('gender')?.invalid && StaffForm.get('gender')?.touched">
                         Gender is required
                     </mat-error>
                 </mat-radio-group>
@@ -130,7 +130,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Address</mat-label>
                     <input type="text" placeholder="Enter address" formControlName="address" matInput />
-                    <mat-error
+                   <mat-error class="error-message"
                         *ngIf="StaffForm.get('address').errors && StaffForm.get('address').errors['required']">
                         Address is required
                     </mat-error>

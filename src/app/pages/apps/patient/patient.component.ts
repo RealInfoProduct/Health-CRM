@@ -123,7 +123,7 @@ applyFilter(event: Event) {
     this.getPatientData()
     this.getlaboratoryData()
     this.getdoctorsdata()
-    this.getappointmentdata()
+    // this.getappointmentdata()
     this.getMedicalData()
      this.userType = localStorage.getItem('usertype');
   }
@@ -158,20 +158,21 @@ applyFilter(event: Event) {
 
 
 
-  getappointmentdata() {
-    const userId = localStorage.getItem('userId')
-        const clinicId = localStorage.getItem('clinicId')
-        const ReceptionistId = localStorage.getItem('ReceptionistId')
-    this.firebaseCollectionService.getAppointmentsList(userId, clinicId, ReceptionistId,'appointmentslist').then((appointment) => {
-      if (appointment && appointment.length > 0) {
-         this.appointmentslist = appointment
-          console.log("this.appointmentslist", this.appointmentslist);
+  // getappointmentdata() {
+  //   const userId = localStorage.getItem('userId')
+  //       const clinicId = localStorage.getItem('clinicId')
+  //       const ReceptionistId = localStorage.getItem('ReceptionistId')
+  //       debugger
+  //   this.firebaseCollectionService.getAppointmentsList(userId, clinicId, ReceptionistId,'appointmentslist').then((appointment) => {
+  //     if (appointment && appointment.length > 0) {
+  //        this.appointmentslist = appointment
+  //         console.log("this.appointmentslist", this.appointmentslist);
           
-       }
-    }).catch((error) => {
-      console.error('Error fetching doctors:', error);
-    })
-  }
+  //      }
+  //   }).catch((error) => {
+  //     console.error('Error fetching appointment:', error);
+  //   })
+  // }
 
   getdoctorsdata() {
       const userId = localStorage.getItem('userId')
@@ -580,9 +581,6 @@ getPatientData() {
       ? result.data.medical.length > 0
       : !!result.data?.medical;
 
-  // =====================================================
-  // REPORTS / LAB SECTION
-  // =====================================================
 
   if (hasReports) {
 
@@ -690,22 +688,13 @@ getPatientData() {
     }
   }
 
-  // =====================================================
-  // MEDICINE SECTION
-  // =====================================================
-
- // =====================================================
-// MEDICINE SECTION
-// =====================================================
 
 if (hasMedical) {
 
   const medicalId = result.data?.medicalName;
 
   if (!medicalId) {
-
     console.error('medicalId is missing');
-
     return;
   }
 
@@ -748,13 +737,9 @@ if (hasMedical) {
       if (index !== -1) {
 
         oldMedicine[index] = {
-
           ...oldMedicine[index],
-
           ...newMedicine,
-
           updatedAt: new Date().toISOString()
-
         };
 
       }
@@ -766,24 +751,17 @@ if (hasMedical) {
       else {
 
         oldMedicine.push({
-
           ...newMedicine,
-
           createdAt: new Date().toISOString()
-
         });
       }
     });
 
     // FINAL UPDATED DATA
     const updatedMedicine = {
-
       ...medi,
-
       medicine: oldMedicine,
-
       updatedAt: new Date().toISOString()
-
     };
 
     // UPDATE API
@@ -808,21 +786,14 @@ this.getMedicalData()
   else {
 
     const addMedicineData = {
-
       patientName: fullPatientName,
-
       mobileNumber: obj.mobileNumber,
-
       userId: userId,
-
       clinicId: clinicId,
-
       medicine: Array.isArray(result.data.medical)
         ? result.data.medical
         : [result.data.medical],
-
       createdAt: new Date().toISOString()
-
     };
 
     this.firebaseCollectionService.addMedicine(

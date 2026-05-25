@@ -89,7 +89,8 @@ userType:any = localStorage.getItem('usertype')
      if (this.userType === 'Medical' && (
       item.route === '/dashboards/dashboard1' ||
       item.route === '/dashboards/dashboard2' ||
-      item.route === '/apps/medicine'
+      item.route === '/apps/medicine'||
+      item.route === '/apps/purchase'
     )) {
       return true; 
     } 

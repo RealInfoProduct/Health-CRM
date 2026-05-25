@@ -26,7 +26,7 @@
                         <mat-option [value]="item.id" *ngFor="let item of filteredPatients">{{getpatientName(item.patientName)}} -
                             {{getpatientNamelast(item.patientName)}} </mat-option>
                     </mat-select>
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="addlabForm.get('patientName').errors && addlabForm.get('patientName').errors['required']">
                         Doctor name is required
                     </mat-error>
@@ -37,7 +37,7 @@
                     <mat-label>Patient Name</mat-label>
                     <input type="text" formControlName="patientName" placeholder="Enter patient name"
                         matInput require  />
-                    <mat-error *ngIf="addlabForm.get('patientName').errors && addlabForm.get('patientName').errors['required']">
+                    <mat-error class="error-message" *ngIf="addlabForm.get('patientName').errors && addlabForm.get('patientName').errors['required']">
                         Patient Name is required
                     </mat-error>
                 </mat-form-field>
@@ -57,7 +57,7 @@
                     <mat-label>Laboratory Name</mat-label>
                     <input type="number" formControlName="laboratoryName" placeholder="Enter laboratory name"
                        matInput require  />
-                    <mat-error *ngIf="addlabForm.get('laboratoryName').errors && addlabForm.get('laboratoryName').errors['required']">
+                    <mat-error class="error-message" *ngIf="addlabForm.get('laboratoryName').errors && addlabForm.get('laboratoryName').errors['required']">
                         Laboratory Name is required
                     </mat-error>
                 </mat-form-field>
@@ -67,11 +67,11 @@
                     <mat-label>Mobile Number</mat-label>
                     <input type="number" formControlName="mobileNumber" placeholder="Enter mobile number" matInput require
                         onKeyPress="if(this.value.length==10) return false;" min="0" />
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="addlabForm.get('mobileNumber').errors && addlabForm.get('mobileNumber').errors['required']">
                         Mobile number is required
                     </mat-error>
-                    <mat-error
+                    <mat-error class="error-message"
                         *ngIf="addlabForm.get('mobileNumber').errors && addlabForm.get('mobileNumber').errors['pattern']">
                         Please enter a valid 10-digit
                     </mat-error>
@@ -83,7 +83,7 @@
                     <mat-label>Age</mat-label>
                     <input type="number" formControlName="age" placeholder="Enter age"
                         onKeyPress="if(this.value.length==3) return false;" matInput require min="0" />
-                    <mat-error *ngIf="addlabForm.get('age').errors && addlabForm.get('age').errors['required']">
+                    <mat-error class="error-message" *ngIf="addlabForm.get('age').errors && addlabForm.get('age').errors['required']">
                         Age is required
                     </mat-error>
                 </mat-form-field>
@@ -94,7 +94,7 @@
                 <mat-radio-group aria-label="Select an option" formControlName="gender">
                     <mat-radio-button value="male">Male </mat-radio-button>
                     <mat-radio-button value="female">Female </mat-radio-button>
-                    <mat-error *ngIf="addlabForm.get('gender')?.invalid && addlabForm.get('gender')?.touched">
+                    <mat-error class="error-message" *ngIf="addlabForm.get('gender')?.invalid && addlabForm.get('gender')?.touched">
                         Gender is required
                     </mat-error>
                 </mat-radio-group>
