@@ -243,7 +243,6 @@ export class PatientDialogComponent implements OnInit {
        userId:localStorage.getItem("userId"),
       clinicId:localStorage.getItem("clinicId"),
     }
-    console.log("payload",payload);
     this.dialogRef.close({ event: this.action, data: payload });
 
   }
@@ -342,7 +341,6 @@ onMedicineSelect(medicineName: any, index: number) {
     const found = purchase.medicine.find(
       (m: any) => m.medicineName === medicineName
     );
-    debugger
 
     if (found) {
       selectedMedicine = found;
