@@ -184,35 +184,6 @@ export class  AuthService {
     localStorage.removeItem('MedicalId');
     localStorage.removeItem('doctorId');
   }
-  // Sign out
-// async signOut() {
-//   try {
-//     await this.afAuth.signOut();
-
-//     localStorage.removeItem('uid'); 
-//     localStorage.removeItem('userId');
-//     localStorage.removeItem('userEmail');
-//     localStorage.removeItem('usertype');
-//     localStorage.removeItem('clinicId');
-
-//     // Optional: navigate to login page
-//     this.router.navigate(['/authentication/side-login']);
-
-//     this.snackBar.open('You have been signed out.', 'Close', {
-//       duration: 3000,
-//       horizontalPosition: 'right',
-//       verticalPosition: 'top',
-//     });
-//   } catch (error) {
-//     console.error('Error signing out', error);
-//     this.snackBar.open('Error signing out. Please try again.', 'Close', {
-//       duration: 3000,
-//       horizontalPosition: 'right',
-//       verticalPosition: 'top',
-//     });
-//     throw error;
-//   }
-// }
 
   // Sign in with Google
   async googleSignIn() {
