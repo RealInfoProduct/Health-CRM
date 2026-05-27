@@ -47,11 +47,11 @@ export class MedicineComponent implements OnInit{
     private firebaseCollectionService:FirebaseCollectionService) { }
 
     ngOnInit(): void {
+      this.getmedicineData()
         this.dateMedicineForm = this.fb.group({
       start: [new Date()],
     });
       this.dataSource.paginator = this.paginator
-      this.getmedicineData()
       this. getappointmentdata()
     }
 

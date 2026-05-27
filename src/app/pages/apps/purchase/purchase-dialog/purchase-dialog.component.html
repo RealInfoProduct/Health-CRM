@@ -3,7 +3,7 @@
     <form [formGroup]="purchaseForm">
         <div class="row">
 
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <mat-form-field class="w-100 m-t-10" appearance="outline">
                     <mat-label>Purchase Date</mat-label>
                     <input matInput [matDatepicker]="touchpic" placeholder="Enter Purchase date" formControlName="purchaseDate" />
@@ -12,7 +12,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Supplier Name</mat-label>
                     <input type="text" matInput formControlName="supplierName" placeholder="Enter Supplier name"
@@ -28,6 +28,20 @@
                 </mat-form-field>
             </div>
             
+            <div class="col-lg-4">
+                 <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Mobile Number</mat-label>
+                    <input type="number" onKeyPress="if(this.value.length==10) return false;" matInput min="0"  formControlName="mobileNumber" placeholder="Enter Mobile Number">
+                     <mat-error class="error-message"
+                        *ngIf="purchaseForm.get('mobileNumber').errors && purchaseForm.get('mobileNumber').errors['required']">
+                        Mobile number is required
+                    </mat-error>
+                   <mat-error class="error-message"
+                        *ngIf="purchaseForm.get('mobileNumber').errors && purchaseForm.get('mobileNumber').errors['pattern']">
+                        Please enter a valid 10-digit
+                    </mat-error>
+                 </mat-form-field>
+            </div>
             
 
             <div class="col-12" formArrayName="medicine">

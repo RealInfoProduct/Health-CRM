@@ -81,6 +81,7 @@ export class PatientDialogComponent implements OnInit {
         doctorName: this.local_data.doctorName,
         appointmentStatus: this.local_data.appointmentStatus,
         visitType: this.local_data.visitType,
+        foollwUpDate: this.convertTimestamp(this.local_data.foollwUpDate),
         paymentMethod: this.local_data.paymentMethod
       });
       if (this.local_data.reports && this.local_data.reports.length > 0) {
@@ -230,6 +231,7 @@ export class PatientDialogComponent implements OnInit {
       address: ['', Validators.required],
       bloodGroup: [''],
       date: ['', Validators.required],
+      foollwUpDate: ['', Validators.required],
       time: ['', Validators.required],
       age: ['', Validators.required],
       gender: ['', Validators.required],
@@ -252,6 +254,7 @@ export class PatientDialogComponent implements OnInit {
       address: this.PatientForm.value.address,
       bloodGroup: this.PatientForm.value.bloodGroup,
       date: this.PatientForm.value.date,
+      foollwUpDate: this.PatientForm.value.foollwUpDate,
       time: this.PatientForm.value.time,
       age: this.PatientForm.value.age,
       gender: this.PatientForm.value.gender,

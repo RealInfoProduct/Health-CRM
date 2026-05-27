@@ -73,6 +73,7 @@ export class PurchaseDialogComponent implements OnInit {
       this.purchaseForm.patchValue({
         purchaseDate: this.convertTimestamp(this.local_data.purchaseDate),
         supplierName: this.local_data.supplierName,
+        mobileNumber: this.local_data.mobileNumber,
       });
 
       this.getmedicine().clear();
@@ -218,6 +219,7 @@ private _filtercompany(value: string): string[] {
     this.purchaseForm = this.fb.group({
       purchaseDate: [new Date()],
       supplierName: ['', Validators.required],
+      mobileNumber: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
       medicine: this.fb.array([this.createMedicineForm()])
     })
   }
@@ -287,6 +289,7 @@ createMedicineForm(): FormGroup {
       id: this.local_data.id ? this.local_data.id : '',
       purchaseDate: this.purchaseForm.value.purchaseDate,
       supplierName: this.purchaseForm.value.supplierName,
+      mobileNumber: this.purchaseForm.value.mobileNumber,
       medicine: this.purchaseForm.value.medicine,
       userId: localStorage.getItem("userId"),
       clinicId: localStorage.getItem("clinicId"),

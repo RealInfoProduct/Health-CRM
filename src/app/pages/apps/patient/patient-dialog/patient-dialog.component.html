@@ -170,6 +170,14 @@
                     </mat-select>
                 </mat-form-field>
             </div>
+            <div class="col-lg-6">
+                 <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Foollw-Up Date</mat-label>
+                            <input matInput formControlName="foollwUpDate" [matDatepicker]="FoollwUp" placeholder="Enter date">
+                            <mat-datepicker-toggle matSuffix [for]="FoollwUp"></mat-datepicker-toggle>
+                            <mat-datepicker #FoollwUp></mat-datepicker>
+                        </mat-form-field>
+            </div>
 
          
 
@@ -224,6 +232,20 @@
                     <mat-select #dropdown formControlName="medicalName" placeholder="Enter Medical name" (selectionChange)="onMedicalChange($event)">
                         <mat-option [value]="item.id" *ngFor="let item of medicallist">{{item.medicalName}}</mat-option>
                     </mat-select>
+                </mat-form-field>
+            </div>
+
+               <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Appointment Status</mat-label>
+                    <mat-select #dropdown formControlName="appointmentStatus" placeholder="Select appointment status">
+                        <mat-option [value]="item.name"
+                            *ngFor="let item of appointmentStatusList">{{item.name}}</mat-option>
+                    </mat-select>
+                   <mat-error class="error-message"
+                        *ngIf="PatientForm.get('appointmentStatus').errors && PatientForm.get('appointmentStatus').errors['required']">
+                        Appointment status is required
+                    </mat-error>
                 </mat-form-field>
             </div>
 
@@ -309,19 +331,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-6">
-                <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Appointment Status</mat-label>
-                    <mat-select #dropdown formControlName="appointmentStatus" placeholder="Select appointment status">
-                        <mat-option [value]="item.name"
-                            *ngFor="let item of appointmentStatusList">{{item.name}}</mat-option>
-                    </mat-select>
-                   <mat-error class="error-message"
-                        *ngIf="PatientForm.get('appointmentStatus').errors && PatientForm.get('appointmentStatus').errors['required']">
-                        Appointment status is required
-                    </mat-error>
-                </mat-form-field>
-            </div>
+         
 
             <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
