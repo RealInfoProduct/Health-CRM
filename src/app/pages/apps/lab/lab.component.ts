@@ -25,6 +25,7 @@ export class LabComponent implements OnInit {
     'mobileNumber',
     'age',
     'gender',
+    'netamt',
     'action'
   ];
 

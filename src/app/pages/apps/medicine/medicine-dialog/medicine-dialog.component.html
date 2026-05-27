@@ -31,88 +31,94 @@
                 </mat-form-field>
             </div>
 
-        <ng-container formArrayName="medicine">
-        <ng-container *ngFor="let item of getMedicineFormArry().controls; let i = index" [formGroupName]="i">
-            <div class="in-width">
-                <mat-form-field class="w-100 m-t-10" appearance="outline">
-                    <mat-label>Date</mat-label>
-                    <input matInput [matDatepicker]="touchpic" placeholder="Enter date" formControlName="date" />
-                    <mat-datepicker-toggle matIconSuffix [for]="touchpic"></mat-datepicker-toggle>
-                    <mat-datepicker touchUi #touchpic></mat-datepicker>
-                </mat-form-field>
-            </div>
-            <div class="in-width">
-                <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Medicine Name</mat-label>
-                    <input type="text" formControlName="medicineName" placeholder="Enter medicine name" matInput
-                        require />
-                </mat-form-field>
-            </div>
+            <ng-container formArrayName="medicine">
+                <ng-container *ngFor="let item of getMedicineFormArry().controls; let i = index" [formGroupName]="i">
+                    <div class="in-width">
+                        <mat-form-field class="w-100 m-t-10" appearance="outline">
+                            <mat-label>Date</mat-label>
+                            <input matInput [matDatepicker]="touchpic" placeholder="Enter date"
+                                formControlName="date" />
+                            <mat-datepicker-toggle matIconSuffix [for]="touchpic"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #touchpic></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="in-width">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Medicine Name</mat-label>
+                            <input type="text" formControlName="medicineName" placeholder="Enter medicine name" matInput
+                                require />
+                        </mat-form-field>
+                    </div>
 
-            <div class="in-width">
-                <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Company Name</mat-label>
-                    <input type="text" formControlName="companyName" placeholder="Enter company name" matInput
-                        require />
-                </mat-form-field>
-            </div>
+                    <div class="in-width">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Company Name</mat-label>
+                            <input type="text" formControlName="companyName" placeholder="Enter company name" matInput
+                                require />
+                        </mat-form-field>
+                    </div>
 
-            <div class="in-width">
+                    <div class="in-width">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Category</mat-label>
+                            <mat-select #dropdown formControlName="category" placeholder="Enter category">
+                                <mat-option [value]="item.name"
+                                    *ngFor="let item of CategoryList">{{item.name}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="t-width">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Time</mat-label>
+                            <input type="text" formControlName="time" placeholder="Enter time" matInput require />
+                        </mat-form-field>
+                    </div>
+
+                    <div class="q-width">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Qty</mat-label>
+                            <input type="number" formControlName="qty" placeholder="Enter qty" matInput require
+                                min="0" />
+                        </mat-form-field>
+                    </div>
+
+                    <div class="r-width">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Rate</mat-label>
+                            <input type="number" formControlName="rate" placeholder="Enter rate" matInput require
+                                min="0" />
+                        </mat-form-field>
+                    </div>
+                    <div class="AR-width">
+                        <a *ngIf="i === 0 && getMedicineFormArry().length < 5" (click)="addMedicine()"><i-tabler
+                                name="plus" class="icon-18"></i-tabler></a>
+                        <a *ngIf="i !== 0" (click)="removemedicine(i)"><i-tabler name="trash"
+                                class="icon-18"></i-tabler></a>
+                    </div>
+                </ng-container>
+            </ng-container>
+
+
+            <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Category</mat-label>
-                    <mat-select #dropdown formControlName="category" placeholder="Enter category">
-                        <mat-option [value]="item.name" *ngFor="let item of CategoryList">{{item.name}}</mat-option>
+                    <mat-label>Payment Method</mat-label>
+                    <mat-select #dropdown formControlName="paymentMethod" placeholder="Select payment method">
+                        <mat-option [value]="item.name"
+                            *ngFor="let item of paymentMethodList">{{item.name}}</mat-option>
                     </mat-select>
+                    <mat-error class="error-message"
+                        *ngIf="addmedicineForm.get('paymentMethod').errors && addmedicineForm.get('paymentMethod').errors['required']">
+                        Payment method is required
+                    </mat-error>
                 </mat-form-field>
             </div>
-
-            <div class="t-width">
-                <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Time</mat-label>
-                    <input type="text" formControlName="time" placeholder="Enter time" matInput require />
-                </mat-form-field>
-            </div>
-
-            <div class="q-width">
-                <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Qty</mat-label>
-                    <input type="number" formControlName="qty" placeholder="Enter qty" matInput require min="0" />
-                </mat-form-field>
-            </div>
-
-            <div class="r-width">
-                <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Rate</mat-label>
-                    <input type="number" formControlName="rate" placeholder="Enter rate" matInput require min="0" />    
-                </mat-form-field>
-            </div>
-             <div class="AR-width">
-                <a *ngIf="i === 0 && getMedicineFormArry().length < 5" (click)="addMedicine()"><i-tabler name="plus"
-                    class="icon-18"></i-tabler></a>
-            <a *ngIf="i !== 0" (click)="removemedicine(i)"><i-tabler name="trash" class="icon-18"></i-tabler></a>
-             </div>
-        </ng-container>
-        </ng-container>
-
-
-        <div class="col-lg-6">
-            <mat-form-field appearance="outline" class="w-100 m-t-10">
-                <mat-label>Payment Method</mat-label>
-                <mat-select #dropdown formControlName="paymentMethod" placeholder="Select payment method">
-                    <mat-option [value]="item.name" *ngFor="let item of paymentMethodList">{{item.name}}</mat-option>
-                </mat-select>
-               <mat-error class="error-message"
-                    *ngIf="addmedicineForm.get('paymentMethod').errors && addmedicineForm.get('paymentMethod').errors['required']">
-                    Payment method is required
-                </mat-error>
-            </mat-form-field>
-        </div>
 
             <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Amount</mat-label>
                     <input type="number" formControlName="amount" placeholder="Enter amount" matInput require min="0" />
-                   <mat-error class="error-message"
+                    <mat-error class="error-message"
                         *ngIf="addmedicineForm.get('amount').errors && addmedicineForm.get('amount').errors['required']">
                         Amount is required
                     </mat-error>
@@ -124,7 +130,7 @@
                     <mat-label>Discount %</mat-label>
                     <input type="number" formControlName="discount" placeholder="Enter discount" matInput require
                         min="0" />
-                   <mat-error class="error-message"
+                    <mat-error class="error-message"
                         *ngIf="addmedicineForm.get('discount').errors && addmedicineForm.get('discount').errors['required']">
                         Discount is required
                     </mat-error>
@@ -135,7 +141,7 @@
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>GST %</mat-label>
                     <input type="number" formControlName="gst" placeholder="Enter GST" matInput require min="0" />
-                   <mat-error class="error-message"
+                    <mat-error class="error-message"
                         *ngIf="addmedicineForm.get('gst').errors && addmedicineForm.get('gst').errors['required']">
                         GST is required
                     </mat-error>
@@ -147,7 +153,7 @@
                     <mat-label>NetAmount</mat-label>
                     <input type="number" formControlName="netamount" placeholder="Enter netamount" matInput require
                         min="0" />
-                   <mat-error class="error-message"
+                    <mat-error class="error-message"
                         *ngIf="addmedicineForm.get('netamount').errors && addmedicineForm.get('netamount').errors['required']">
                         Netamount is required
                     </mat-error>

@@ -113,6 +113,44 @@
                 </mat-radio-group>
             </div>
 
+            <div class="col-12" formArrayName="heaithReports" >
+                <div *ngFor="let report of getheaithReports().controls; let i = index" [formGroupName]="i" class="row">
+                    <div class="col-lg-3">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Date</mat-label>
+                            <input matInput formControlName="date" [matDatepicker]="picker" placeholder="Enter date">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+            
+                    <div class="col-lg-3">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Blood Pressure (BP)</mat-label>
+                            <input matInput type="text" formControlName="bloodPressure" placeholder="Enter Blood Pressure">
+                        </mat-form-field>
+                    </div>
+            
+                    <div class="col-lg-3">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Oxygen Saturation (SpO₂)</mat-label>
+                            <input matInput type="number" formControlName="oxygenSaturation" placeholder="Enter Oxygen Saturation">
+                        </mat-form-field>
+                    </div>
+            
+                    <div class="col-lg-1 d-flex align-items-center">
+                        <a class="m-r-10 cursor-pointer" *ngIf="getheaithReports().length > 1">
+                            <i-tabler name="trash" (click)="removeheaithReports(i)" class="icon-18"></i-tabler>
+                        </a>
+                        <a class="m-r-10 cursor-pointer">
+                            <i-tabler name="plus" (click)="addheaithReportsDetail()" class="icon-18"></i-tabler>
+                        </a>
+                    </div>
+            
+                </div>
+            
+            </div>
+
             <!-- <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Doctor Name</mat-label>

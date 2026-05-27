@@ -61,7 +61,12 @@ export class PatientDialogComponent implements OnInit {
     this.PatientFormlist();
 
     if (this.action === 'Update') {
-        await this.loadMedicineData(this.local_data.medicalName);
+      const data = this.local_data || {};
+
+      // only call if medicalName exists
+      if (data.medicalName) {
+        await this.loadMedicineData(data.medicalName);
+      }
       this.PatientForm.patchValue({
         patientName: `${this.local_data.firstName} ${this.local_data.lastName}`,
         mobileNumber: this.local_data.mobileNumber,
@@ -100,14 +105,31 @@ export class PatientDialogComponent implements OnInit {
           }));
         });
       }
+      this.getheaithReports().clear();
+
+      if (this.local_data.heaithReports?.length > 0) {
+
+        this.local_data.heaithReports.forEach((item: any) => {
+          this.getheaithReports().push(this.fb.group({
+            date: [item.date ? this.convertTimestamp(item.date) || item.date : ''],
+            bloodPressure: [item.bloodPressure || ''],
+            oxygenSaturation: [item.oxygenSaturation || '']
+          }));
+        });
+
+      } else {
+
+        this.addheaithReportsDetail();
+
+      }
     }
+
 
     this.getlaboratoryData();
     this.getdoctorsdata();
     this.getappointmentdata();
-       this.getMedicalData()
-       this.getlabdata()
-
+    this.getMedicalData();
+    this.getlabdata();
     this.PatientForm.get('patientName')?.valueChanges.subscribe((patientId) => {
       const selectedPatient = this.appointmentslist.find(
         (appointment) => appointment.id === patientId
@@ -218,7 +240,8 @@ export class PatientDialogComponent implements OnInit {
       visitType: ['', Validators.required],
       paymentMethod: ['', Validators.required],
       reports: this.fb.array([]),
-      medical: this.fb.array([]),
+      medical: this.fb.array([]), 
+      heaithReports: this.fb.array([this.createHeaithReports()])
     })
   }
 
@@ -240,6 +263,7 @@ export class PatientDialogComponent implements OnInit {
       paymentMethod: this.PatientForm.value.paymentMethod,
       reports: this.PatientForm.value.reports,
       medical: this.PatientForm.value.medical,
+      heaithReports: this.PatientForm.value.heaithReports,
        userId:localStorage.getItem("userId"),
       clinicId:localStorage.getItem("clinicId"),
     }
@@ -300,16 +324,6 @@ export class PatientDialogComponent implements OnInit {
   addMedicalDetail() {
     this.medical.push(this.createMedical());
   }
-
-  // onMedicalChange(event: any) {
-  //   if (event.value) {
-  //     if (this.medical.length === 0) {
-  //       this.addMedicalDetail()
-  //     }
-  //   } else {
-  //     this.medical.clear();
-  //   }
-  // }
 
   async onMedicalChange(event: any) {
   const medicalId = event.value;
@@ -383,4 +397,46 @@ onMedicineSelect(medicineName: any, index: number) {
       this.filteredPatients = [...this.appointmentslist];
     }
   }
+  
+    getheaithReports(): FormArray {
+    return this.PatientForm.get('heaithReports') as FormArray;
+  }
+
+ createHeaithReports(): FormGroup {
+  const group = this.fb.group({
+    date: [new Date()],
+    bloodPressure: ['', Validators.pattern(/^\d{2,3}\/\d{2,3}$/)],
+    oxygenSaturation: ['']
+  });
+
+  // attach formatter here (ONLY ONCE)
+  const control = group.get('bloodPressure');
+
+  control?.valueChanges.subscribe(value => {
+    if (!value) return;
+
+    let val = value.toString().replace(/[^0-9]/g, ''); // only numbers
+
+    // auto format 12080 -> 120/80
+    if (val.length > 3) {
+      val = val.slice(0, 3) + '/' + val.slice(3, 5);
+    }
+
+    if (control.value !== val) {
+      control.setValue(val, { emitEvent: false });
+    }
+  });
+
+  return group;
+}
+
+  removeheaithReports(index: number) {
+    this.getheaithReports().removeAt(index);
+  }
+
+  addheaithReportsDetail() {
+    this.getheaithReports().push(this.createHeaithReports());
+  }
+
+
 }

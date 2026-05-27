@@ -42,26 +42,7 @@
                     </mat-error>
                 </mat-form-field>
             </div>
-    
-            <!-- <div class="col-lg-4">
-                <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Laboratory Name</mat-label>
-                    <mat-select #dropdown formControlName="laboratoryName" placeholder="Enter laboratory name">
-                        <mat-option [value]="item.id"
-                            *ngFor="let item of laboratorylist">{{item.laboratoryName}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>-->
-               <!-- <div class="col-lg-4">
-                <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Laboratory Name</mat-label>
-                    <input type="number" formControlName="laboratoryName" placeholder="Enter laboratory name"
-                       matInput require  />
-                    <mat-error class="error-message" *ngIf="addlabForm.get('laboratoryName').errors && addlabForm.get('laboratoryName').errors['required']">
-                        Laboratory Name is required
-                    </mat-error>
-                </mat-form-field>
-            </div> -->
+
             <div class="col-lg-4">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Mobile Number</mat-label>
@@ -126,18 +107,19 @@
                                 required />
                         </mat-form-field>
                     </div>
-    
-                    <div class="m-width">
-                        <mat-form-field appearance="outline" class="w-100 m-t-10">
-                            <mat-label>Report Fee</mat-label>
-                            <input type="number" formControlName="reportFee" placeholder="Enter report fee" matInput require
-                                min="0" />
-                        </mat-form-field>
-                    </div>
+
                     <div class="d-width">
                         <mat-form-field appearance="outline" class="w-100 m-t-10">
                             <mat-label>Disease</mat-label>
                             <input type="text" formControlName="disease" placeholder="Enter disease" matInput require />
+                        </mat-form-field>
+                    </div>
+
+                     <div class="m-width">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Report Fee</mat-label>
+                            <input type="number" formControlName="reportFee" placeholder="Enter report fee" matInput require
+                                min="0" />
                         </mat-form-field>
                     </div>
     
@@ -152,6 +134,66 @@
     
                 </div>
     
+            </div>
+
+              <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Payment Method</mat-label>
+                    <mat-select #dropdown formControlName="paymentMethod" placeholder="Select payment method">
+                        <mat-option [value]="item.name"
+                            *ngFor="let item of paymentMethodList">{{item.name}}</mat-option>
+                    </mat-select>
+                    <mat-error class="error-message"
+                        *ngIf="addlabForm.get('paymentMethod').errors && addlabForm.get('paymentMethod').errors['required']">
+                        Payment method is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Amount</mat-label>
+                    <input type="number" formControlName="amount" placeholder="Enter amount" matInput require min="0" />
+                    <mat-error class="error-message"
+                        *ngIf="addlabForm.get('amount').errors && addlabForm.get('amount').errors['required']">
+                        Amount is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Discount %</mat-label>
+                    <input type="number" formControlName="discount" placeholder="Enter discount" matInput require
+                        min="0" />
+                    <mat-error class="error-message"
+                        *ngIf="addlabForm.get('discount').errors && addlabForm.get('discount').errors['required']">
+                        Discount is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>GST %</mat-label>
+                    <input type="number" formControlName="gst" placeholder="Enter GST" matInput require min="0" />
+                    <mat-error class="error-message"
+                        *ngIf="addlabForm.get('gst').errors && addlabForm.get('gst').errors['required']">
+                        GST is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>NetAmount</mat-label>
+                    <input type="number" formControlName="netamount" placeholder="Enter netamount" matInput require
+                        min="0" />
+                    <mat-error class="error-message"
+                        *ngIf="addlabForm.get('netamount').errors && addlabForm.get('netamount').errors['required']">
+                        Netamount is required
+                    </mat-error>
+                </mat-form-field>
             </div>
         </div>
     </form>

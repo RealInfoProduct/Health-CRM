@@ -139,7 +139,6 @@ const selectedPatient = this.patientlist.find(
       gst: [5, Validators.required],
       netamount: ['', Validators.required],
     })
-    this.getMedicineFormArry().valueChanges.subscribe(() => this.updateAmount());
     this.addmedicineForm.get('discount')?.valueChanges.subscribe(() => this.updateAmount());
     this.addmedicineForm.get('gst')?.valueChanges.subscribe(() => this.updateAmount());
   }
@@ -148,25 +147,12 @@ getMedicineFormArry(){
   return this.addmedicineForm.get('medicine') as FormArray
 }
 
-//   addMedicine(medicine?:any){
-// this.getMedicineFormArry().push(
-//   this.fb.group({
-//       date: [medicine?.date || '', Validators.required],
-//       medicineName: [medicine?.medicineName || '', Validators.required],
-//       companyName: [medicine?.companyName || '', Validators.required],
-//       category: [medicine?.category || '', Validators.required],
-//       qty: [medicine?.qty || '', Validators.required],
-//       rate: [medicine?.rate || '', Validators.required],
-//   })
-// )
-//   }
 
 addMedicine(medicine?: any) {
 
   let medicineDate: Date | string = '';
 
   if (medicine?.date) {
-
     if (medicine.date.seconds) {
       medicineDate = new Date(medicine.date.seconds * 1000);
     } else {
@@ -174,47 +160,86 @@ addMedicine(medicine?: any) {
     }
   }
 
-  this.getMedicineFormArry().push(
-    this.fb.group({
-      date: [medicineDate, Validators.required],
-      medicineName: [medicine?.medicineName || '', Validators.required],
-      companyName: [medicine?.companyName || medicine?.CompanyName || '', Validators.required],
-      category: [medicine?.category || '', Validators.required],
-      qty: [medicine?.qty || '', Validators.required],
-      rate: [medicine?.rate || '', Validators.required],
-      time: [medicine?.time || '', Validators.required],
-    })
-  );
+  const medicineGroup = this.fb.group({
+    date: [medicineDate, Validators.required],
+    medicineName: [medicine?.medicineName || '', Validators.required],
+    companyName: [medicine?.companyName || medicine?.CompanyName || '', Validators.required],
+    category: [medicine?.category || '', Validators.required],
+    qty: [medicine?.qty || 0, Validators.required],
+    rate: [medicine?.rate || 0, Validators.required],
+    time: [medicine?.time || '', Validators.required],
+    amount: [0]
+  });
+
+  // qty change
+  medicineGroup.get('qty')?.valueChanges.subscribe(() => {
+    this.updateAmount();
+  });
+
+  // rate change
+  medicineGroup.get('rate')?.valueChanges.subscribe(() => {
+    this.updateAmount();
+  });
+
+  this.getMedicineFormArry().push(medicineGroup);
+
+  this.updateAmount();
 }
 
   removemedicine(index:any){
     this.getMedicineFormArry().removeAt(index)
+
+  this.updateAmount();
   }
 
   updateAmount(): void {
-    let totalAmount = 0;
-  
-    this.getMedicineFormArry().controls.forEach((group: FormGroup) => {
-      const qty = group.get('qty')?.value || 0;
-      const rate = group.get('rate')?.value || 0;
-  
-      if (qty > 0 && rate > 0) {
-        const amount = qty * rate;
-        group.get('amount')?.setValue(parseFloat(amount.toFixed(2)), { emitEvent: false });
-        totalAmount += amount;
-      }
+
+  let totalAmount = 0;
+
+  this.getMedicineFormArry().controls.forEach((group: any) => {
+
+    const qty = Number(group.get('qty')?.value || 0);
+
+    const rate = Number(group.get('rate')?.value || 0);
+
+    const rowAmount = qty * rate;
+
+    // set row amount
+    group.get('amount')?.setValue(rowAmount, {
+      emitEvent: false
     });
-  
-    // Apply discount and GST on the total amount
-    const discount = this.addmedicineForm.get('discount')?.value || 0;
-    const gst = this.addmedicineForm.get('gst')?.value || 0;
-  
-    const discountedAmount = totalAmount - (totalAmount * discount / 100);
-    const netAmount = discountedAmount + (discountedAmount * gst / 100);
-  
-    this.addmedicineForm.get('amount')?.setValue(parseFloat(totalAmount.toFixed(2)), { emitEvent: false });
-    this.addmedicineForm.get('netamount')?.setValue(parseFloat(netAmount.toFixed(2)), { emitEvent: false });
-  }
+
+    totalAmount += rowAmount;
+  });
+
+  // discount amount
+  const discount = Number(
+    this.addmedicineForm.get('discount')?.value || 0
+  );
+
+  // gst %
+  const gst = Number(
+    this.addmedicineForm.get('gst')?.value || 0
+  );
+
+  // subtract discount
+  const subtotal = totalAmount - discount;
+
+  // gst calculate
+  const gstAmount = (subtotal * gst) / 100;
+
+  // final amount
+  const netamount = subtotal + gstAmount;
+
+  // patch values
+  this.addmedicineForm.patchValue({
+    amount: totalAmount.toFixed(2),
+    netamount: netamount.toFixed(2)
+  }, {
+    emitEvent: false
+  });
+
+}
   
 
   doAction(): void {

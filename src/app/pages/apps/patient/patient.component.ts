@@ -327,7 +327,6 @@ export class PatientComponent implements OnInit {
         this.getPatientData()
       }
       if (result?.event === 'Update') {
-
         const userId = localStorage.getItem('userId');
         const clinicId = localStorage.getItem('clinicId');
         const doctorId = localStorage.getItem('doctorId');
@@ -364,6 +363,8 @@ export class PatientComponent implements OnInit {
         if (hasReports) {
 
           const laboratoryId = result.data?.laboratoryName;
+            const fullPatientName =
+            `${obj.firstName || ''} ${obj.lastName || ''}`.trim();
 
           const existingLab = this.lablist?.find(
             (l: any) =>
@@ -444,13 +445,18 @@ export class PatientComponent implements OnInit {
 
               // ADD LAB FIRST TIME
               const addLabData = {
-
-                ...result.data,
-
-                createdAt: new Date().toISOString()
+                  patientName: fullPatientName,
+              mobileNumber: obj.mobileNumber,
+              age: obj.age,
+              gender: obj.gender,
+              userId: userId,
+              clinicId: clinicId,
+              reports: Array.isArray(result.data.reports)
+                ? result.data.reports
+                : [result.data.reports],
+              date: new Date().toISOString()
 
               };
-
               this.firebaseCollectionService.addlab(
                 userId,
                 clinicId,

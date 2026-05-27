@@ -55,21 +55,11 @@
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600 Laboratorytable">Laboratory Name</th>
           <td mat-cell *matCellDef="let element">{{getlaboratorylist(element.laboratoryName)  }}</td>
         </ng-container>
-        
-        <!-- <ng-container matColumnDef="laboratoryName">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600 Laboratorytable">Laboratory Name</th>
-          <td mat-cell *matCellDef="let element">{{getlaboratorylist(element.laboratoryName)  }}</td>
-        </ng-container> -->
-        
+    
         <ng-container matColumnDef="doctorName">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Doctor Name </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">{{ getDoctorslist(element.doctorName)  }}</td>
         </ng-container>
-
-        <!-- <ng-container matColumnDef="mobileNumber">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600 Mobiletable">Mobile Number</th>
-          <td mat-cell *matCellDef="let element">{{ element.mobileNumber }}</td>
-        </ng-container> -->
 
         <ng-container matColumnDef="address">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Address</th>
@@ -110,11 +100,6 @@
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Visit Type </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.visitType }}</td>
         </ng-container>
-<!-- 
-        <ng-container matColumnDef="paymentMethod">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Payment</th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.paymentMethod }}</td>
-        </ng-container> -->
 
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">

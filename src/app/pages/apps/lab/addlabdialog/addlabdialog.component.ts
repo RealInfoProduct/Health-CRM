@@ -18,6 +18,12 @@ export class AddlabdialogComponent implements OnInit {
   patientlist: any =[]
    filteredPatients: any[] = [];
 
+     paymentMethodList = [
+    { id: 1, name: 'Cash' },
+    { id: 2, name: 'Net Banking' }
+  ]
+
+
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<AddlabdialogComponent>,
@@ -33,11 +39,15 @@ export class AddlabdialogComponent implements OnInit {
     this.createReport()
     if (this.action === 'Update') {
       this.addlabForm.controls['patientName'].setValue(this.local_data.patientName)
-      this.addlabForm.controls['date'].setValue( new Date(this.local_data.date.seconds * 1000))
+      this.addlabForm.controls['date'].setValue(this.local_data.date)
       this.addlabForm.controls['mobileNumber'].setValue(this.local_data.mobileNumber)
       this.addlabForm.controls['age'].setValue(this.local_data.age)
       this.addlabForm.controls['gender'].setValue(this.local_data.gender)
-      this.addlabForm.controls['laboratoryName'].setValue(this.local_data.laboratoryName)
+      this.addlabForm.controls['amount'].setValue(this.local_data.amount)
+      this.addlabForm.controls['discount'].setValue(this.local_data.discount || 0)
+      this.addlabForm.controls['paymentMethod'].setValue(this.local_data.paymentMethod)
+      this.addlabForm.controls['gst'].setValue(this.local_data.gst || 0)
+      this.addlabForm.controls['netamount'].setValue(this.local_data.netamount)
     }
     if (this.local_data.reports && this.local_data.reports.length > 0) {
       this.local_data.reports.forEach((report: any) => {
@@ -86,6 +96,16 @@ export class AddlabdialogComponent implements OnInit {
     }
       }
     });
+
+ 
+
+this.addlabForm.get('discount')?.valueChanges.subscribe(() => {
+  this.calculateAmounts();
+});
+
+this.addlabForm.get('gst')?.valueChanges.subscribe(() => {
+  this.calculateAmounts();
+});
   }
 
    getPatientData() {
@@ -125,8 +145,12 @@ export class AddlabdialogComponent implements OnInit {
       mobileNumber: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
       age: ['', Validators.required],
       gender: ['', Validators.required],
-      laboratoryName: ['', Validators.required],
-      reports: this.fb.array([])
+      reports: this.fb.array([]),
+      paymentMethod: ['', Validators.required],
+      amount: ['', Validators.required],
+      discount: [0, Validators.required],
+      gst: [5, Validators.required],
+      netamount: ['', Validators.required],
     })
   }
 
@@ -137,8 +161,12 @@ export class AddlabdialogComponent implements OnInit {
       mobileNumber: this.addlabForm.value.mobileNumber,
       age: this.addlabForm.value.age,
       gender: this.addlabForm.value.gender,
-      laboratoryName: this.addlabForm.value.laboratoryName,
        reports: this.addlabForm.value.reports,
+       paymentMethod: this.addlabForm.value.paymentMethod,
+      amount: this.addlabForm.value.amount,
+      discount: this.addlabForm.value.discount,
+      gst: this.addlabForm.value.gst,
+      netamount: this.addlabForm.value.netamount,
     }
     console.log(payload);
     
@@ -151,21 +179,27 @@ export class AddlabdialogComponent implements OnInit {
   }
   
   createReport(): FormGroup {
-    return this.fb.group({
+    const reportGroup = this.fb.group({
        date: [new Date()],
       reportType: ['', Validators.required],
       reportName: ['', Validators.required],
       reportFee: ['', Validators.required],
       disease: ['', Validators.required],
     });
+       this.addlabForm.get('reports')?.valueChanges.subscribe(() => {
+  this.calculateAmounts();
+});
+  return reportGroup;
   }
   
   removeReport(index: number) {
     this.reports.removeAt(index);
+     this.calculateAmounts();
   }
   
   addReportDetail(){
      this.reports.push(this.createReport());
+      this.calculateAmounts();
   }
 
   getpatientName(patientid:any){
@@ -209,6 +243,34 @@ filterPatients(event: any) {
       this.filteredPatients = [...this.patientlist];
     }
   }
+
+ calculateAmounts() {
+
+  let amount = 0;
+
+  this.reports.controls.forEach((control: any) => {
+    amount += Number(control.get('reportFee')?.value || 0);
+  });
+
+  const discount = Number(this.addlabForm.get('discount')?.value || 0);
+
+  const gst = Number(this.addlabForm.get('gst')?.value || 0);
+
+  // discount remove
+  const subtotal = amount - discount;
+
+  // gst add
+  const gstAmount = (subtotal * gst) / 100;
+
+  // final amount
+  const netamount = subtotal + gstAmount;
+
+  this.addlabForm.patchValue({
+    amount: amount,
+    netamount: netamount.toFixed(2)
+  }, { emitEvent: false });
+
+}
   
 }
 
