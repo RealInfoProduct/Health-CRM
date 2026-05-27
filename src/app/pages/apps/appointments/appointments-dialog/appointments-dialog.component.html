@@ -152,6 +152,13 @@
 
             <div class="col-lg-6">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Weight</mat-label>
+                    <input type="number" placeholder="Enter Weight" formControlName="weight" matInput />
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Appointment Status</mat-label>
                     <mat-select #dropdown formControlName="appointmentStatus" placeholder="Select appointment status">
                         <mat-option [value]="item.name"

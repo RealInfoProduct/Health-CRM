@@ -62,6 +62,7 @@ filteredPatients: any[] = [];
       this.appointmentsForm.controls['email'].setValue(this.local_data.email)
       this.appointmentsForm.controls['bloodGroup'].setValue(this.local_data.bloodGroup)
       this.appointmentsForm.controls['age'].setValue(this.local_data.age)
+      this.appointmentsForm.controls['weight'].setValue(this.local_data.weight)
       this.appointmentsForm.controls['appointmentStatus'].setValue(this.local_data.appointmentStatus)
       this.appointmentsForm.controls['visitType'].setValue(this.local_data.visitType)
       this.appointmentsForm.controls['paymentMethod'].setValue(this.local_data.paymentMethod)
@@ -102,6 +103,7 @@ onPatientSelected(event: MatAutocompleteSelectedEvent) {
       doctorName: selectedPatient.doctorName || '',
       address: selectedPatient.address || '',
       age: selectedPatient.age || '',
+      weight: selectedPatient.weight || '',
       gender: selectedPatient.gender || '',
       bloodGroup: selectedPatient.bloodGroup || '',
       email: selectedPatient.email || ''
@@ -159,6 +161,7 @@ getappointmentdata() {
       email: [''],
       bloodGroup: [''],
       age: ['', Validators.required],
+      weight: [''],
       appointmentStatus: ['', Validators.required],
       visitType: ['', Validators.required],
       paymentMethod: ['', Validators.required]
@@ -180,6 +183,7 @@ getappointmentdata() {
       email: this.appointmentsForm.value.email,
       bloodGroup: this.appointmentsForm.value.bloodGroup,
       age: this.appointmentsForm.value.age,
+      weight: this.appointmentsForm.value.weight,
       appointmentStatus: this.appointmentsForm.value.appointmentStatus,
       visitType: this.appointmentsForm.value.visitType,
       paymentMethod: this.appointmentsForm.value.paymentMethod,

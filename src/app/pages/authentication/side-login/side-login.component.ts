@@ -478,22 +478,71 @@ submit() {
       });
 
     }
-    else if (loginUser && loginUser.userType === 'Receptionist') {
-      localStorage.setItem('userEmail', loginUser.userName);
-      localStorage.setItem('usertype', loginUser.userType);
-      localStorage.setItem('userId', loginUser.userId);
-      localStorage.setItem('ReceptionistId', loginUser.receptionist);
-      localStorage.setItem('clinicId', loginUser.clinicId);
+    // else if (loginUser && loginUser.userType === 'Receptionist') {
+    //   debugger
+    //   localStorage.setItem('userEmail', loginUser.userName);
+    //   localStorage.setItem('usertype', loginUser.userType);
+    //   localStorage.setItem('userId', loginUser.userId);
+    //   localStorage.setItem('ReceptionistId', loginUser.receptionist);
+    //     localStorage.setItem('doctorId', loginUser.doctors);
+    //   localStorage.setItem('clinicId', loginUser.clinicId);
 
-      this.router.navigate(['/dashboards/dashboard1']);
+    //   this.router.navigate(['/dashboards/dashboard1']);
 
-      this.snackBar.open('Login successful', 'Close', {
-        duration: 3000,
-        horizontalPosition: 'right',
-        verticalPosition: 'top',
-      });
+    //   this.snackBar.open('Login successful', 'Close', {
+    //     duration: 3000,
+    //     horizontalPosition: 'right',
+    //     verticalPosition: 'top',
+    //   });
 
-    }
+    // }
+  else if (loginUser && loginUser.userType === 'Receptionist') {
+
+  this.firebaseCollectionService
+    .getDoctors(
+      loginUser.userId,
+      loginUser.clinicId,
+      'doctorsList'
+    )
+    .then((doctors: any[]) => {
+
+      if (doctors && doctors.length > 0) {
+
+        // all doctor ids
+        const allDoctorIds = doctors.map(
+          (doc: any) => doc.id
+        );
+
+        console.log('All Doctor IDs => ', allDoctorIds);
+
+        // localStorage
+        localStorage.setItem(
+          'doctorId',
+          JSON.stringify(allDoctorIds)
+        );
+
+        localStorage.setItem('userEmail', loginUser.userName);
+        localStorage.setItem('usertype', loginUser.userType);
+        localStorage.setItem('userId', loginUser.userId);
+        localStorage.setItem('ReceptionistId', loginUser.receptionist);
+        localStorage.setItem('clinicId', loginUser.clinicId);
+
+        this.router.navigate(['/dashboards/dashboard1']);
+
+        this.snackBar.open('Login successful', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+
+      }
+
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+}
     else if (loginUser && loginUser.userType === 'Medical') {
       localStorage.setItem('userEmail', loginUser.userName);
       localStorage.setItem('usertype', loginUser.userType);
