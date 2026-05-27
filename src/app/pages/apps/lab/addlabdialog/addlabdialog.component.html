@@ -11,27 +11,7 @@
                             <mat-datepicker #picker></mat-datepicker>
                         </mat-form-field>
             </div>
-
-            <!-- <div class="col-lg-4">
-                <mat-form-field appearance="outline" class="w-100 m-t-10">
-                    <mat-label>Patient Name</mat-label>
-                    <mat-select #dropdown formControlName="patientName" placeholder="Enter patient name"
-                        (openedChange)="onSelectOpen($event, searchInput)">
-                        <mat-option class="search-option">
-                            <div class="search-container">
-                                <input #searchInput matInput type="text" placeholder="Search..." (click)="$event.stopPropagation()"
-                                    (keydown)="$event.stopPropagation()" (keyup)="filterPatients($event)" />
-                            </div>
-                        </mat-option>
-                        <mat-option [value]="item.id" *ngFor="let item of filteredPatients">{{getpatientName(item.patientName)}} -
-                            {{getpatientNamelast(item.patientName)}} </mat-option>
-                    </mat-select>
-                    <mat-error class="error-message"
-                        *ngIf="addlabForm.get('patientName').errors && addlabForm.get('patientName').errors['required']">
-                        Doctor name is required
-                    </mat-error>
-                </mat-form-field>
-            </div> -->
+            
                <div class="col-lg-4">
                 <mat-form-field appearance="outline" class="w-100 m-t-10">
                     <mat-label>Patient Name</mat-label>

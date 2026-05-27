@@ -157,13 +157,13 @@ export class PatientDialogComponent implements OnInit {
 
   async loadMedicineData(medicalId: any) {
 
-  const userId = localStorage.getItem('userId');
-  const clinicId = localStorage.getItem('clinicId');
+    const userId = localStorage.getItem('userId');
+    const clinicId = localStorage.getItem('clinicId');
 
-  this.purchaselist = await this.firebaseCollectionService
-    .getMedicine(userId, clinicId, medicalId, 'purchaselist');
+    this.purchaselist = await this.firebaseCollectionService
+      .getMedicine(userId, clinicId, medicalId, 'purchaselist');
 
-}
+  }
 
   getdoctorsdata() {
     this.firebaseCollectionService.getDocuments('Doctor', 'doctorslist').then((doctors) => {
@@ -176,10 +176,10 @@ export class PatientDialogComponent implements OnInit {
 
   }
 
- getMedicalData() {
-     const userId = localStorage.getItem('userId')
-     const clinicId = localStorage.getItem('clinicId')
-    this.firebaseCollectionService.getMedical(userId, clinicId,'medicallist').then((medical) => {  
+  getMedicalData() {
+    const userId = localStorage.getItem('userId')
+    const clinicId = localStorage.getItem('clinicId')
+    this.firebaseCollectionService.getMedical(userId, clinicId, 'medicallist').then((medical) => {
       this.medicallist = medical
       if (medical && medical.length > 0) {
       }
@@ -199,8 +199,8 @@ export class PatientDialogComponent implements OnInit {
 
   getlaboratoryData() {
     const userId = localStorage.getItem('userId')
-     const clinicId = localStorage.getItem('clinicId')
-    this.firebaseCollectionService.getlaboratory(userId, clinicId, 'laboratorylist').then((laboratory) => { 
+    const clinicId = localStorage.getItem('clinicId')
+    this.firebaseCollectionService.getlaboratory(userId, clinicId, 'laboratorylist').then((laboratory) => {
       this.laboratorylist = laboratory
       if (laboratory && laboratory.length > 0) {
 
@@ -208,7 +208,7 @@ export class PatientDialogComponent implements OnInit {
     })
   }
 
-    getlabdata() {
+  getlabdata() {
     this.firebaseCollectionService.getDocuments('Doctor', 'lablist').then((lab) => {
       this.lablist = lab
       if (lab && lab.length > 0) {
@@ -242,7 +242,7 @@ export class PatientDialogComponent implements OnInit {
       visitType: ['', Validators.required],
       paymentMethod: ['', Validators.required],
       reports: this.fb.array([]),
-      medical: this.fb.array([]), 
+      medical: this.fb.array([]),
       heaithReports: this.fb.array([this.createHeaithReports()])
     })
   }
@@ -258,7 +258,7 @@ export class PatientDialogComponent implements OnInit {
       time: this.PatientForm.value.time,
       age: this.PatientForm.value.age,
       gender: this.PatientForm.value.gender,
-      laboratoryName: this.PatientForm.value.laboratoryName ||"",
+      laboratoryName: this.PatientForm.value.laboratoryName || "",
       medicalName: this.PatientForm.value.medicalName || "",
       doctorName: this.PatientForm.value.doctorName,
       appointmentStatus: this.PatientForm.value.appointmentStatus,
@@ -267,8 +267,8 @@ export class PatientDialogComponent implements OnInit {
       reports: this.PatientForm.value.reports,
       medical: this.PatientForm.value.medical,
       heaithReports: this.PatientForm.value.heaithReports,
-       userId:localStorage.getItem("userId"),
-      clinicId:localStorage.getItem("clinicId"),
+      userId: localStorage.getItem("userId"),
+      clinicId: localStorage.getItem("clinicId"),
     }
     this.dialogRef.close({ event: this.action, data: payload });
 
@@ -329,55 +329,55 @@ export class PatientDialogComponent implements OnInit {
   }
 
   async onMedicalChange(event: any) {
-  const medicalId = event.value;
+    const medicalId = event.value;
 
-  if (medicalId) {
+    if (medicalId) {
 
-    const userId = localStorage.getItem('userId');
-    const clinicId = localStorage.getItem('clinicId');
-    const medicine = await this.firebaseCollectionService
-    .getMedicine(userId, clinicId, medicalId, 'purchaselist');
-    
-    this.purchaselist = medicine;
-    
-    if (this.medical.length === 0) {
-      this.addMedicalDetail();
+      const userId = localStorage.getItem('userId');
+      const clinicId = localStorage.getItem('clinicId');
+      const medicine = await this.firebaseCollectionService
+        .getMedicine(userId, clinicId, medicalId, 'purchaselist');
+
+      this.purchaselist = medicine;
+
+      if (this.medical.length === 0) {
+        this.addMedicalDetail();
+      }
+
+    } else {
+      this.medical.clear();
     }
-    
-  } else {
-    this.medical.clear();
   }
-}
 
-onMedicineSelect(medicineName: any, index: number) {
-  
-  let selectedMedicine: any;
-  
-  this.purchaselist.forEach((purchase: any) => {
-    
-    const found = purchase.medicine.find(
-      (m: any) => m.medicineName === medicineName
-    );
+  onMedicineSelect(medicineName: any, index: number) {
 
-    if (found) {
-      selectedMedicine = found;
-    }
+    let selectedMedicine: any;
 
-  });
+    this.purchaselist.forEach((purchase: any) => {
 
-  if (selectedMedicine) {
+      const found = purchase.medicine.find(
+        (m: any) => m.medicineName === medicineName
+      );
 
-    const medicalGroup = this.medical.at(index) as FormGroup;
+      if (found) {
+        selectedMedicine = found;
+      }
 
-    medicalGroup.patchValue({
-      medicineName: selectedMedicine.medicineName,
-      CompanyName: selectedMedicine.companyName,
-      category: selectedMedicine.medicineType
     });
 
-  }
+    if (selectedMedicine) {
 
-}
+      const medicalGroup = this.medical.at(index) as FormGroup;
+
+      medicalGroup.patchValue({
+        medicineName: selectedMedicine.medicineName,
+        CompanyName: selectedMedicine.companyName,
+        category: selectedMedicine.medicineType
+      });
+
+    }
+
+  }
 
   filterPatients(event: any) {
     const value = event.target.value
@@ -400,38 +400,38 @@ onMedicineSelect(medicineName: any, index: number) {
       this.filteredPatients = [...this.appointmentslist];
     }
   }
-  
-    getheaithReports(): FormArray {
+
+  getheaithReports(): FormArray {
     return this.PatientForm.get('heaithReports') as FormArray;
   }
 
- createHeaithReports(): FormGroup {
-  const group = this.fb.group({
-    date: [new Date()],
-    bloodPressure: ['', Validators.pattern(/^\d{2,3}\/\d{2,3}$/)],
-    oxygenSaturation: ['']
-  });
+  createHeaithReports(): FormGroup {
+    const group = this.fb.group({
+      date: [new Date()],
+      bloodPressure: ['', Validators.pattern(/^\d{2,3}\/\d{2,3}$/)],
+      oxygenSaturation: ['']
+    });
 
-  // attach formatter here (ONLY ONCE)
-  const control = group.get('bloodPressure');
+    // attach formatter here (ONLY ONCE)
+    const control = group.get('bloodPressure');
 
-  control?.valueChanges.subscribe(value => {
-    if (!value) return;
+    control?.valueChanges.subscribe(value => {
+      if (!value) return;
 
-    let val = value.toString().replace(/[^0-9]/g, ''); // only numbers
+      let val = value.toString().replace(/[^0-9]/g, ''); // only numbers
 
-    // auto format 12080 -> 120/80
-    if (val.length > 3) {
-      val = val.slice(0, 3) + '/' + val.slice(3, 5);
-    }
+      // auto format 12080 -> 120/80
+      if (val.length > 3) {
+        val = val.slice(0, 3) + '/' + val.slice(3, 5);
+      }
 
-    if (control.value !== val) {
-      control.setValue(val, { emitEvent: false });
-    }
-  });
+      if (control.value !== val) {
+        control.setValue(val, { emitEvent: false });
+      }
+    });
 
-  return group;
-}
+    return group;
+  }
 
   removeheaithReports(index: number) {
     this.getheaithReports().removeAt(index);

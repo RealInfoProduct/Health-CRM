@@ -21,9 +21,7 @@ export class PatientComponent implements OnInit {
     'id',
     'tokenNumber',
     'patientName',
-    // 'laboratoryName',
     'doctorName',
-    // 'mobileNumber',
     'address',
     'bloodGroup',
     'date',
@@ -32,7 +30,6 @@ export class PatientComponent implements OnInit {
     'gender',
     'appointmentStatus',
     'visitType',
-    // 'paymentMethod',
     'action'
   ];
 
@@ -123,7 +120,6 @@ export class PatientComponent implements OnInit {
     this.getPatientData()
     this.getlaboratoryData()
     this.getdoctorsdata()
-    // this.getappointmentdata()
     this.getMedicalData()
     this.userType = localStorage.getItem('usertype');
   }
@@ -363,7 +359,7 @@ export class PatientComponent implements OnInit {
         if (hasReports) {
 
           const laboratoryId = result.data?.laboratoryName;
-            const fullPatientName =
+          const fullPatientName =
             `${obj.firstName || ''} ${obj.lastName || ''}`.trim();
 
           const existingLab = this.lablist?.find(
@@ -445,16 +441,16 @@ export class PatientComponent implements OnInit {
 
               // ADD LAB FIRST TIME
               const addLabData = {
-                  patientName: fullPatientName,
-              mobileNumber: obj.mobileNumber,
-              age: obj.age,
-              gender: obj.gender,
-              userId: userId,
-              clinicId: clinicId,
-              reports: Array.isArray(result.data.reports)
-                ? result.data.reports
-                : [result.data.reports],
-              date: new Date().toISOString()
+                patientName: fullPatientName,
+                mobileNumber: obj.mobileNumber,
+                age: obj.age,
+                gender: obj.gender,
+                userId: userId,
+                clinicId: clinicId,
+                reports: Array.isArray(result.data.reports)
+                  ? result.data.reports
+                  : [result.data.reports],
+                date: new Date().toISOString()
 
               };
               this.firebaseCollectionService.addlab(

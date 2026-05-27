@@ -57,9 +57,6 @@ userList:any =[]
       this.doctorsForm.controls['joiningDate'].setValue(this.convertTimestamp(this.local_data.joiningDate))
       this.doctorsForm.controls['experience'].setValue(this.local_data.experience)
       this.doctorsForm.controls['consultationFee'].setValue(this.local_data.consultationFee)
-      // this.doctorsForm.controls['availability'].setValue(this.local_data.availability)
-      // this.doctorsForm.controls['rating'].setValue(this.local_data.rating)
-      // this.doctorsForm.controls['clinicLocation'].setValue(this.local_data.clinicLocation)
       this.doctorsForm.controls['userName'].setValue(this.local_data.userName)
       this.doctorsForm.controls['password'].setValue(this.local_data.password)
     }
@@ -93,9 +90,6 @@ userList:any =[]
       joiningDate: [new Date(), Validators.required],
       experience: ['', Validators.required],
       consultationFee: ['', Validators.required],
-      // availability: ['', Validators.required],
-      // rating: ['', Validators.required],
-      // clinicLocation: ['', Validators.required],
       userName: ['', Validators.required],
       password: ['', Validators.required],
     })
@@ -112,9 +106,6 @@ userList:any =[]
     joiningDate: this.doctorsForm.value.joiningDate,
     experience: this.doctorsForm.value.experience,
     consultationFee: this.doctorsForm.value.consultationFee,
-    // availability: this.doctorsForm.value.availability,
-    // rating: this.doctorsForm.value.rating,
-    // clinicLocation: this.doctorsForm.value.clinicLocation,
     userName:this.doctorsForm.value.userName,
     password:this.doctorsForm.value.password,
     userId:localStorage.getItem("userId"),

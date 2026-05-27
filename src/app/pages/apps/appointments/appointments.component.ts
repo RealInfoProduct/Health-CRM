@@ -27,7 +27,6 @@ export class AppointmentsComponent implements OnInit {
     'time',
     'address',
     'mobileNumber',
-    // 'email',
     'bloodGroup',
     'age',
     'weight',

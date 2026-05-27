@@ -80,10 +80,6 @@ export class LaboratoryComponent implements OnInit {
   }
 
 
-  // applyFilter(filterValue: string): void {
-  //   this.dataSource.filter = filterValue.trim().toLowerCase();
-  // }
-
 applyFilter(event: Event) {
   const filterValue = (event.target as HTMLInputElement).value;
   this.dataSource.filter = filterValue.trim().toLowerCase();

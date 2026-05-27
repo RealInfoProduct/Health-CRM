@@ -12,14 +12,13 @@
       <div class="col-lg-3" [formGroup]="datePatientForm">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Select Date</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="start"   (dateChange)="filterDate($event.value)">
+          <input matInput [matDatepicker]="picker" formControlName="start" (dateChange)="filterDate($event.value)">
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       </div>
       <div class="col-lg-3"></div>
       <div class="col-lg-2 d-flex align-items-center justify-content-end">
-        <!-- <button mat-flat-button (click)="openPatientDialog('Add',{})" color="primary" > -->
         <button mat-flat-button (click)="openPatientDialog('Add',{})" color="primary" *ngIf="userType !== 'Doctor'">
           Add Patient
         </button>
@@ -38,27 +37,27 @@
           <td mat-cell *matCellDef="let element; let i = index">{{ i + 1}}</td>
         </ng-container>
 
-         <ng-container matColumnDef="tokenNumber">
+        <ng-container matColumnDef="tokenNumber">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Token No</th>
           <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.tokenNumber }} </td>
         </ng-container>
-        
+
         <ng-container matColumnDef="patientName">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600 Patienttable">Patient Name</th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{element.firstName }}   {{element.lastName }} <br>
+            {{element.firstName }} {{element.lastName }} <br>
             ({{element.mobileNumber }})
           </td>
         </ng-container>
-        
+
         <ng-container matColumnDef="laboratoryName">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600 Laboratorytable">Laboratory Name</th>
-          <td mat-cell *matCellDef="let element">{{getlaboratorylist(element.laboratoryName)  }}</td>
+          <td mat-cell *matCellDef="let element">{{getlaboratorylist(element.laboratoryName) }}</td>
         </ng-container>
-    
+
         <ng-container matColumnDef="doctorName">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> Doctor Name </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">{{ getDoctorslist(element.doctorName)  }}</td>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ getDoctorslist(element.doctorName) }}</td>
         </ng-container>
 
         <ng-container matColumnDef="address">
@@ -90,7 +89,7 @@
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Gender</th>
           <td mat-cell *matCellDef="let element">{{ element.gender }}</td>
         </ng-container>
-        
+
         <ng-container matColumnDef="appointmentStatus">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600 Appointmenttable"> Appointment Status </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.appointmentStatus }}</td>

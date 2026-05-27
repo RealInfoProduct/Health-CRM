@@ -21,7 +21,6 @@ export class LabComponent implements OnInit {
     'id',
     'date',
     'patientName',
-    // 'laboratoryName',
     'mobileNumber',
     'age',
     'gender',
@@ -200,7 +199,6 @@ export class LabComponent implements OnInit {
 
 getAppointmentlist(labPatientId: string): string {
 
-  // lab.patientName === patientlist.id
   const patientObj = this.patientlist.find(
     (patient: any) => patient.id === labPatientId
   );
@@ -209,7 +207,6 @@ getAppointmentlist(labPatientId: string): string {
     return '';
   }
 
-  // patientlist.patientName === appointmentslist.id
   const appointmentObj = this.appointmentslist.find(
     (appointment: any) => appointment.id === patientObj.patientName
   );

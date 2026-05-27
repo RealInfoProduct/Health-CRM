@@ -36,8 +36,8 @@ export class PurchaseDialogComponent implements OnInit {
 
   medicineList: string[] = [];
   filteredMedicines: string[] = [];
-  filteredCompany:string[] =[]
-  companyList:string[] =[]
+  filteredCompany: string[] = []
+  companyList: string[] = []
 
   userId = localStorage.getItem('userId')
   clinicId = localStorage.getItem('clinicId')
@@ -61,12 +61,12 @@ export class PurchaseDialogComponent implements OnInit {
     this.filteredCompanies = this.purchaseList;
 
     this.purchaseForm.get('supplierName')?.valueChanges.pipe(startWith(''),
-    map(value => this._filterCompany(value || ''))
-  )
-  .subscribe(res => {
-    this.filteredCompanies = res;
-  });
-  
+      map(value => this._filterCompany(value || ''))
+    )
+      .subscribe(res => {
+        this.filteredCompanies = res;
+      });
+
 
     if (this.action === 'Update') {
 
@@ -125,95 +125,95 @@ export class PurchaseDialogComponent implements OnInit {
             purchase.map(item => item.supplierName)
           )];
 
-            // Medicine List
-        this.medicineList = [...new Set(
-          purchase.flatMap(item =>
-            item.medicine?.map((m: any) => m.medicineName) || []
-          )
-        )];
+          // Medicine List
+          this.medicineList = [...new Set(
+            purchase.flatMap(item =>
+              item.medicine?.map((m: any) => m.medicineName) || []
+            )
+          )];
 
-        // Unit List
-        this.unitList = [...new Set(
-          purchase.flatMap(item =>
-            item.medicine?.map((m: any) => m.unit) || []
-          )
-        )];
+          // Unit List
+          this.unitList = [...new Set(
+            purchase.flatMap(item =>
+              item.medicine?.map((m: any) => m.unit) || []
+            )
+          )];
 
-        // company List
-        this.companyList = [...new Set(
-          purchase.flatMap(item =>
-            item.medicine?.map((m: any) => m.companyName) || []
-          )
-        )];
+          // company List
+          this.companyList = [...new Set(
+            purchase.flatMap(item =>
+              item.medicine?.map((m: any) => m.companyName) || []
+            )
+          )];
 
 
           this.filteredCompanies = this.purchaseList;
 
-        this.setupMedicineAutocomplete();
+          this.setupMedicineAutocomplete();
         }
       });
   }
-  
+
   setupMedicineAutocomplete() {
 
-  this.getmedicine().controls.forEach((group: any, index: number) => {
+    this.getmedicine().controls.forEach((group: any, index: number) => {
 
-    // Medicine Autocomplete
-    group.get('medicineName')?.valueChanges
-      .pipe(
-        startWith(''),
-        map((value: string) => this._filterMedicine(value || ''))
-      )
-      .subscribe(res => {
-        this.filteredMedicines[index] = res;
-      });
+      // Medicine Autocomplete
+      group.get('medicineName')?.valueChanges
+        .pipe(
+          startWith(''),
+          map((value: string) => this._filterMedicine(value || ''))
+        )
+        .subscribe(res => {
+          this.filteredMedicines[index] = res;
+        });
 
-    // Unit Autocomplete
-    group.get('unit')?.valueChanges
-      .pipe(
-        startWith(''),
-        map((value: string) => this._filterUnit(value || ''))
-      )
-      .subscribe(res => {
-        this.filteredUnits[index] = res;
-      });
+      // Unit Autocomplete
+      group.get('unit')?.valueChanges
+        .pipe(
+          startWith(''),
+          map((value: string) => this._filterUnit(value || ''))
+        )
+        .subscribe(res => {
+          this.filteredUnits[index] = res;
+        });
 
-    // company Autocomplete
-    group.get('companyName')?.valueChanges
-      .pipe(
-        startWith(''),
-        map((value: string) => this._filtercompany(value || ''))
-      )
-      .subscribe(res => {
-        this.filteredCompany[index] = res;
-      });
+      // company Autocomplete
+      group.get('companyName')?.valueChanges
+        .pipe(
+          startWith(''),
+          map((value: string) => this._filtercompany(value || ''))
+        )
+        .subscribe(res => {
+          this.filteredCompany[index] = res;
+        });
 
-  });
-}
+    });
+  }
 
-private _filterMedicine(value: string): string[] {
-  const filterValue = value.toLowerCase();
+  private _filterMedicine(value: string): string[] {
+    const filterValue = value.toLowerCase();
 
-  return this.medicineList.filter(medicine =>
-    medicine.toLowerCase().includes(filterValue)
-  );
-}
+    return this.medicineList.filter(medicine =>
+      medicine.toLowerCase().includes(filterValue)
+    );
+  }
 
-private _filterUnit(value: string): string[] {
-  const filterValue = value.toLowerCase();
+  private _filterUnit(value: string): string[] {
+    const filterValue = value.toLowerCase();
 
-  return this.unitList.filter(unit =>
-    unit.toLowerCase().includes(filterValue)
-  );
-}
+    return this.unitList.filter(unit =>
+      unit.toLowerCase().includes(filterValue)
+    );
+  }
 
-private _filtercompany(value: string): string[] {
-  const filterValue = value.toLowerCase();
+  private _filtercompany(value: string): string[] {
+    const filterValue = value.toLowerCase();
 
-  return this.companyList.filter(companyName =>
-    companyName?.toLowerCase().includes(filterValue)
-  );
-}
+    return this.companyList.filter(companyName =>
+      companyName?.toLowerCase().includes(filterValue)
+    );
+  }
 
   addmedicallist() {
     this.purchaseForm = this.fb.group({
@@ -229,60 +229,58 @@ private _filtercompany(value: string): string[] {
   }
 
 
-addReportDetail() {
-  this.getmedicine().push(this.createMedicineForm());
+  addReportDetail() {
+    this.getmedicine().push(this.createMedicineForm());
 
-  const index = this.getmedicine().length - 1;
-  const group: any = this.getmedicine().at(index);
+    const index = this.getmedicine().length - 1;
+    const group: any = this.getmedicine().at(index);
 
-  // Medicine
-  group.get('medicineName')?.valueChanges
-    .pipe(
-      startWith(''),
-      map((value: string) => this._filterMedicine(value || ''))
-    )
-    .subscribe(res => {
-      this.filteredMedicines[index] = res;
-    });
+    // Medicine
+    group.get('medicineName')?.valueChanges
+      .pipe(
+        startWith(''),
+        map((value: string) => this._filterMedicine(value || ''))
+      )
+      .subscribe(res => {
+        this.filteredMedicines[index] = res;
+      });
 
-  // Unit
-  group.get('unit')?.valueChanges
-    .pipe(
-      startWith(''),
-      map((value: string) => this._filterUnit(value || ''))
-    )
-    .subscribe(res => {
-      this.filteredUnits[index] = res;
-    });
+    // Unit
+    group.get('unit')?.valueChanges
+      .pipe(
+        startWith(''),
+        map((value: string) => this._filterUnit(value || ''))
+      )
+      .subscribe(res => {
+        this.filteredUnits[index] = res;
+      });
 
-  // Company
-  group.get('companyName')?.valueChanges
-    .pipe(
-      startWith(''),
-      map((value: string) => this._filtercompany(value || ''))
-    )
-    .subscribe(res => {
-      this.filteredCompany[index] = res;
-    });
-}
+    // Company
+    group.get('companyName')?.valueChanges
+      .pipe(
+        startWith(''),
+        map((value: string) => this._filtercompany(value || ''))
+      )
+      .subscribe(res => {
+        this.filteredCompany[index] = res;
+      });
+  }
 
   removeReport(index: number) {
     this.getmedicine().removeAt(index);
   }
 
-createMedicineForm(): FormGroup {
-   return this.fb.group({
-    medicineName: ['', Validators.required],
-    companyName: ['', Validators.required],
-    medicineType: ['', Validators.required],
-    qty: ['', Validators.required],
-    unit: ['', Validators.required],
-    price: ['', Validators.required],
-  });
+  createMedicineForm(): FormGroup {
+    return this.fb.group({
+      medicineName: ['', Validators.required],
+      companyName: ['', Validators.required],
+      medicineType: ['', Validators.required],
+      qty: ['', Validators.required],
+      unit: ['', Validators.required],
+      price: ['', Validators.required],
+    });
 
-}
-
-
+  }
 
   doAction(): void {
     const payload = {

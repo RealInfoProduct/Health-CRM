@@ -100,8 +100,6 @@ export class ClicnkComponent implements OnInit {
           .addDocument('Admin', result.data, 'clinicList')
           .then((res: any) => {
 
-            console.log(res); // check firebase response
-
             const payload = {
               id: "",
               userName: result.data.userName,
