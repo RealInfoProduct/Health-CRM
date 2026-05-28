@@ -49,7 +49,7 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Stock',
-    iconName: 'first-aid-kit',
+    iconName: 'stack-3',
     route: '/apps/stock',
     // allowedUserTypes: ['Admin','Doctor'],
   },
