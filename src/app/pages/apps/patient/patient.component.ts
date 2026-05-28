@@ -217,7 +217,6 @@ export class PatientComponent implements OnInit {
       }
     }
 
-    console.log('FINAL LABLIST =>', this.lablist)
   }
 
   getPatientData() {
@@ -312,7 +311,7 @@ export class PatientComponent implements OnInit {
     obj.action = action;
     const dialogRef = this.dialog.open(PatientDialogComponent, {
       data: obj,
-      width: action === 'Delete' ? '25%' : '55%'
+      width: action === 'Delete' ? '25%' : '60%'
     })
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
@@ -431,7 +430,6 @@ export class PatientComponent implements OnInit {
                 updatedLab
               ).then(() => {
 
-                console.log('Lab updated successfully');
 
                 this.getlaboratoryData();
 
@@ -460,7 +458,6 @@ export class PatientComponent implements OnInit {
                 addLabData
               ).then(() => {
 
-                console.log('Lab added successfully');
 
                 this.getlaboratoryData();
 
@@ -554,7 +551,6 @@ export class PatientComponent implements OnInit {
               updatedMedicine
             ).then(() => {
               this.getMedicalData()
-              console.log('Medicine updated successfully');
 
             });
 
@@ -584,7 +580,6 @@ export class PatientComponent implements OnInit {
               addMedicineData
             ).then(() => {
               this.getMedicalData()
-              console.log('Medicine added successfully');
 
             });
           }

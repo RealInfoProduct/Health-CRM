@@ -17,6 +17,7 @@ export class MedicineViewComponent implements OnInit {
      'category',
      'qty',
      'time',
+     'mealTiming',
      'price',
    ];
  

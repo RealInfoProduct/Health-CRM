@@ -25,7 +25,7 @@ export class PurchaseDialogComponent implements OnInit {
     { id: 7, name: 'Drops' },
     { id: 8, name: 'Powder' },
     { id: 9, name: 'Inhaler' },
-    { id: 10, name: 'Gel' },
+    { id: 10, name: 'Gel' }
   ]
 
   unitList: string[] = [];

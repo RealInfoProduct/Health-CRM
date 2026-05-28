@@ -114,7 +114,6 @@ export class LabComponent implements OnInit {
   getappointmentdata() {
     this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist').then((appointment) => {
       this.appointmentslist = appointment
-      console.log("this.appointmentslist",this.appointmentslist);
     }).catch((error) => {
       console.error('Error fetching laboratory:', error);
     });
@@ -126,7 +125,6 @@ export class LabComponent implements OnInit {
         this.patientlist = patient
 
       }
-      console.log("this.patientlist", this.patientlist);
     })
   }
 
@@ -153,7 +151,6 @@ export class LabComponent implements OnInit {
       });
       this.lablist = lab
         this.originalMedicine = lab
-        console.log("this.originalMedicine",this.originalMedicine);
         
       if (lab && lab.length > 0) {
         this.dataSource = new MatTableDataSource(this.lablist)

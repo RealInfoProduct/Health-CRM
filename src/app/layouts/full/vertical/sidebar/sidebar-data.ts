@@ -48,6 +48,12 @@ export const navItems: NavItem[] = [
     // allowedUserTypes: ['Admin','Doctor'],
   },
   {
+    displayName: 'Stock',
+    iconName: 'first-aid-kit',
+    route: '/apps/stock',
+    // allowedUserTypes: ['Admin','Doctor'],
+  },
+  {
     displayName: 'Receptionist',
     iconName: 'first-aid-kit',
     route: '/apps/receptionist',

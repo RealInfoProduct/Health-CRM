@@ -30,6 +30,8 @@
     "apexcharts": "^3.40.0",
     "date-fns": "^2.29.3",
     "firebase": "^10.14.1",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
     "ng-apexcharts": "^1.7.6",
     "ng2-search-filter": "^0.5.1",
     "ngx-mat-timepicker": "^18.0.0",

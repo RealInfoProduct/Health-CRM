@@ -121,7 +121,6 @@ getdoctorsdata() {
         this.originalAppointments = appointment
       if (appointment && appointment.length > 0) {
         this.dataSource = new MatTableDataSource(this.appointmentslist)
-        console.log("this.appointmentslist",this.appointmentslist);
         
         this.dataSource.paginator = this.paginator
       } else {
@@ -141,7 +140,6 @@ getdoctorsdata() {
     this.firebaseCollectionService.getpatient(userId, clinicId, doctorId, 'patientlist').then((patient) => {
          if (patient && patient.length > 0) {
           this.patientlist = patient
-          console.log("this.patientlist",this.patientlist); 
          }
       })
     }

@@ -116,7 +116,6 @@ this.addlabForm.get('gst')?.valueChanges.subscribe(() => {
         );
          this.filteredPatients = [...this.patientlist];
       }
-      console.log("this.patientlist",this.patientlist);
     })
   }
 
@@ -168,7 +167,6 @@ this.addlabForm.get('gst')?.valueChanges.subscribe(() => {
       gst: this.addlabForm.value.gst,
       netamount: this.addlabForm.value.netamount,
     }
-    console.log(payload);
     
     this.dialogRef.close({ event: this.action, data: payload });
   }

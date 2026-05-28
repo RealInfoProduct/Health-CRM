@@ -34,10 +34,21 @@ export class PatientDialogComponent implements OnInit {
 
   CategoryList = [
     { id: 1, name: 'Tablet' },
-    { id: 2, name: 'Syrup' },
-    { id: 3, name: 'Injectable' }
+    { id: 2, name: 'Capsule' },
+    { id: 3, name: 'Syrup' },
+    { id: 4, name: 'Injectable' },
+    { id: 5, name: 'Cream' },
+    { id: 6, name: 'Ointment' },
+    { id: 7, name: 'Drops' },
+    { id: 8, name: 'Powder' },
+    { id: 9, name: 'Inhaler' },
+    { id: 10, name: 'Gel' },
   ]
 
+  mealTiming = [
+    {id: 1, name : 'After Dinner'},
+    {id: 2, name : 'Before Dinner'}
+  ]
 
   laboratorylist: any = []
   doctorslist: any = []
@@ -103,6 +114,7 @@ export class PatientDialogComponent implements OnInit {
             category: medicals.category,
             qty: medicals.qty,
             time: medicals.time,
+            mealTiming: medicals.mealTiming,
           }));
         });
       }
@@ -317,6 +329,7 @@ export class PatientDialogComponent implements OnInit {
       category: ['', Validators.required],
       qty: ['', Validators.required],
       time: ['', Validators.required],
+      mealTiming: ['', Validators.required],
     });
   }
 

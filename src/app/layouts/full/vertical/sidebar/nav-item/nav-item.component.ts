@@ -90,7 +90,8 @@ userType:any = localStorage.getItem('usertype')
       item.route === '/dashboards/dashboard1' ||
       item.route === '/dashboards/dashboard2' ||
       item.route === '/apps/medicine'||
-      item.route === '/apps/purchase'
+      item.route === '/apps/purchase'||
+      item.route === '/apps/stock'
     )) {
       return true; 
     } 

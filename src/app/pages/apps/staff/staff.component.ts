@@ -59,7 +59,6 @@ export class StaffComponent implements OnInit {
   getStaffData() {
     this.firebaseCollectionService.getDocuments('clinicList', 'stafflist').then((staff) => {
       this.stafflist = staff
-      console.log('this.stafflist=====',this.stafflist);
       if (staff && staff.length > 0) {
         this.dataSource = new MatTableDataSource(this.stafflist);
         this.dataSource.paginator = this.paginator

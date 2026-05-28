@@ -34,6 +34,9 @@ export class MedicineComponent implements OnInit{
   appointmentslist: any = []
   dateMedicineForm: FormGroup;
   originalMedicine: any[] = [];
+  Stocklist: any[] = [];
+
+
   dataSource = new MatTableDataSource(this.medicinelist);
   userId = localStorage.getItem('userId')
   clinicId = localStorage.getItem('clinicId')
@@ -46,14 +49,15 @@ export class MedicineComponent implements OnInit{
     public dialog: MatDialog,
     private firebaseCollectionService:FirebaseCollectionService) { }
 
-    ngOnInit(): void {
-      this.getmedicineData()
-        this.dateMedicineForm = this.fb.group({
+  ngOnInit(): void {
+    this.getmedicineData()
+    this.dateMedicineForm = this.fb.group({
       start: [new Date()],
     });
-      this.dataSource.paginator = this.paginator
-      this. getappointmentdata()
-    }
+    this.dataSource.paginator = this.paginator
+    this.getappointmentdata()
+    this.getStockData() 
+  }
 
    filterDate(selectedDate: Date | null) {
 
@@ -106,6 +110,15 @@ export class MedicineComponent implements OnInit{
       }
     }
     
+
+   getStockData() {
+    this.firebaseCollectionService.getStock(this.userId, this.clinicId, this.medicalId, 'Stocklist').then((Stock) => {
+      if (Stock && Stock.length > 0) {
+        this.Stocklist = Stock
+        
+      }
+    })
+  }
     
    getmedicineData(){
 
@@ -121,7 +134,6 @@ export class MedicineComponent implements OnInit{
         return dateB.getTime() - dateA.getTime();
       });
       this.medicinelist = medicine
-      console.log(this.medicinelist);
       this.originalMedicine = medicine
       if(medicine && medicine.length > 0){
         this.dataSource = new MatTableDataSource(this.medicinelist)
@@ -151,26 +163,181 @@ export class MedicineComponent implements OnInit{
     obj.action = action;
     const dialogRef = this.dialog.open(MedicineDialogComponent, {
       data: obj,
-      width: action === 'Delete' ? '25%' : '60%'
+      width: action === 'Delete' ? '25%' : '65%'
     });
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(async (result) => {
       if (result.event === 'Add') {
         this.firebaseCollectionService.addMedicine(this.userId,this.clinicId,this.medicalId, result.data)
         this.getmedicineData()
       }
-      if (result.event === 'Update') {
-        this.medicinelist.forEach((element: any) => {
-          if (obj.id === element.id) {
-            this.firebaseCollectionService.updateMedicine(this.userId,this.clinicId,this.medicalId, obj.id, result.data)
-            this.getmedicineData()
-          }
-        })
-        this.dataSource = new MatTableDataSource(this.medicinelist)
+      // if (result.event === 'Update') {
+      //   this.medicinelist.forEach((element: any) => {
+      //     if (obj.id === element.id) {
+      //       this.firebaseCollectionService.updateMedicine(this.userId,this.clinicId,this.medicalId, obj.id, result.data)
+      //       this.firebaseCollectionService.updatepurchase(this.userId,this.clinicId,this.medicalId, obj.id, result.data)
+      //       this.getmedicineData()
+      //     }
+      //   })
+      //   this.dataSource = new MatTableDataSource(this.medicinelist)
+      // }
+  if (result.event === 'Update') {
+
+    const soldMedicines = result.data.medicine || [];
+
+
+    // medicine array loop
+    for (const soldItem of soldMedicines) {
+
+
+      // stock item find
+      const stockItem = this.Stocklist.find((stock: any) =>
+
+        stock.medicineName?.trim().toLowerCase() ===
+        soldItem.medicineName?.trim().toLowerCase()
+
+        &&
+
+        stock.companyName?.trim().toLowerCase() ===
+        soldItem.companyName?.trim().toLowerCase()
+
+        &&
+
+        stock.medicineType?.trim().toLowerCase() ===
+        soldItem.category?.trim().toLowerCase()
+      );
+
+
+      // if stock found
+      if (stockItem) {
+
+        const stockQty = Number(stockItem.qty) || 0;
+
+        const soldQty = Number(soldItem.qty) || 0;
+
+        const remainingQty = stockQty - soldQty;
+
+        const updatedStock = {
+          ...stockItem,
+          qty: remainingQty < 0 ? 0 : remainingQty
+        };
+
+
+        try {
+
+          await this.firebaseCollectionService.updateStock(
+            this.userId,
+            this.clinicId,
+            this.medicalId,
+            stockItem.id,
+            updatedStock
+          );
+
+
+        } catch (error) {
+
+          console.error('STOCK UPDATE ERROR => ', error);
+
+        }
+      } else {
+
       }
+    }
+
+    // update medicine bill
+    try {
+
+      await this.firebaseCollectionService.updateMedicine(
+        this.userId,
+        this.clinicId,
+        this.medicalId,
+        obj.id,
+        result.data
+      );
+
+
+    } catch (error) {
+
+      console.error('MEDICINE UPDATE ERROR => ', error);
+
+    }
+
+    this.getStockData();
+    this.getmedicineData();
+  }
       if (result.event === 'Delete') {
-        this.firebaseCollectionService.deleteMedicine(this.userId,this.clinicId,this.medicalId, obj.id)
-        this.getmedicineData()
+
+  // deleted medicine bill data
+  const deletedMedicines = obj.medicine || [];
+
+
+  // loop deleted medicine array
+  for (const deletedItem of deletedMedicines) {
+
+
+    // find stock item
+    const stockItem = this.Stocklist.find((stock: any) =>
+
+      stock.medicineName?.trim().toLowerCase() ===
+      deletedItem.medicineName?.trim().toLowerCase()
+
+      &&
+
+      stock.companyName?.trim().toLowerCase() ===
+      deletedItem.companyName?.trim().toLowerCase()
+
+      &&
+
+      stock.medicineType?.trim().toLowerCase() ===
+      deletedItem.category?.trim().toLowerCase()
+    );
+
+
+    // if stock found
+    if (stockItem) {
+
+      const currentStockQty = Number(stockItem.qty) || 0;
+
+      const deletedQty = Number(deletedItem.qty) || 0;
+
+      // add deleted qty back to stock
+      const updatedQty = currentStockQty + deletedQty;
+
+      const updatedStock = {
+        ...stockItem,
+        qty: updatedQty
+      };
+
+
+      try {
+
+        await this.firebaseCollectionService.updateStock(
+          this.userId,
+          this.clinicId,
+          this.medicalId,
+          stockItem.id,
+          updatedStock
+        );
+
+
+      } catch (error) {
+
+        console.error('STOCK UPDATE ERROR => ', error);
+
       }
+    }
+  }
+
+  // delete medicine bill
+  await this.firebaseCollectionService.deleteMedicine(
+    this.userId,
+    this.clinicId,
+    this.medicalId,
+    obj.id
+  );
+
+  this.getmedicineData();
+  this.getStockData();
+}
     });
   }
 

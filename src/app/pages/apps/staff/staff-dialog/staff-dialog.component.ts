@@ -106,7 +106,6 @@ convertTimestamp(element : any): Date | null {
       gender: this.StaffForm.value.gender,
       address: this.StaffForm.value.address
     }
-    console.log(payload);
     this.dialogRef.close({ event: this.action, data: payload });
   }
 }

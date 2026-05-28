@@ -6,6 +6,8 @@ import { PurchaseDialogComponent } from './purchase-dialog/purchase-dialog.compo
 import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
 import { PurchaseViewComponent } from './purchase-view/purchase-view.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-purchase',
@@ -19,11 +21,13 @@ export class PurchaseComponent implements OnInit{
     'id',
     'purchaseDate',
     'supplierName',
+    'mobileNumber',
     'total',
     'action'
   ];
   
   purchaseList: any = []
+  Stocklist: any = []
   
   dataSource = new MatTableDataSource(this.purchaseList);
   userId = localStorage.getItem('userId')
@@ -41,6 +45,7 @@ constructor(
 
 ngOnInit(): void {
     this.getPurchaseData()
+    this.getStockData()
       const today = new Date();
     const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
     const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
@@ -50,30 +55,66 @@ ngOnInit(): void {
     });
 }
 
+// filterDate() {
+//     if (!this.purchaseList) return;
+//     const startDate = this.datePurchaseListForm.value.start ? new Date(this.datePurchaseListForm.value.start) : null;
+//     const endDate = this.datePurchaseListForm.value.end ? new Date(this.datePurchaseListForm.value.end) : null;
+
+//     if (startDate && endDate) {
+//       this.dataSource.data = this.purchaseList.filter((invoice: any) => {
+//         if (!invoice.purchaseDate) return false;
+
+//         let invoiceDate;
+//         if (invoice.purchaseDate.toDate) {
+//           invoiceDate = invoice.purchaseDate.toDate();
+//         } else if (invoice.purchaseDate instanceof Date) {
+//           invoiceDate = invoice.purchaseDate;
+//         } else {
+//           return false;
+//         }
+
+//         return invoiceDate >= startDate && invoiceDate <= endDate;
+//       });
+//     } else {
+//       this.dataSource.data = this.purchaseList;
+//     }
+//   }
+
 filterDate() {
-    if (!this.purchaseList) return;
-    const startDate = this.datePurchaseListForm.value.start ? new Date(this.datePurchaseListForm.value.start) : null;
-    const endDate = this.datePurchaseListForm.value.end ? new Date(this.datePurchaseListForm.value.end) : null;
+  if (!this.purchaseList) return;
 
-    if (startDate && endDate) {
-      this.dataSource.data = this.purchaseList.filter((invoice: any) => {
-        if (!invoice.purchaseDate) return false;
+  const startDate = this.datePurchaseListForm.value.start
+    ? new Date(this.datePurchaseListForm.value.start)
+    : null;
 
-        let invoiceDate;
-        if (invoice.purchaseDate.toDate) {
-          invoiceDate = invoice.purchaseDate.toDate();
-        } else if (invoice.purchaseDate instanceof Date) {
-          invoiceDate = invoice.purchaseDate;
-        } else {
-          return false;
-        }
+  const endDate = this.datePurchaseListForm.value.end
+    ? new Date(this.datePurchaseListForm.value.end)
+    : null;
 
-        return invoiceDate >= startDate && invoiceDate <= endDate;
-      });
-    } else {
-      this.dataSource.data = this.purchaseList;
-    }
+  if (endDate) {
+    endDate.setHours(23, 59, 59, 999);
   }
+
+  if (startDate && endDate) {
+    this.dataSource.data = this.purchaseList.filter((purchase: any) => {
+
+      if (!purchase.purchaseDate) return false;
+
+      let purchaseDate: Date;
+
+      if (purchase.purchaseDate.toDate) {
+        purchaseDate = purchase.purchaseDate.toDate();
+      } else {
+        purchaseDate = new Date(purchase.purchaseDate);
+      }
+
+      return purchaseDate >= startDate && purchaseDate <= endDate;
+    });
+
+  } else {
+    this.dataSource.data = this.purchaseList;
+  }
+}
 
   getPurchaseData() {
     this.firebaseCollectionService.getpurchase(this.userId, this.clinicId,this.medicalId,'purchaselist').then((purchase) => {  
@@ -93,6 +134,15 @@ filterDate() {
     });
   }
 
+    getStockData() {
+    this.firebaseCollectionService.getStock(this.userId, this.clinicId,this.medicalId,'Stocklist').then((stock) => {  
+      
+      if (stock && stock.length > 0) {
+        this.Stocklist = stock
+
+      }
+    })
+  }
 
  applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -107,20 +157,170 @@ filterDate() {
     
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.event === 'Add') {
-        this.firebaseCollectionService.addpurchase(this.userId, this.clinicId,this.medicalId,result.data)
-        this.getPurchaseData()
+
+  const purchase = result.data;
+
+  // 1️⃣ Save purchase
+  this.firebaseCollectionService.addpurchase(
+    this.userId,
+    this.clinicId,
+    this.medicalId,
+    purchase
+  );
+
+  // 2️⃣ STOCK MERGE LOGIC
+  if (purchase.medicine && Array.isArray(purchase.medicine)) {
+
+    purchase.medicine.forEach((med: any) => {
+
+      const newStock = {
+        medicineName: med.medicineName,
+        companyName: med.companyName,
+        medicineType: med.medicineType,
+        unit: med.unit,
+        price: med.price,
+        qty: med.qty,
+        userId: this.userId,
+        clinicId: this.clinicId,
+        MedicalId: this.medicalId
+      };
+
+      // 👉 existing stock list ma match check karo
+      const existing = this.Stocklist.find((s: any) =>
+        s.medicineName === med.medicineName &&
+        s.companyName === med.companyName &&
+        s.medicineType === med.medicineType
+      );
+
+      if (existing) {
+        // 3️⃣ UPDATE qty (merge)
+        const updatedQty = Number(existing.qty || 0) + Number(med.qty || 0);
+
+        const updatedStock = {
+          ...existing,
+          qty: updatedQty
+        };
+        debugger
+
+        this.firebaseCollectionService.updateStock(
+          this.userId,
+          this.clinicId,
+          this.medicalId,
+          existing.id,
+          updatedStock
+        );
+
+      } else {
+        // 4️⃣ NEW STOCK
+        this.firebaseCollectionService.addStock(
+          this.userId,
+          this.clinicId,
+          this.medicalId,
+          newStock
+        );
       }
-      if (result?.event === 'Update') {
-        this.purchaseList.forEach((element: any) => {
-          if (obj.id === element.id) {
-            this.firebaseCollectionService.updatepurchase(this.userId, this.clinicId,this.medicalId, obj.id, result.data);
-            this.getPurchaseData()
-          }
-        })
+    });
+  }
+
+  this.getPurchaseData();
+  this.getStockData();
+}
+   if (result?.event === 'Update') {
+
+  const oldPurchase = obj;
+  const newPurchase = result.data;
+
+  // 🔴 1. REMOVE OLD STOCK (reverse qty)
+  if (oldPurchase.medicine?.length) {
+    oldPurchase.medicine.forEach((med: any) => {
+
+      const existing = this.Stocklist.find((s: any) =>
+        s.medicineName === med.medicineName &&
+        s.companyName === med.companyName &&
+        s.medicineType === med.medicineType
+      );
+
+      if (existing) {
+        const updatedQty =
+          Number(existing.qty || 0) - Number(med.qty || 0);
+
+        const updatedStock = {
+          ...existing,
+          qty: updatedQty < 0 ? 0 : updatedQty
+        };
+
+        this.firebaseCollectionService.updateStock(
+          this.userId,
+          this.clinicId,
+          this.medicalId,
+          existing.id,
+          updatedStock
+        );
       }
+    });
+  }
+
+  // 🟢 2. ADD NEW STOCK (same logic as Add)
+  if (newPurchase.medicine?.length) {
+    newPurchase.medicine.forEach((med: any) => {
+
+      const existing = this.Stocklist.find((s: any) =>
+        s.medicineName === med.medicineName &&
+        s.companyName === med.companyName &&
+        s.medicineType === med.medicineType
+      );
+
+      if (existing) {
+        const updatedQty =
+          Number(existing.qty || 0) + Number(med.qty || 0);
+
+        const updatedStock = {
+          ...existing,
+          qty: updatedQty
+        };
+
+        this.firebaseCollectionService.updateStock(
+          this.userId,
+          this.clinicId,
+          this.medicalId,
+          existing.id,
+          updatedStock
+        );
+
+      } else {
+        const newStock = {
+          medicineName: med.medicineName,
+          companyName: med.companyName,
+          medicineType: med.medicineType,
+          unit: med.unit,
+          price: med.price,
+          qty: med.qty,
+          userId: this.userId,
+          clinicId: this.clinicId,
+          MedicalId: this.medicalId
+        };
+
+        this.firebaseCollectionService.addStock(
+          this.userId,
+          this.clinicId,
+          this.medicalId,
+          newStock
+        );
+      }
+    });
+  }
+
+  // 🔵 3. UPDATE PURCHASE
+  this.firebaseCollectionService
+    .updatepurchase(this.userId, this.clinicId, this.medicalId, obj.id, newPurchase)
+    .then(() => {
+      this.getPurchaseData();
+      this.getStockData();
+    });
+}
       if (result?.event === 'Delete') {
         this.firebaseCollectionService.deletepurchase(this.userId, this.clinicId,this.medicalId, obj.id);
-        this.getPurchaseData()
+        this.getPurchaseData();
       }
     })
   }
@@ -137,4 +337,70 @@ filterDate() {
     0
   ) || 0;
 }
+
+filedownload() {
+ if (!this.dataSource.data || this.dataSource.data.length === 0) {
+    alert('No purchase data found for selected date range');
+    return;
+  }
+
+  const doc = new jsPDF();
+
+  // Selected Dates
+  const startDate = this.datePurchaseListForm.value.start
+    ? new Date(this.datePurchaseListForm.value.start).toLocaleDateString('en-GB')
+    : '';
+
+  const endDate = this.datePurchaseListForm.value.end
+    ? new Date(this.datePurchaseListForm.value.end).toLocaleDateString('en-GB')
+    : '';
+
+    const grandTotal = this.dataSource.data.reduce(
+  (sum: number, element: any) => sum + this.getTotal(element),
+  0
+);
+
+  // Title
+  doc.setFontSize(16);
+  doc.text('Purchase Report', 14, 15);
+
+  // Date Range
+  doc.setFontSize(11);
+  doc.text(`Date : ${startDate} To ${endDate}`, 14, 25);
+
+  // total Amount
+ doc.text(`Total Amount : ${grandTotal}`, 160, 25);
+
+  const tableData = this.dataSource.data.map((element: any, index: number) => {
+
+    let purchaseDate = '';
+
+    if (element.purchaseDate?.toDate) {
+      purchaseDate = element.purchaseDate.toDate().toLocaleDateString('en-GB');
+    }
+
+    return [
+      index + 1,
+      purchaseDate,
+      element.supplierName || '',
+      element.mobileNumber || '',
+      this.getTotal(element)
+    ];
+  });
+
+  autoTable(doc, {
+    head: [['No.', 'Purchase Date', 'Supplier Name', 'Mobile Number', 'Total']],
+    body: tableData,
+    startY: 30,
+    styles: {
+      fontSize: 10
+    },
+    headStyles: {
+      fillColor: [41, 128, 185]
+    }
+  });
+
+  doc.save('purchase-report.pdf');
+}
+
 }

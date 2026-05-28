@@ -58,6 +58,7 @@ import { MedicineViewComponent } from './medicine/medicine-view/medicine-view.co
 import { PurchaseComponent } from './purchase/purchase.component';
 import { PurchaseDialogComponent } from './purchase/purchase-dialog/purchase-dialog.component';
 import { PurchaseViewComponent } from './purchase/purchase-view/purchase-view.component';
+import { StockComponent } from './stock/stock.component';
 
 
 
@@ -116,6 +117,7 @@ import { PurchaseViewComponent } from './purchase/purchase-view/purchase-view.co
     PurchaseComponent,
     PurchaseDialogComponent,
     PurchaseViewComponent,
+    StockComponent,
 
   ],
   providers: [  { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],

@@ -285,6 +285,17 @@
                         </mat-form-field>
                     </div>
 
+                     <div class="mealTiming-width">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Meal Timing</mat-label>
+                            <mat-select formControlName="mealTiming">
+                                <mat-option [value]="item.name" *ngFor="let item of mealTiming">
+                                    {{item.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
                     <div class="AR-width">
                         <a class="m-r-10 cursor-pointer" *ngIf="medical.length > 1">
                             <i-tabler name="trash" (click)="removeMedical(i)" class="icon-18"></i-tabler>

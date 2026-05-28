@@ -16,8 +16,15 @@ export class MedicineDialogComponent implements OnInit {
 
   CategoryList = [
     { id: 1, name: 'Tablet' },
-    { id: 2, name: 'Syrup' },
-    { id: 3, name: 'Injectable' }
+    { id: 2, name: 'Capsule' },
+    { id: 3, name: 'Syrup' },
+    { id: 4, name: 'Injectable' },
+    { id: 5, name: 'Cream' },
+    { id: 6, name: 'Ointment' },
+    { id: 7, name: 'Drops' },
+    { id: 8, name: 'Powder' },
+    { id: 9, name: 'Inhaler' },
+    { id: 10, name: 'Gel' },
   ]
 
   paymentMethodList = [
@@ -25,9 +32,17 @@ export class MedicineDialogComponent implements OnInit {
     { id: 2, name: 'Net Banking' }
   ]
 
+   mealTiming = [
+    {id: 1, name : 'After Dinner'},
+    {id: 2, name : 'Before Dinner'}
+  ]
+  Stocklist: any[] = [];
   appointmentslist: any = []
   patientlist: any = []
 
+  userId = localStorage.getItem('userId')
+  clinicId = localStorage.getItem('clinicId')
+  medicalId = localStorage.getItem('MedicalId')
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<MedicineDialogComponent>,
@@ -40,10 +55,10 @@ export class MedicineDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("this.patientlist", this.patientlist);
     this.addmedicallist()
     this.getPatientData()
     this.getappointmentdata()
+    this.getStockData() 
     if (this.action === 'Update') {
       this.addmedicineForm.controls['patientName'].setValue(this.local_data.patientName)
       this.addmedicineForm.controls['mobileNumber'].setValue(this.local_data.mobileNumber)
@@ -78,7 +93,8 @@ export class MedicineDialogComponent implements OnInit {
               category: med.category || '',
               qty: med.qty || '',
               rate: med.rate || '',
-              time: med.time || ''
+              time: med.time || '',
+              mealTiming: med.mealTiming || '',
             })
           );
 
@@ -103,7 +119,6 @@ export class MedicineDialogComponent implements OnInit {
     if (storedAppointments) {
       // Parse the JSON string and assign it to appointmentslist
       this.appointmentslist = JSON.parse(storedAppointments);
-      console.log('Loaded appointments from localStorage:', this.appointmentslist);
     } else {
       // Fetch from Firebase if not found in localStorage
       this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist').then((appointment) => {
@@ -112,13 +127,24 @@ export class MedicineDialogComponent implements OnInit {
 
           // Store the fetched data in localStorage
           localStorage.setItem('appointmentslist', JSON.stringify(this.appointmentslist));
-          console.log('Fetched appointments from Firebase and stored in localStorage:', this.appointmentslist);
         }
       }).catch((error) => {
         console.error('Error fetching appointments:', error);
       });
     }
   }
+
+  getStockData() {
+    this.firebaseCollectionService.getStock(this.userId, this.clinicId, this.medicalId, 'Stocklist').then((purchase) => {
+      if (purchase && purchase.length > 0) {
+        this.Stocklist = purchase
+          this.getMedicineFormArry().controls.forEach(ctrl => {
+          ctrl.get('qty')?.updateValueAndValidity();
+        });
+      }
+    })
+  }
+    
 
 
   convertTimestamp(element: any): Date | null {
@@ -165,10 +191,19 @@ export class MedicineDialogComponent implements OnInit {
       medicineName: [medicine?.medicineName || '', Validators.required],
       companyName: [medicine?.companyName || medicine?.CompanyName || '', Validators.required],
       category: [medicine?.category || '', Validators.required],
-      qty: [medicine?.qty || 0, Validators.required],
+       qty: [
+      medicine?.qty || 0,
+      [
+        Validators.required,
+        Validators.min(1),
+        this.qtyValidator.bind(this)
+      ]
+    ],
+      // qty: [medicine?.qty || 0, Validators.required],
       rate: [medicine?.rate || 0, Validators.required],
       time: [medicine?.time || '', Validators.required],
-      amount: [0]
+      mealTiming: [medicine?.mealTiming || '', Validators.required],
+      amount: [0],
     });
 
     // qty change
@@ -181,10 +216,36 @@ export class MedicineDialogComponent implements OnInit {
       this.updateAmount();
     });
 
+     medicineGroup.get('medicineName')?.valueChanges.subscribe(() => {
+  const qtyControl = medicineGroup.get('qty');
+  qtyControl?.updateValueAndValidity();
+});
+
     this.getMedicineFormArry().push(medicineGroup);
 
     this.updateAmount();
   }
+
+qtyValidator = (control: any) => {
+  if (!control.parent) return null;
+
+  const qty = Number(control.value || 0);
+  const medicineName = control.parent.get('medicineName')?.value;
+
+  if (!medicineName) return null;
+
+  let availableQty = 0;
+  
+this.Stocklist.forEach((purchase: any) => {
+    if (purchase.medicineName === medicineName) {
+      availableQty += Number(purchase.qty || 0);
+    }
+
+  });
+
+
+  return qty > availableQty ? { qtyExceeded: true } : null;
+};
 
   removemedicine(index: any) {
     this.getMedicineFormArry().removeAt(index)
@@ -253,6 +314,5 @@ export class MedicineDialogComponent implements OnInit {
       netamount: this.addmedicineForm.value.netamount,
     }
     this.dialogRef.close({ event: this.action, data: payload });
-    console.log('payload', payload);
   }
 }

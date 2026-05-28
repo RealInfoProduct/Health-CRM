@@ -63,7 +63,6 @@ receptionistList:any =[]
       if (clicnk && clicnk.length > 0) {
 
         this.clinicList = clicnk;
-        console.log(this.clinicList);
 
         this.clinicList.forEach((clinicData: any) => {
 
@@ -182,7 +181,6 @@ submit() {
           (doc: any) => doc.id
         );
 
-        console.log('All Doctor IDs => ', allDoctorIds);
 
         // localStorage
         localStorage.setItem(

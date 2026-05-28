@@ -46,7 +46,6 @@ export class AddmedicaldialogComponent implements OnInit {
     this.firebaseCollectionService.getDocuments('Admin', 'userlist').then((user) => {
       if (user && user.length > 0) {
         this.userList = user
-        console.log(this.userList);
         this.setDuplicateValidators();
       }
 

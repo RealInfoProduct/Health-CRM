@@ -1561,4 +1561,174 @@ export class FirebaseCollectionService {
       this.spinnerService.setSpinner(false);
     }
   }
+
+  // new Stock
+  async addStock(adminId: string, clinicId: string, MedicineId: string, StockData: any) {
+    this.spinnerService.setSpinner(true);
+
+    try {
+      const medicine = this.firestore
+        .collection('Admin')
+        .doc(adminId)
+        .collection('clinicList')
+        .doc(clinicId)
+        .collection('medicallist')
+        .doc(MedicineId)
+        .collection('Stocklist');
+      const newStocklistRef = medicine.ref.doc();
+
+      const data = {
+        ...StockData,
+        id: newStocklistRef.id
+      };
+      await newStocklistRef.set(data);
+
+      this.snackBar.open('Stock added successfully', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+      return newStocklistRef.id;
+
+    } catch (error: any) {
+
+      console.error(error);
+
+      this.snackBar.open(`Error: ${error.message}`, 'Close');
+
+      return null;
+
+    } finally {
+
+      this.spinnerService.setSpinner(false);
+    }
+  }
+  async updateStock(
+    adminId: string,
+    clinicId: string,
+    medicalId: string,
+    StockId: string,
+    StockData: any
+  ) {
+
+    this.spinnerService.setSpinner(true);
+
+    try {
+
+      const ref = this.firestore
+        .collection('Admin')
+        .doc(adminId)
+        .collection('clinicList')
+        .doc(clinicId)
+        .collection('medicallist')
+        .doc(medicalId)
+        .collection('Stocklist')
+        .doc(StockId);
+
+      await ref.update(StockData);
+
+      this.snackBar.open('Stock updated successfully', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+
+    } catch (error: any) {
+
+      this.snackBar.open(
+        `Error updating Stock: ${error.message}`,
+        'Close',
+        {
+          duration: 3000,
+        }
+      );
+
+      throw error;
+
+    } finally {
+
+      this.spinnerService.setSpinner(false);
+
+    }
+  }
+
+  async deleteStock(
+    adminId: string,
+    clinicId: string,
+    medicalId: string,
+    StockId: string
+  ) {
+
+    this.spinnerService.setSpinner(true);
+
+    try {
+
+      const ref = this.firestore
+        .collection('Admin')
+        .doc(adminId)
+        .collection('clinicList')
+        .doc(clinicId)
+        .collection('medicallist')
+        .doc(medicalId)
+        .collection('Stocklist')
+        .doc(StockId);
+
+      await ref.delete();
+
+      this.snackBar.open('Stock deleted successfully', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+
+    } catch (error: any) {
+
+      this.snackBar.open(
+        `Error deleting Stock: ${error.message}`,
+        'Close',
+        {
+          duration: 3000,
+        }
+      );
+
+      throw error;
+
+    } finally {
+
+      this.spinnerService.setSpinner(false);
+
+    }
+  }
+
+  async getStock(
+    adminId: string,
+    clinicId: string,
+    medicalId: string,
+    collectionName: string
+  ) {
+
+    this.spinnerService.setSpinner(true);
+
+    try {
+
+      const snapshot = await this.firestore
+        .collection('Admin')
+        .doc(adminId)
+        .collection('clinicList')
+        .doc(clinicId)
+        .collection('medicallist')
+        .doc(medicalId)
+        .collection(collectionName)
+        .get()
+        .toPromise();
+
+      return snapshot.docs.map((doc: any) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+    } finally {
+      this.spinnerService.setSpinner(false);
+    }
+  }
 }

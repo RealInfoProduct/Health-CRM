@@ -14,6 +14,7 @@ import { StaffComponent } from './staff/staff.component';
 import { ClicnkComponent } from './clicnk/clicnk.component';
 import { ReceptionistComponent } from './receptionist/receptionist.component';
 import { PurchaseComponent } from './purchase/purchase.component';
+import { StockComponent } from './stock/stock.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -39,6 +40,17 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/apps/purchase' },
             { title: 'Purchase' },
+          ],
+        },
+      },
+      {
+        path: 'stock',
+        component: StockComponent,
+        data: {
+          title: 'Stock',
+          urls: [
+            { title: 'Dashboard', url: '/apps/stock' },
+            { title: 'Stock' },
           ],
         },
       },

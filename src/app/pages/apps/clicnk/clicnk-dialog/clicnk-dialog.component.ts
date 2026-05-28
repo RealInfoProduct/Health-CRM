@@ -52,7 +52,6 @@ userList:any =[]
     this.firebaseCollectionService.getDocuments('Admin', 'userlist').then((user) => {
       if(user && user.length >0) {
         this.userList = user 
-        console.log(this.userList);
               this.setDuplicateValidators();
       }
 
@@ -87,7 +86,6 @@ userList:any =[]
     userId:localStorage.getItem("userId"),
     userType:"Clinic",
   }
-  console.log(payload);
 
   this.dialogRef.close({ event: this.action, data: payload });
 }
