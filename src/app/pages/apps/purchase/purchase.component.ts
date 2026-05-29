@@ -225,58 +225,143 @@ filterDate() {
   this.getPurchaseData();
   this.getStockData();
 }
-   if (result?.event === 'Update') {
+//    if (result?.event === 'Update') {
+
+//   const oldPurchase = obj;
+//   const newPurchase = result.data;
+
+//   // 🔴 1. REMOVE OLD STOCK (reverse qty)
+//   if (oldPurchase.medicine?.length) {
+//     oldPurchase.medicine.forEach((med: any) => {
+
+//       const existing = this.Stocklist.find((s: any) =>
+//         s.medicineName === med.medicineName &&
+//         s.companyName === med.companyName &&
+//         s.medicineType === med.medicineType
+//       );
+
+//       if (existing) {
+//         const updatedQty =
+//           Number(existing.qty || 0) - Number(med.qty || 0);
+
+//         const updatedStock = {
+//           ...existing,
+//           qty: updatedQty < 0 ? 0 : updatedQty
+//         };
+
+//         this.firebaseCollectionService.updateStock(
+//           this.userId,
+//           this.clinicId,
+//           this.medicalId,
+//           existing.id,
+//           updatedStock
+//         );
+//       }
+//     });
+//   }
+
+//   // 🟢 2. ADD NEW STOCK (same logic as Add)
+//   if (newPurchase.medicine?.length) {
+//     newPurchase.medicine.forEach((med: any) => {
+
+//       const existing = this.Stocklist.find((s: any) =>
+//         s.medicineName === med.medicineName &&
+//         s.companyName === med.companyName &&
+//         s.medicineType === med.medicineType
+//       );
+
+//       if (existing) {
+//         const updatedQty =
+//           Number(existing.qty || 0) + Number(med.qty || 0);
+
+//         const updatedStock = {
+//           ...existing,
+//           qty: updatedQty
+//         };
+
+//         this.firebaseCollectionService.updateStock(
+//           this.userId,
+//           this.clinicId,
+//           this.medicalId,
+//           existing.id,
+//           updatedStock
+//         );
+
+//       } else {
+//         const newStock = {
+//           medicineName: med.medicineName,
+//           companyName: med.companyName,
+//           medicineType: med.medicineType,
+//           unit: med.unit,
+//           price: med.price,
+//           qty: med.qty,
+//           userId: this.userId,
+//           clinicId: this.clinicId,
+//           MedicalId: this.medicalId
+//         };
+
+//         this.firebaseCollectionService.addStock(
+//           this.userId,
+//           this.clinicId,
+//           this.medicalId,
+//           newStock
+//         );
+//       }
+//     });
+//   }
+
+//   // 🔵 3. UPDATE PURCHASE
+//   this.firebaseCollectionService
+//     .updatepurchase(this.userId, this.clinicId, this.medicalId, obj.id, newPurchase)
+//     .then(() => {
+//       this.getPurchaseData();
+//       this.getStockData();
+//     });
+// }
+if (result?.event === 'Update') {
 
   const oldPurchase = obj;
   const newPurchase = result.data;
 
-  // 🔴 1. REMOVE OLD STOCK (reverse qty)
-  if (oldPurchase.medicine?.length) {
-    oldPurchase.medicine.forEach((med: any) => {
-
-      const existing = this.Stocklist.find((s: any) =>
-        s.medicineName === med.medicineName &&
-        s.companyName === med.companyName &&
-        s.medicineType === med.medicineType
-      );
-
-      if (existing) {
-        const updatedQty =
-          Number(existing.qty || 0) - Number(med.qty || 0);
-
-        const updatedStock = {
-          ...existing,
-          qty: updatedQty < 0 ? 0 : updatedQty
-        };
-
-        this.firebaseCollectionService.updateStock(
-          this.userId,
-          this.clinicId,
-          this.medicalId,
-          existing.id,
-          updatedStock
-        );
-      }
-    });
-  }
-
-  // 🟢 2. ADD NEW STOCK (same logic as Add)
   if (newPurchase.medicine?.length) {
-    newPurchase.medicine.forEach((med: any) => {
+
+    newPurchase.medicine.forEach((newMed: any) => {
+
+      const oldMed = oldPurchase.medicine.find((m: any) =>
+        m.medicineName === newMed.medicineName &&
+        m.companyName === newMed.companyName &&
+        m.medicineType === newMed.medicineType
+      );
 
       const existing = this.Stocklist.find((s: any) =>
-        s.medicineName === med.medicineName &&
-        s.companyName === med.companyName &&
-        s.medicineType === med.medicineType
+        s.medicineName === newMed.medicineName &&
+        s.companyName === newMed.companyName &&
+        s.medicineType === newMed.medicineType
       );
 
       if (existing) {
-        const updatedQty =
-          Number(existing.qty || 0) + Number(med.qty || 0);
+
+        let finalQty = Number(existing.qty || 0);
+
+        const oldQty = Number(oldMed?.qty || 0);
+        const newQty = Number(newMed?.qty || 0);
+
+        // ✅ only qty changed
+        if (oldQty !== newQty) {
+
+          const diffQty = newQty - oldQty;
+
+          finalQty = finalQty + diffQty;
+        }
 
         const updatedStock = {
           ...existing,
-          qty: updatedQty
+
+          // ✅ always update latest price
+          price: newMed.price,
+
+          // ✅ qty only when changed
+          qty: finalQty
         };
 
         this.firebaseCollectionService.updateStock(
@@ -288,13 +373,15 @@ filterDate() {
         );
 
       } else {
+
+        // new medicine
         const newStock = {
-          medicineName: med.medicineName,
-          companyName: med.companyName,
-          medicineType: med.medicineType,
-          unit: med.unit,
-          price: med.price,
-          qty: med.qty,
+          medicineName: newMed.medicineName,
+          companyName: newMed.companyName,
+          medicineType: newMed.medicineType,
+          unit: newMed.unit,
+          price: newMed.price,
+          qty: newMed.qty,
           userId: this.userId,
           clinicId: this.clinicId,
           MedicalId: this.medicalId
@@ -307,12 +394,19 @@ filterDate() {
           newStock
         );
       }
+
     });
   }
 
-  // 🔵 3. UPDATE PURCHASE
+  // purchase update
   this.firebaseCollectionService
-    .updatepurchase(this.userId, this.clinicId, this.medicalId, obj.id, newPurchase)
+    .updatepurchase(
+      this.userId,
+      this.clinicId,
+      this.medicalId,
+      obj.id,
+      newPurchase
+    )
     .then(() => {
       this.getPurchaseData();
       this.getStockData();
