@@ -244,11 +244,9 @@
                             <mat-label>Medicine Name</mat-label>
                             <mat-select formControlName="medicineName"
                                 (selectionChange)="onMedicineSelect($event.value,i)">
-                                <ng-container *ngFor="let item of purchaselist">
-                                    <mat-option *ngFor="let med of item.medicine" [value]="med.medicineName">
+                                    <mat-option *ngFor="let med of uniqueMedicines" [value]="med.medicineName">
                                         {{ med.medicineName }}
                                     </mat-option>
-                                </ng-container>
                             </mat-select>
                         </mat-form-field>
                     </div>

@@ -59,6 +59,9 @@ import { PurchaseComponent } from './purchase/purchase.component';
 import { PurchaseDialogComponent } from './purchase/purchase-dialog/purchase-dialog.component';
 import { PurchaseViewComponent } from './purchase/purchase-view/purchase-view.component';
 import { StockComponent } from './stock/stock.component';
+import { AdmitPatientComponent } from './admit-patient/admit-patient.component';
+import { AdmitPatientDialogComponent } from './admit-patient/admit-patient-dialog/admit-patient-dialog.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 
 
@@ -84,6 +87,7 @@ import { StockComponent } from './stock/stock.component';
     NgScrollbarModule,
     MatInputModule,
     NgxMatTimepickerModule,
+    MatAutocompleteModule
   ],
   exports: [TablerIconsModule,MedicineComponent,MedicalComponent],
   declarations: [
@@ -118,6 +122,8 @@ import { StockComponent } from './stock/stock.component';
     PurchaseDialogComponent,
     PurchaseViewComponent,
     StockComponent,
+    AdmitPatientComponent,
+    AdmitPatientDialogComponent,
 
   ],
   providers: [  { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],

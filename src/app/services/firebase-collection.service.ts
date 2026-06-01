@@ -882,6 +882,176 @@ export class FirebaseCollectionService {
     }
   }
 
+  // new admitlist
+  async addadmitlist(adminId: string, clinicId: string, receptionistId: string, admitData: any) {
+    this.spinnerService.setSpinner(true);
+
+    try {
+      const admit = this.firestore
+        .collection('Admin')
+        .doc(adminId)
+        .collection('clinicList')
+        .doc(clinicId)
+        .collection('Receptionistlist')
+        .doc(receptionistId)
+        .collection('admitlist');
+      const newDoctorRef = admit.ref.doc();
+
+      const data = {
+        ...admitData,
+        id: newDoctorRef.id
+      };
+      await newDoctorRef.set(data);
+
+      this.snackBar.open('Receptionist added successfully', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+      return newDoctorRef.id;
+
+    } catch (error: any) {
+
+      console.error(error);
+
+      this.snackBar.open(`Error: ${error.message}`, 'Close');
+
+      return null;
+
+    } finally {
+
+      this.spinnerService.setSpinner(false);
+    }
+  }
+  async updateadmitList(
+    adminId: string,
+    clinicId: string,
+    receptionistId: string,
+    appointmentId: string,
+    appointmentData: any
+  ) {
+
+    this.spinnerService.setSpinner(true);
+
+    try {
+
+      const ref = this.firestore
+        .collection('Admin')
+        .doc(adminId)
+        .collection('clinicList')
+        .doc(clinicId)
+        .collection('Receptionistlist')
+        .doc(receptionistId)
+        .collection('admitlist')
+        .doc(appointmentId);
+
+      await ref.update(appointmentData);
+
+      this.snackBar.open('Appointment updated successfully', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+
+    } catch (error: any) {
+
+      this.snackBar.open(
+        `Error updating appointment: ${error.message}`,
+        'Close',
+        {
+          duration: 3000,
+        }
+      );
+
+      throw error;
+
+    } finally {
+
+      this.spinnerService.setSpinner(false);
+
+    }
+  }
+
+  async deleteadmitList(
+    adminId: string,
+    clinicId: string,
+    receptionistId: string,
+    appointmentId: string
+  ) {
+
+    this.spinnerService.setSpinner(true);
+
+    try {
+
+      const ref = this.firestore
+        .collection('Admin')
+        .doc(adminId)
+        .collection('clinicList')
+        .doc(clinicId)
+        .collection('Receptionistlist')
+        .doc(receptionistId)
+        .collection('admitlist')
+        .doc(appointmentId);
+
+      await ref.delete();
+
+      this.snackBar.open('Appointment deleted successfully', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+
+    } catch (error: any) {
+
+      this.snackBar.open(
+        `Error deleting appointment: ${error.message}`,
+        'Close',
+        {
+          duration: 3000,
+        }
+      );
+
+      throw error;
+
+    } finally {
+
+      this.spinnerService.setSpinner(false);
+
+    }
+  }
+
+  async getadmitList(
+    adminId: string,
+    clinicId: string,
+    receptionistId: string,
+    collectionName: string
+  ) {
+
+    this.spinnerService.setSpinner(true);
+
+    try {
+
+      const snapshot = await this.firestore
+        .collection('Admin')
+        .doc(adminId)
+        .collection('clinicList')
+        .doc(clinicId)
+        .collection('Receptionistlist')
+        .doc(receptionistId)
+        .collection(collectionName)
+        .get()
+        .toPromise();
+
+      return snapshot.docs.map((doc: any) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+    } finally {
+      this.spinnerService.setSpinner(false);
+    }
+  }
+
   // new patient
   async addpatient(adminId: string, clinicId: string, doctorId: string, patientData: any) {
     this.spinnerService.setSpinner(true);

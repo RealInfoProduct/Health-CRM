@@ -15,6 +15,7 @@ import { ClicnkComponent } from './clicnk/clicnk.component';
 import { ReceptionistComponent } from './receptionist/receptionist.component';
 import { PurchaseComponent } from './purchase/purchase.component';
 import { StockComponent } from './stock/stock.component';
+import { AdmitPatientComponent } from './admit-patient/admit-patient.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -27,7 +28,7 @@ export const AppsRoutes: Routes = [
         data: {
           title: 'Appointments',
           urls: [
-            { title: 'Dashboard', url: '/apps/appointments' },
+            {  url: '/apps/appointments' },
             { title: 'Appointments' },
           ],
         },
@@ -38,8 +39,19 @@ export const AppsRoutes: Routes = [
         data: {
           title: 'Purchase',
           urls: [
-            { title: 'Dashboard', url: '/apps/purchase' },
+            {  url: '/apps/purchase' },
             { title: 'Purchase' },
+          ],
+        },
+      },
+      {
+        path: 'admitpatient',
+        component: AdmitPatientComponent,
+        data: {
+          title: 'AdmitPatient',
+          urls: [
+            {  url: '/apps/admitpatient' },
+            { title: 'AdmitPatient' },
           ],
         },
       },
@@ -49,7 +61,7 @@ export const AppsRoutes: Routes = [
         data: {
           title: 'Stock',
           urls: [
-            { title: 'Dashboard', url: '/apps/stock' },
+            {  url: '/apps/stock' },
             { title: 'Stock' },
           ],
         },
@@ -60,7 +72,7 @@ export const AppsRoutes: Routes = [
         data: {
           title: 'Medical',
           urls: [
-            { title: 'Dashboard', url: '/apps/medical' },
+            {  url: '/apps/medical' },
             { title: 'Medical' },
           ],
         },
@@ -71,7 +83,7 @@ export const AppsRoutes: Routes = [
         data: {
           title: 'Laboratory',
           urls: [
-            { title: 'Dashboard', url:'/apps/laboratory' },
+            {  url:'/apps/laboratory' },
             { title: 'Laboratory' },
           ],
         },
@@ -82,7 +94,7 @@ export const AppsRoutes: Routes = [
         data: {
           title: 'Lab',
           urls: [
-            { title: 'Dashboard', url:'/apps/lab' },
+            {  url:'/apps/lab' },
             { title: 'Lab' },
           ],
         },
@@ -93,7 +105,7 @@ export const AppsRoutes: Routes = [
         data: {
           title: 'Staff',
           urls: [
-            { title: 'Dashboard', url:'/apps/staff' },
+            {  url:'/apps/staff' },
             { title: 'Staff' },
           ],
         },
@@ -104,7 +116,7 @@ export const AppsRoutes: Routes = [
         data: {
           title: 'My Report',
           urls: [
-            { title: 'Dashboard', url:'/apps/report' },
+            {  url:'/apps/report' },
             { title: 'My Report' },
           ],
         },
@@ -115,7 +127,7 @@ export const AppsRoutes: Routes = [
         data: {
           title: 'Patient',
           urls: [
-            { title: 'Dashboard', url:'/apps/patient' },
+            {  url:'/apps/patient' },
             { title: 'Patient' },
           ],
         },
@@ -126,7 +138,7 @@ export const AppsRoutes: Routes = [
         data: {
           title: 'Medicine',
           urls: [
-            { title: 'Dashboard', url:'/apps/medicine' },
+            {  url:'/apps/medicine' },
             { title: 'Medicine' },
           ],
         },
@@ -137,7 +149,7 @@ export const AppsRoutes: Routes = [
         data: {
           title: 'Doctors',
           urls: [
-            { title: 'Dashboard', url:'/apps/doctors' },
+            {  url:'/apps/doctors' },
             { title: 'Doctors' },
           ],
         },
@@ -148,7 +160,7 @@ export const AppsRoutes: Routes = [
         data: {
           title: 'Bill',
           urls: [
-            { title: 'Dashboard', url:'/apps/bill' },
+            {  url:'/apps/bill' },
             { title: 'Bill' },
           ],
         },
@@ -159,7 +171,7 @@ export const AppsRoutes: Routes = [
         data: {
           title: 'Clinic',
           urls: [
-            { title: 'Dashboard', url:'/apps/clinic' },
+            {  url:'/apps/clinic' },
             { title: 'Clinic' },
           ],
         },
@@ -170,7 +182,7 @@ export const AppsRoutes: Routes = [
         data: {
           title: 'Receptionist',
           urls: [
-            { title: 'Dashboard', url:'/apps/receptionist' },
+            { url:'/apps/receptionist' },
             { title: 'Receptionist' },
           ],
         },

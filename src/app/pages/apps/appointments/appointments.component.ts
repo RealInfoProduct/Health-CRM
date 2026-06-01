@@ -214,34 +214,18 @@ getdoctorsdata() {
         const doctorId = result.data.doctorName;
 
         // 1. Add appointment
-        this.firebaseCollectionService.addappointmentslist(
-          this.userId,
-          this.clinicId,
-          this.ReceptionistId,
-          result.data
-        );
+        this.firebaseCollectionService.addappointmentslist( this.userId, this.clinicId, this.ReceptionistId, result.data );
 
         // 2. Check patient exists
         const existingPatient = this.findExistingPatient(result.data);
 
         if (existingPatient) {
           // UPDATE patient
-          this.firebaseCollectionService.updatepatient(
-            this.userId,
-            this.clinicId,
-            doctorId,
-            existingPatient.id,
-            result.data
-          );
+          this.firebaseCollectionService.updatepatient( this.userId, this.clinicId, doctorId, existingPatient.id, result.data );
         } 
         else {
           // ADD new patient
-          this.firebaseCollectionService.addpatient(
-            this.userId,
-            this.clinicId,
-            doctorId,
-            result.data
-          );
+          this.firebaseCollectionService.addpatient( this.userId, this.clinicId, doctorId, result.data );
         }
 
         this.getappointmentdata();
@@ -251,13 +235,7 @@ getdoctorsdata() {
 
         const doctorId = result.data.doctorName;
 
-        this.firebaseCollectionService.updateAppointmentsList(
-          this.userId,
-          this.clinicId,
-          this.ReceptionistId,
-          obj.id,
-          result.data
-        );
+        this.firebaseCollectionService.updateAppointmentsList( this.userId, this.clinicId, this.ReceptionistId, obj.id, result.data );
 
         const existingPatient = this.findExistingPatient(result.data);
 
@@ -266,22 +244,10 @@ getdoctorsdata() {
           const updatedData = { ...result.data };
           delete updatedData.id;
 
-          this.firebaseCollectionService.updatepatient(
-            this.userId,
-            this.clinicId,
-            doctorId,
-            existingPatient.id,
-            updatedData
-          );
+          this.firebaseCollectionService.updatepatient( this.userId, this.clinicId, doctorId, existingPatient.id, updatedData );
 
         } else {
-
-          this.firebaseCollectionService.addpatient(
-            this.userId,
-            this.clinicId,
-            doctorId,
-            result.data
-          );
+          this.firebaseCollectionService.addpatient( this.userId, this.clinicId, doctorId, result.data );
         }
 
         this.getappointmentdata();
@@ -292,12 +258,7 @@ getdoctorsdata() {
         const doctorId = obj.doctorName;
 
         // Delete appointment
-        this.firebaseCollectionService.deleteAppointmentsList(
-          this.userId,
-          this.clinicId,
-          this.ReceptionistId,
-          obj.id
-        );
+        this.firebaseCollectionService.deleteAppointmentsList( this.userId,this.clinicId,this.ReceptionistId,obj.id );
 
         // Find matching patient from obj data
         const patient = this.patientlist.find((p: any) =>
@@ -308,14 +269,7 @@ getdoctorsdata() {
       
       // Delete patient
       if (patient) {
-
-          this.firebaseCollectionService.deletepatient(
-            this.userId,
-            this.clinicId,
-            doctorId,
-            patient.id
-          );
-
+          this.firebaseCollectionService.deletepatient( this.userId, this.clinicId, doctorId, patient.id );
         }
 
         this.getappointmentdata();

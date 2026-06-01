@@ -199,9 +199,7 @@ getappointmentdata() {
         const clinicId = localStorage.getItem('clinicId')
         const ReceptionistId = localStorage.getItem('ReceptionistId')
     this.firebaseCollectionService.getAppointmentsList(userId, clinicId, ReceptionistId,'appointmentslist').then((appointments) => {
-
         const today = new Date().toDateString();
-
         const todayAppointments = appointments.filter(appt => {
           if (!appt.date) return false;
 
@@ -241,9 +239,7 @@ getappointmentdata() {
     hours = hours ? hours : 12; // 0 => 12
 
     const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
-
     const timeString = `${hours}:${formattedMinutes} ${ampm}`;
-
     this.appointmentsForm.patchValue({
       time: timeString
     });

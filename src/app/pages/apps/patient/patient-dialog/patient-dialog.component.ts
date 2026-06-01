@@ -57,6 +57,7 @@ export class PatientDialogComponent implements OnInit {
   filteredPatients: any[] = [];
   purchaselist: any[] = [];
   lablist: any[] = [];
+  uniqueMedicines: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -164,6 +165,15 @@ export class PatientDialogComponent implements OnInit {
         });
       }
     });
+
+     const medicines = this.purchaselist.flatMap((item: any) => item.medicine);
+
+  this.uniqueMedicines = medicines.filter(
+    (med: any, index: number, self: any[]) =>
+      index === self.findIndex(
+        (m: any) => m.medicineName === med.medicineName
+      )
+  );
   }
 
 

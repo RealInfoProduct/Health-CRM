@@ -95,6 +95,12 @@ export const navItems: NavItem[] = [
     // allowedUserTypes: ['Admin','Doctor', 'Patient'],
   },
   {
+    displayName: 'AdmitPatient',
+    iconName: 'disabled',
+    route: '/apps/admitpatient',
+    // allowedUserTypes: ['Admin','Doctor', 'Patient'],
+  },
+  {
     displayName: 'Bill',
     iconName: 'receipt-2',
     route: '/apps/bill',
