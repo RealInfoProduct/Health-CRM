@@ -1,0 +1,64 @@
+<mat-card class="cardWithShadow">
+    <mat-card-content class="p-24">
+        <div class="row justify-content-between">
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 hide-hint">
+                    <input matInput placeholder="Search Report" />
+                    <mat-icon matSuffix>
+                        <i-tabler name="search" class="icon-20"></i-tabler>
+                    </mat-icon>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-4 d-flex align-items-center justify-content-end">
+                <button mat-flat-button color="primary">
+                    Download Report
+                </button>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<mat-card class="cardWithShadow theme-card">
+    <mat-card-header>
+        <mat-card-title class="m-b-0">Select Date</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="b-t-1">
+        <div class="row">
+
+            <div class="col-lg-6">
+                <mat-card class="b-1 shadow-none">
+                    <mat-card-header>
+                        <mat-card-title>From Date</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content class="b-t-1">
+                        <mat-form-field class="w-100" appearance="outline">
+                            <mat-label>Choose a date</mat-label>
+                            <input matInput [matDatepicker]="touchpicker" />
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matIconSuffix [for]="touchpicker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #touchpicker></mat-datepicker>
+                        </mat-form-field>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-card class="b-1 shadow-none">
+                    <mat-card-header>
+                        <mat-card-title>To Date</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content class="b-t-1">
+                        <mat-form-field class="w-100" appearance="outline">
+                            <mat-label>Choose a date</mat-label>
+                            <input matInput [matDatepicker]="touchpic" />
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matIconSuffix [for]="touchpic"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #touchpic></mat-datepicker>
+                        </mat-form-field>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+
+        </div>
+    </mat-card-content>
+</mat-card>

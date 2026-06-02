@@ -1,0 +1,195 @@
+<h2 class="f-w-500 p-b-20 b-b-1" mat-dialog-title><strong>{{action}} Lab</strong></h2>
+<mat-dialog-content class="p-t-20" *ngIf="action !== 'Delete'; else elseTemplate">
+    <form [formGroup]="addlabForm">
+        <div class="row">
+    
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Date</mat-label>
+                            <input matInput formControlName="date" [matDatepicker]="picker" placeholder="Enter Date">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+            </div>
+            
+               <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Patient Name</mat-label>
+                    <input type="text" formControlName="patientName" placeholder="Enter patient name"
+                        matInput require  />
+                    <mat-error class="error-message" *ngIf="addlabForm.get('patientName').errors && addlabForm.get('patientName').errors['required']">
+                        Patient Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Mobile Number</mat-label>
+                    <input type="number" formControlName="mobileNumber" placeholder="Enter mobile number" matInput require
+                        onKeyPress="if(this.value.length==10) return false;" min="0" />
+                    <mat-error class="error-message"
+                        *ngIf="addlabForm.get('mobileNumber').errors && addlabForm.get('mobileNumber').errors['required']">
+                        Mobile number is required
+                    </mat-error>
+                    <mat-error class="error-message"
+                        *ngIf="addlabForm.get('mobileNumber').errors && addlabForm.get('mobileNumber').errors['pattern']">
+                        Please enter a valid 10-digit
+                    </mat-error>
+                </mat-form-field>
+            </div>
+    
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Age</mat-label>
+                    <input type="number" formControlName="age" placeholder="Enter age"
+                        onKeyPress="if(this.value.length==3) return false;" matInput require min="0" />
+                    <mat-error class="error-message" *ngIf="addlabForm.get('age').errors && addlabForm.get('age').errors['required']">
+                        Age is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+    
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Gender</mat-label>
+                <mat-radio-group aria-label="Select an option" formControlName="gender">
+                    <mat-radio-button value="male">Male </mat-radio-button>
+                    <mat-radio-button value="female">Female </mat-radio-button>
+                    <mat-error class="error-message" *ngIf="addlabForm.get('gender')?.invalid && addlabForm.get('gender')?.touched">
+                        Gender is required
+                    </mat-error>
+                </mat-radio-group>
+            </div>
+    
+            <div class="col-12" formArrayName="reports">
+                <div *ngFor="let report of reports.controls; let i = index" [formGroupName]="i" class="row">
+                     <div class="in-width">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Date</mat-label>
+                            <input matInput formControlName="date" [matDatepicker]="picker" placeholder="Enter date">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="m-width">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Report Type</mat-label>
+                            <input type="text" formControlName="reportType" placeholder="Enter report type" matInput
+                                require />
+                        </mat-form-field>
+                    </div>
+    
+                    <div class="m-width">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Report Name</mat-label>
+                            <input type="text" formControlName="reportName" placeholder="Enter report name" matInput
+                                required />
+                        </mat-form-field>
+                    </div>
+
+                    <div class="d-width">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Disease</mat-label>
+                            <input type="text" formControlName="disease" placeholder="Enter disease" matInput require />
+                        </mat-form-field>
+                    </div>
+
+                     <div class="m-width">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Report Fee</mat-label>
+                            <input type="number" formControlName="reportFee" placeholder="Enter report fee" matInput require
+                                min="0" />
+                        </mat-form-field>
+                    </div>
+    
+                    <div class="AR-width d-flex align-items-center">
+                        <a class="m-r-10 cursor-pointer">
+                            <i-tabler name="trash" (click)="removeReport(i)" class="icon-18"></i-tabler>
+                        </a>
+                        <a class="m-r-10 cursor-pointer">
+                            <i-tabler name="plus" (click)="addReportDetail()" class="icon-18"></i-tabler>
+                        </a>
+                    </div>
+    
+                </div>
+    
+            </div>
+
+              <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Payment Method</mat-label>
+                    <mat-select #dropdown formControlName="paymentMethod" placeholder="Select payment method">
+                        <mat-option [value]="item.name"
+                            *ngFor="let item of paymentMethodList">{{item.name}}</mat-option>
+                    </mat-select>
+                    <mat-error class="error-message"
+                        *ngIf="addlabForm.get('paymentMethod').errors && addlabForm.get('paymentMethod').errors['required']">
+                        Payment method is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Amount</mat-label>
+                    <input type="number" formControlName="amount" placeholder="Enter amount" matInput require min="0" />
+                    <mat-error class="error-message"
+                        *ngIf="addlabForm.get('amount').errors && addlabForm.get('amount').errors['required']">
+                        Amount is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Discount %</mat-label>
+                    <input type="number" formControlName="discount" placeholder="Enter discount" matInput require
+                        min="0" />
+                    <mat-error class="error-message"
+                        *ngIf="addlabForm.get('discount').errors && addlabForm.get('discount').errors['required']">
+                        Discount is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>GST %</mat-label>
+                    <input type="number" formControlName="gst" placeholder="Enter GST" matInput require min="0" />
+                    <mat-error class="error-message"
+                        *ngIf="addlabForm.get('gst').errors && addlabForm.get('gst').errors['required']">
+                        GST is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>NetAmount</mat-label>
+                    <input type="number" formControlName="netamount" placeholder="Enter netamount" matInput require
+                        min="0" />
+                    <mat-error class="error-message"
+                        *ngIf="addlabForm.get('netamount').errors && addlabForm.get('netamount').errors['required']">
+                        Netamount is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+        <mat-dialog-actions class="p-24 justify-content-end">
+            <button mat-stroked-button color="warn" class="m-l-8" mat-dialog-close>
+                Cancel
+            </button>
+            <button mat-flat-button (click)="doAction()" mat-flat-button [mat-dialog-close]="true" color="primary" [disabled]="action !== 'Delete' && addlabForm.invalid">
+                {{action}}
+            </button>
+        </mat-dialog-actions>
+<ng-template #elseTemplate>
+    <div class="p-x-24">
+        <p>Are you sure you want to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
+    </div>
+    <mat-divider></mat-divider>
+</ng-template>

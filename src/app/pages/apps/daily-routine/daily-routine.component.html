@@ -1,0 +1,90 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-24">
+    <div class="row justify-content-between">
+
+      <div class="col-lg-4">
+        <mat-form-field appearance="outline" class="w-100 ">
+          <input matInput placeholder="Search ..." (keyup)="applyFilter($event)" />
+          <mat-icon matSuffix>
+            <i-tabler name="search" class="icon-20"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-5"></div>
+
+      <div class="col-lg-3 d-flex align-items-center justify-content-end">
+        <button mat-flat-button (click)="openadminDialog('Add', {})" color="primary">
+          Add
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-24">
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" class="w-100">
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">No.</th>
+          <td mat-cell *matCellDef="let element;  let i = index ">{{ i + 1 }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="patientName">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Patient Name</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.patientName }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="mobileNumber">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Mobile Number</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.mobileNumber }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="department">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Department</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.department }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ward">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Ward</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.ward }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="roomNumber">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Room Number</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.roomNumber }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="bedNumber">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Bed Number</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.bedNumber }} </td>
+        </ng-container>
+
+         <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Action
+          </th>
+          <td mat-cell *matCellDef="let element" class="action-link">
+            <a (click)="openadminDialog('Update', element)" class="m-r-10 cursor-pointer"><i-tabler name="edit"
+                class="icon-18"></i-tabler></a>
+            <a (click)="openadminDialog('Delete', element)" class="m-r-10 cursor-pointer">
+              <i-tabler name="trash" class="icon-18"></i-tabler>
+            </a>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="appointmentsColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: appointmentsColumns"></tr>
+        <tr class="mat-row" style="text-align: center;" *matNoDataRow>
+          <td class="mat-cell" [attr.colspan]="appointmentsColumns.length">
+            No record found
+          </td>
+        </tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>

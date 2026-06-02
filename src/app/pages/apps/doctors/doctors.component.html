@@ -1,0 +1,126 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-24">
+    <div class="row justify-content-between">
+      <div class="col-lg-4">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
+          <input matInput placeholder="Search Doctors" (keyup)="applyFilter($event)" />
+          <mat-icon matSuffix>
+            <i-tabler name="search" class="icon-20"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+      <div class="col-lg-4 d-flex align-items-center justify-content-end" *ngIf="userType !== 'Patient'">
+        <button mat-flat-button (click)="openDoctorsDialog('Add', {})" color="primary">
+          Add Doctors
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-24">
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" class="w-100">
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">No.</th>
+          <td mat-cell *matCellDef="let element;  let i = index ">{{ i + 1 }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="doctorsName">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600 Doctorstable">
+            Doctors Name
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.doctorsName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="department">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Department
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.department }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="mobileNumber">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600 Mobiletable">
+            Mobile Number
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.mobileNumber }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="degree">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Degree
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.degree }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="experience">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Experience
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.experience }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="consultationFee">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600 Consultationtable">
+            Consultation Fee
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.consultationFee }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Email
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.email }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="joiningDate">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600 Joiningtable">
+            Joining Date
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ convertTimestamp(element.joiningDate) | date :
+            "mediumDate" }}</td>
+        </ng-container>
+
+         <ng-container matColumnDef="userName">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+           User Name
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.userName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="password">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+           Password
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.password }}</td>
+        </ng-container>
+
+        <ng-container *ngIf="userType !== 'Patient'"  matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Action
+          </th>
+          <td mat-cell *matCellDef="let element" class="action-link">
+            <a (click)="openDoctorsDialog('Update', element)" class="m-r-10 cursor-pointer"><i-tabler name="edit"
+                class="icon-18"></i-tabler></a>
+            <a (click)="openDoctorsDialog('Delete', element)" class="m-r-10 cursor-pointer">
+              <i-tabler name="trash" class="icon-18"></i-tabler>
+            </a>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="doctorsColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: doctorsColumns"></tr>
+        <tr class="mat-row" style="text-align: center;" *matNoDataRow>
+          <td class="mat-cell" [attr.colspan]="doctorsColumns.length">
+            No record found
+          </td>
+        </tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>

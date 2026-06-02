@@ -93,7 +93,8 @@ export class HeaderComponent {
       icon: '/assets/images/flag/icon-flag-de.svg',
     },
   ];
-
+userType: string = '';
+userEmail: string = '';
   constructor(
     private vsidenav: CoreService,
     public dialog: MatDialog,
@@ -101,6 +102,11 @@ export class HeaderComponent {
   ) {
     translate.setDefaultLang('en');
   }
+
+  ngOnInit(): void {
+  this.userType = localStorage.getItem('usertype') || '';
+  this.userEmail = localStorage.getItem('userEmail') || '';
+}
 
   openDialog() {
     const dialogRef = this.dialog.open(AppSearchDialogComponent);

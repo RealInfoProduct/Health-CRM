@@ -1,0 +1,160 @@
+<h2 class="f-w-500 p-b-20 b-b-1" mat-dialog-title><strong>{{action}} Doctors</strong></h2>
+<mat-dialog-content class="p-t-20" *ngIf="action !== 'Delete'; else elseTemplate">
+    <form [formGroup]="doctorsForm">
+        <div class="row">
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Doctors Name</mat-label>
+                    <input type="text" formControlName="doctorsName" placeholder="Enter doctors name" matInput require />
+                    <mat-error class="error-message"
+                        *ngIf="doctorsForm.get('doctorsName').errors && doctorsForm.get('doctorsName').errors['required']">
+                        Doctors name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Department</mat-label>
+                    <mat-select #dropdown formControlName="department" placeholder="Enter department">
+                        <mat-option [value]="item.name" *ngFor="let item of DepartmentList">{{item.name}}</mat-option>
+                    </mat-select>
+                    <mat-error class="error-message"
+                        *ngIf="doctorsForm.get('department').errors && doctorsForm.get('department').errors['required']">
+                        Department is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Degree</mat-label>
+                    <input type="text" formControlName="degree" placeholder="Enter degree" matInput require />
+                    <mat-error class="error-message" *ngIf="doctorsForm.get('degree').errors && doctorsForm.get('degree').errors['required']">
+                        Degree is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Mobile Number</mat-label>
+                    <input type="number" formControlName="mobileNumber" placeholder="Enter mobile number" matInput require
+                        onKeyPress="if(this.value.length==10) return false;" min="0" />
+                    <mat-error class="error-message"
+                        *ngIf="doctorsForm.get('mobileNumber').errors && doctorsForm.get('mobileNumber').errors['required']">
+                        Mobile number is required
+                    </mat-error>
+                    <mat-error class="error-message"
+                        *ngIf="doctorsForm.get('mobileNumber').errors && doctorsForm.get('mobileNumber').errors['pattern']">
+                        Please enter a valid 10-digit
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Email</mat-label>
+                    <input type="text" formControlName="email" placeholder="Enter email" matInput  />
+                    <mat-error class="error-message" *ngIf="doctorsForm.get('email').errors && doctorsForm.get('email').errors['pattern']">
+                        Please enter a valid email
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field class="w-100 m-t-10" appearance="outline">
+                    <mat-label>Joining Date</mat-label>
+                    <input matInput [matDatepicker]="touchpic" placeholder="Enter joining date"
+                        formControlName="joiningDate" />
+                    <mat-datepicker-toggle matIconSuffix [for]="touchpic"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #touchpic></mat-datepicker>
+                    <mat-error class="error-message"
+                        *ngIf="doctorsForm.get('joiningDate')?.invalid && doctorsForm.get('joiningDate')?.touched">
+                        Joining date is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Experience (Years)</mat-label>
+                    <input type="number" formControlName="experience" placeholder="Enter experience" matInput require
+                        min="0" />
+                    <mat-error class="error-message"
+                        *ngIf="doctorsForm.get('experience').errors && doctorsForm.get('experience').errors['required']">
+                        Experience is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Consultation Fee</mat-label>
+                    <input type="number" formControlName="consultationFee" placeholder="Enter consultation fee" matInput
+                        require min="0" />
+                    <mat-error class="error-message"
+                        *ngIf="doctorsForm.get('consultationFee').errors && doctorsForm.get('consultationFee').errors['required']">
+                        Consultation fee is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+              <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 ">User Name</mat-label>
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <input type="text" formControlName="userName" placeholder="Enter User Name" matInput require />
+                    <mat-error  class="error-message" *ngIf="doctorsForm.get('userName').errors &&  doctorsForm.get('userName').errors['required']">
+                        User Name is required
+                    </mat-error>
+                    <mat-error  class="error-message" *ngIf="doctorsForm.get('userName')?.errors?.['userNameExists']">
+                        User Name already exists
+                    </mat-error>
+                    </mat-form-field>
+            </div>
+            
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600">Password</mat-label>
+            
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+            
+                    <input [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="Enter Password"
+                        matInput required />
+            
+                   
+                    <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+                        <mat-icon>
+                            {{ hidePassword ? 'visibility_off' : 'visibility' }}
+                        </mat-icon>
+                    </button>
+            
+                    <mat-error  class="error-message" *ngIf="doctorsForm.get('password')?.errors?.['required']">
+                        Password is required
+                    </mat-error>
+                    <mat-error class="error-message" *ngIf="doctorsForm.get('password')?.errors?.['passwordExists']">
+                        Password already exists
+                    </mat-error>
+                    
+                    </mat-form-field>
+            </div>
+
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions class="p-24 justify-content-end">
+    <button mat-stroked-button color="warn" class="m-l-8" mat-dialog-close>
+        Cancel
+    </button>
+    <button mat-flat-button (click)="doAction()" [mat-dialog-close]="true" mat-flat-button color="primary"
+        [disabled]="action !== 'Delete' && doctorsForm.invalid">
+        {{action}}
+    </button>
+</mat-dialog-actions>
+<ng-template #elseTemplate>
+    <div class="p-x-24">
+        <p>Are you sure you want to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
+    </div>
+    <mat-divider></mat-divider>
+</ng-template>

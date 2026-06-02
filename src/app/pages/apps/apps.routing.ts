@@ -1,241 +1,205 @@
 import { Routes } from '@angular/router';
 
-import { AppChatComponent } from './chat/chat.component';
-import { AppNotesComponent } from './notes/notes.component';
-import { AppTodoComponent } from './todo/todo.component';
-import { AppPermissionComponent } from './permission/permission.component';
-import { AppEmailComponent } from './email/email.component';
-import { DetailComponent } from './email/detail/detail.component';
-import { AppTaskboardComponent } from './taskboard/taskboard.component';
-import { AppFullcalendarComponent } from './fullcalendar/fullcalendar.component';
-import { AppTicketlistComponent } from './ticketlist/ticketlist.component';
-import { AppContactComponent } from './contact/contact.component';
-import { AppCoursesComponent } from './courses/courses.component';
-import { AppCourseDetailComponent } from './courses/course-detail/course-detail.component';
-import { AppEmployeeComponent } from './employee/employee.component';
-import { AppInvoiceListComponent } from './invoice/invoice-list/invoice-list.component';
-import { AppAddInvoiceComponent } from './invoice/add-invoice/add-invoice.component';
-import { AppInvoiceViewComponent } from './invoice/invoice-view/invoice-view.component';
-import { AppEditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
-import { AppBlogsComponent } from './blogs/blogs.component';
-import { AppBlogDetailsComponent } from './blogs/details/details.component';
+// import { AppChatComponent } from './chat/chat.component';
+import { MedicalComponent } from './medical/medical.component';
+import { LaboratoryComponent } from './laboratory/laboratory.component';
+import { LabComponent } from './lab/lab.component';
+import { MyReportComponent } from './my-report/my-report.component';
+import { PatientComponent } from './patient/patient.component';
+import { MedicineComponent } from './medicine/medicine.component';
+import { DoctorsComponent } from './doctors/doctors.component';
+import { BillComponent } from './bill/bill.component';
+import { AppointmentsComponent } from './appointments/appointments.component';
+import { StaffComponent } from './staff/staff.component';
+import { ClicnkComponent } from './clicnk/clicnk.component';
+import { ReceptionistComponent } from './receptionist/receptionist.component';
+import { PurchaseComponent } from './purchase/purchase.component';
+import { StockComponent } from './stock/stock.component';
+import { AdmitPatientComponent } from './admit-patient/admit-patient.component';
+import { DailyRoutineComponent } from './daily-routine/daily-routine.component';
 
 export const AppsRoutes: Routes = [
   {
     path: '',
     children: [
+
       {
-        path: 'chat',
-        component: AppChatComponent,
+        path: 'appointments',
+        component: AppointmentsComponent,
         data: {
-          title: 'Chat',
+          title: 'Appointments',
           urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Chat' },
+            {  url: '/apps/appointments' },
+            { title: 'Appointments' },
           ],
         },
       },
       {
-        path: 'calendar',
-        component: AppFullcalendarComponent,
+        path: 'purchase',
+        component: PurchaseComponent,
         data: {
-          title: 'Calendar',
+          title: 'Purchase',
           urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Calendar' },
+            {  url: '/apps/purchase' },
+            { title: 'Purchase' },
           ],
         },
       },
       {
-        path: 'notes',
-        component: AppNotesComponent,
+        path: 'admitpatient',
+        component: AdmitPatientComponent,
         data: {
-          title: 'Notes',
+          title: 'AdmitPatient',
           urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Notes' },
-          ],
-        },
-      },
-      { path: 'email', redirectTo: 'email/inbox', pathMatch: 'full' },
-      {
-        path: 'email/:type',
-        component: AppEmailComponent,
-        data: {
-          title: 'Email',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Email' },
-          ],
-        },
-        children: [
-          {
-            path: ':id',
-            component: DetailComponent,
-            data: {
-              title: 'Email Detail',
-              urls: [
-                { title: 'Dashboard', url: '/dashboards/dashboard1' },
-                { title: 'Email Detail' },
-              ],
-            },
-          },
-        ],
-      },
-      {
-        path: 'permission',
-        component: AppPermissionComponent,
-        data: {
-          title: 'Roll Base Access',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Roll Base Access' },
+            {  url: '/apps/admitpatient' },
+            { title: 'AdmitPatient' },
           ],
         },
       },
       {
-        path: 'todo',
-        component: AppTodoComponent,
+        path: 'stock',
+        component: StockComponent,
         data: {
-          title: 'Todo App',
+          title: 'Stock',
           urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Todo App' },
+            {  url: '/apps/stock' },
+            { title: 'Stock' },
           ],
         },
       },
       {
-        path: 'taskboard',
-        component: AppTaskboardComponent,
+        path: 'medical',
+        component: MedicalComponent,
         data: {
-          title: 'Taskboard',
+          title: 'Medical',
           urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Taskboard' },
+            {  url: '/apps/medical' },
+            { title: 'Medical' },
           ],
         },
       },
       {
-        path: 'tickets',
-        component: AppTicketlistComponent,
+        path: 'laboratory',
+        component: LaboratoryComponent,
         data: {
-          title: 'Tickets',
+          title: 'Laboratory',
           urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Tickets' },
+            {  url:'/apps/laboratory' },
+            { title: 'Laboratory' },
           ],
         },
       },
       {
-        path: 'contacts',
-        component: AppContactComponent,
+        path: 'lab',
+        component: LabComponent,
         data: {
-          title: 'Contacts',
+          title: 'Lab',
           urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Contacts' },
+            {  url:'/apps/lab' },
+            { title: 'Lab' },
           ],
         },
       },
       {
-        path: 'courses',
-        component: AppCoursesComponent,
+        path: 'staff',
+        component: StaffComponent,
         data: {
-          title: 'Courses',
+          title: 'Staff',
           urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Courses' },
+            {  url:'/apps/staff' },
+            { title: 'Staff' },
           ],
         },
       },
       {
-        path: 'courses/coursesdetail/:id',
-        component: AppCourseDetailComponent,
+        path: 'report',
+        component: MyReportComponent,
         data: {
-          title: 'Course Detail',
+          title: 'My Report',
           urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Course Detail' },
+            {  url:'/apps/report' },
+            { title: 'My Report' },
           ],
         },
       },
       {
-        path: 'blog/post',
-        component: AppBlogsComponent,
+        path: 'patient',
+        component: PatientComponent,
         data: {
-          title: 'Posts',
+          title: 'Patient',
           urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Posts' },
+            {  url:'/apps/patient' },
+            { title: 'Patient' },
           ],
         },
       },
       {
-        path: 'blog/detail/:id',
-        component: AppBlogDetailsComponent,
+        path: 'medicine',
+        component: MedicineComponent,
         data: {
-          title: 'Blog Detail',
+          title: 'Medicine',
           urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Blog Detail' },
+            {  url:'/apps/medicine' },
+            { title: 'Medicine' },
           ],
         },
       },
       {
-        path: 'employee',
-        component: AppEmployeeComponent,
+        path: 'doctors',
+        component: DoctorsComponent,
         data: {
-          title: 'Employee',
+          title: 'Doctors',
           urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Employee' },
+            {  url:'/apps/doctors' },
+            { title: 'Doctors' },
           ],
         },
       },
       {
-        path: 'invoice',
-        component: AppInvoiceListComponent,
+        path: 'bill',
+        component: BillComponent,
         data: {
-          title: 'Invoice',
+          title: 'Bill',
           urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Invoice' },
+            {  url:'/apps/bill' },
+            { title: 'Bill' },
           ],
         },
       },
       {
-        path: 'addInvoice',
-        component: AppAddInvoiceComponent,
+        path: 'clinic',
+        component: ClicnkComponent,
         data: {
-          title: 'Add Invoice',
+          title: 'Clinic',
           urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Add Invoice' },
+            {  url:'/apps/clinic' },
+            { title: 'Clinic' },
           ],
         },
       },
       {
-        path: 'viewInvoice/:id',
-        component: AppInvoiceViewComponent,
+        path: 'receptionist',
+        component: ReceptionistComponent,
         data: {
-          title: 'View Invoice',
+          title: 'Receptionist',
           urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'View Invoice' },
+            { url:'/apps/receptionist' },
+            { title: 'Receptionist' },
           ],
         },
       },
       {
-        path: 'editinvoice/:id',
-        component: AppEditInvoiceComponent,
+        path: 'daliyRoutine',
+        component: DailyRoutineComponent,
         data: {
-          title: 'Edit Invoice',
+          title: 'Daliy Routine',
           urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Edit Invoice' },
+            { url:'/apps/daliyRoutine' },
+            { title: 'Daliy Routine' },
           ],
         },
       },
+     
     ],
   },
 ];

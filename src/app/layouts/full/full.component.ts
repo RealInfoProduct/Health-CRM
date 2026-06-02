@@ -20,6 +20,8 @@ import { AppHorizontalHeaderComponent } from './horizontal/header/header.compone
 import { AppHorizontalSidebarComponent } from './horizontal/sidebar/sidebar.component';
 import { AppBreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
 import { CustomizerComponent } from './shared/customizer/customizer.component';
+import { SpinnerComponent } from 'src/app/spinner/spinner.component';
+import { AuthService } from 'src/app/services/auth.service';
 
 const MOBILE_VIEW = 'screen and (max-width: 768px)';
 const TABLET_VIEW = 'screen and (min-width: 769px) and (max-width: 1024px)';
@@ -55,7 +57,8 @@ interface quicklinks {
     AppHorizontalHeaderComponent,
     AppHorizontalSidebarComponent,
     AppBreadcrumbComponent,
-    CustomizerComponent
+    CustomizerComponent,
+    SpinnerComponent
   ],
   templateUrl: './full.component.html',
   styleUrls: [],
@@ -182,13 +185,15 @@ export class FullComponent implements OnInit {
       link: '/theme-pages/treeview',
     },
   ];
-
+ userEmail:any = localStorage.getItem('userEmail')?.split('@')[0].slice(0, 15);
+ userType:any = localStorage.getItem('usertype')
   constructor(
     private settings: CoreService,
     private mediaMatcher: MediaMatcher,
     private router: Router,
     private breakpointObserver: BreakpointObserver,
     private navService: NavService,
+       private authService:AuthService,
   ) {
     this.htmlElement = document.querySelector('html')!;
     this.layoutChangesSubscription = this.breakpointObserver
@@ -253,5 +258,12 @@ export class FullComponent implements OnInit {
       this.htmlElement.classList.remove('dark-theme');
       this.htmlElement.classList.add('light-theme');
     }
+  }
+
+
+  power(){
+    this.authService.signOut().catch((error)=>{
+      
+    })
   }
 }

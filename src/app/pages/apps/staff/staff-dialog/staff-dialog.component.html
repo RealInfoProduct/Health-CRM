@@ -1,0 +1,159 @@
+<h2 class="f-w-500 p-b-20 b-b-1" mat-dialog-title><strong>{{action}}Staff</strong></h2>
+<mat-dialog-content class="p-t-20" *ngIf="action !== 'Delete'; else elseTemplate">
+    <form [formGroup]="StaffForm">
+        <div class="row">
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Staff Name</mat-label>
+                    <input type="text" placeholder="Enter staff name" formControlName="staffName" matInput />
+                   <mat-error class="error-message"
+                        *ngIf="StaffForm.get('staffName').errors && StaffForm.get('staffName').errors['required']">
+                        Staff name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Designation </mat-label>
+                    <mat-select #dropdown formControlName="designation" placeholder="Enter designation">
+                        <mat-option [value]="item.name" *ngFor="let item of Stafflist">{{item.name }}</mat-option>
+                    </mat-select>
+                   <mat-error class="error-message"
+                        *ngIf="StaffForm.get('designation').errors && StaffForm.get('designation').errors['required']">
+                        Designation is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+             <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label >Mobile Number</mat-label>
+                    <input type="number" placeholder="Mobile Number" formControlName="mobileNumber"
+                        onKeyPress="if(this.value.length==10) return false;" matInput min="0" />
+                   <mat-error class="error-message"
+                        *ngIf="StaffForm.get('mobileNumber').errors && StaffForm.get('mobileNumber').errors['required']">
+                        Mobile number is required
+                    </mat-error>
+                   <mat-error class="error-message"
+                        *ngIf="StaffForm.get('mobileNumber').errors && StaffForm.get('mobileNumber').errors['pattern']">
+                        Please enter a valid 10-digit
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Email</mat-label>
+                    <input type="text" formControlName="email" placeholder="Enter email" matInput />
+        
+                   <mat-error class="error-message"
+                        *ngIf="StaffForm.get('email').errors && StaffForm.get('email').errors['pattern']">
+                        Please enter a valid email
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field class="w-100 m-t-10" appearance="outline">
+                    <mat-label>Joining Date</mat-label>
+                    <input matInput [matDatepicker]="touchpic" placeholder="Enter joining date" formControlName="joiningDate" />
+                    <mat-datepicker-toggle matIconSuffix [for]="touchpic"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #touchpic></mat-datepicker>
+                   <mat-error class="error-message" *ngIf="StaffForm.get('joiningDate').errors && StaffForm.get('joiningDate').errors['required']">
+                        Joining date is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Salary</mat-label>
+                    <input type="number" placeholder="Enter salary" formControlName="salary" matInput min="0" />
+                   <mat-error class="error-message" 
+                    *ngIf="StaffForm.get('salary').errors && StaffForm.get('salary').errors['required']">
+                    Salary is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Status</mat-label>
+                    <mat-select #dropdown formControlName="status" placeholder="Enter status">
+                        <mat-option [value]="item.name" *ngFor="let item of Statuslist">{{item.name }}</mat-option>
+                    </mat-select>
+                   <mat-error class="error-message"
+                        *ngIf="StaffForm.get('status').errors && StaffForm.get('status').errors['required']">
+                        Status is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Shift</mat-label>
+                    <mat-select #dropdown formControlName="shift" placeholder="Enter shift">
+                        <mat-option [value]="item.name" *ngFor="let item of Shiftlist">{{item.name }}</mat-option>
+                    </mat-select>
+                   <mat-error class="error-message"
+                        *ngIf="StaffForm.get('shift').errors && StaffForm.get('shift').errors['required']">
+                        Shift is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Experience (Years)</mat-label>
+                    <input type="number" placeholder="Enter experience" formControlName="experience" matInput min="0" />
+                   <mat-error class="error-message" 
+                    *ngIf="StaffForm.get('experience').errors && StaffForm.get('experience').errors['required']">
+                    Experience  is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Gender</mat-label>
+                <mat-radio-group aria-label="Select an option" formControlName="gender">
+                    <mat-radio-button value="male">Male </mat-radio-button>
+                    <mat-radio-button value="female">Female </mat-radio-button>
+                   <mat-error class="error-message" *ngIf="StaffForm.get('gender')?.invalid && StaffForm.get('gender')?.touched">
+                        Gender is required
+                    </mat-error>
+                </mat-radio-group>
+            </div>
+
+            <div class="col-lg-12">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Address</mat-label>
+                    <input type="text" placeholder="Enter address" formControlName="address" matInput />
+                   <mat-error class="error-message"
+                        *ngIf="StaffForm.get('address').errors && StaffForm.get('address').errors['required']">
+                        Address is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+        </div>
+    </form>
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+<mat-dialog-actions class="p-24 justify-content-end">
+    <button mat-stroked-button color="warn"  mat-dialog-close class="m-l-8" >
+        Cancel
+    </button>
+    <button mat-flat-button mat-flat-button [mat-dialog-close]="true" color="primary" (click)="Adddata()"
+        [disabled]="action !== 'Delete' && StaffForm.invalid">
+        {{action}}
+    </button>
+</mat-dialog-actions>
+<ng-template #elseTemplate>
+    <div class="p-x-24">
+        <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
+    </div>
+    <mat-divider></mat-divider>
+</ng-template>

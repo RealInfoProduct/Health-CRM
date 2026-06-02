@@ -1,0 +1,97 @@
+<mat-card class="cardWithShadow" >
+    <mat-card-content class="p-24">
+        <div class="row">
+             <div class="col-lg-3">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
+          <input matInput placeholder="Search..." (keyup)="applyFilter($any($event.target).value)" />
+          <mat-icon matSuffix>
+            <i-tabler name="search" class="icon-20"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+        </div>
+      <div class="table-responsive">
+        <table mat-table [dataSource]="StockDataSource" class="w-100">
+          <ng-container matColumnDef="srno">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Sr No.</th>
+            <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+  
+          <ng-container matColumnDef="medicineName">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Medicine Name</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="d-flex align-items-center">
+                <div class="m-l-16">
+                  <p class="mat-subtitle-1 f-s-16 m-t-0">
+                    {{ element.medicineName }}
+                  </p>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="companyName">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Company Name</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="d-flex align-items-center">
+                <div class="m-l-16">
+                  <p class="mat-subtitle-1 f-s-16 m-t-0">
+                    {{ element.companyName }}
+                  </p>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="medicineType">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Medicine Type</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="d-flex align-items-center">
+                <div class="m-l-16">
+                  <p class="mat-subtitle-1 f-s-16 m-t-0">
+                    {{ element.medicineType }}
+                  </p>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+ 
+          <ng-container matColumnDef="qty">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Qty</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="d-flex align-items-center">
+                <div class="m-l-16">
+                  <p class="mat-subtitle-1 f-s-16 m-t-0">
+                    {{ element.qty }} ({{element.unit}})
+                  </p>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+           
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Price</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="d-flex align-items-center">
+                <div class="m-l-16">
+                  <p class="mat-subtitle-1 f-s-16 m-t-0">
+                    {{ element.price }}
+                  </p>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr class="mat-row" style="text-align: center;" *matNoDataRow>
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              No record found
+            </td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+ 

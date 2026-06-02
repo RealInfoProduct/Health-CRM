@@ -1,0 +1,318 @@
+import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Timestamp } from 'firebase/firestore';
+import { FirebaseCollectionService } from 'src/app/services/firebase-collection.service';
+
+@Component({
+  selector: 'app-medicine-dialog',
+  templateUrl: './medicine-dialog.component.html',
+  styleUrls: ['./medicine-dialog.component.scss']
+})
+export class MedicineDialogComponent implements OnInit {
+  addmedicineForm: FormGroup;
+  action: string;
+  local_data: any;
+
+  CategoryList = [
+    { id: 1, name: 'Tablet' },
+    { id: 2, name: 'Capsule' },
+    { id: 3, name: 'Syrup' },
+    { id: 4, name: 'Injectable' },
+    { id: 5, name: 'Cream' },
+    { id: 6, name: 'Ointment' },
+    { id: 7, name: 'Drops' },
+    { id: 8, name: 'Powder' },
+    { id: 9, name: 'Inhaler' },
+    { id: 10, name: 'Gel' },
+  ]
+
+  paymentMethodList = [
+    { id: 1, name: 'Cash' },
+    { id: 2, name: 'Net Banking' }
+  ]
+
+   mealTiming = [
+    {id: 1, name : 'After Dinner'},
+    {id: 2, name : 'Before Dinner'}
+  ]
+  Stocklist: any[] = [];
+  appointmentslist: any = []
+  patientlist: any = []
+
+  userId = localStorage.getItem('userId')
+  clinicId = localStorage.getItem('clinicId')
+  medicalId = localStorage.getItem('MedicalId')
+  constructor(
+    private fb: FormBuilder,
+    public dialogRef: MatDialogRef<MedicineDialogComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
+    private firebaseCollectionService: FirebaseCollectionService
+
+  ) {
+    this.local_data = { ...data };
+    this.action = this.local_data.action;
+  }
+
+  ngOnInit(): void {
+    this.addmedicallist()
+    this.getPatientData()
+    this.getappointmentdata()
+    this.getStockData() 
+    if (this.action === 'Update') {
+      this.addmedicineForm.controls['patientName'].setValue(this.local_data.patientName)
+      this.addmedicineForm.controls['mobileNumber'].setValue(this.local_data.mobileNumber)
+      this.addmedicineForm.controls['amount'].setValue(this.local_data.amount)
+      this.addmedicineForm.controls['discount'].setValue(this.local_data.discount || 0)
+      this.addmedicineForm.controls['paymentMethod'].setValue(this.local_data.paymentMethod)
+      this.addmedicineForm.controls['gst'].setValue(this.local_data.gst || 0)
+      this.addmedicineForm.controls['netamount'].setValue(this.local_data.netamount)
+      this.local_data.medicine.forEach((element: any) => {
+        this.addMedicine(element)
+      });
+    } else {
+      this.addMedicine()
+    }
+
+    this.addmedicineForm.get('patientName')?.valueChanges.subscribe((patientId) => {
+      const selectedPatient = this.patientlist.find(
+        (patient) => patient.patientName === patientId
+      );
+      if (selectedPatient) {
+        const medicineArray = this.getMedicineFormArry();
+        medicineArray.clear();
+        selectedPatient.medical?.forEach((med: any) => {
+
+          medicineArray.push(
+            this.fb.group({
+              date: med.date
+                ? new Date(med.date.seconds * 1000)
+                : '',
+              medicineName: med.medicineName || '',
+              companyName: med.CompanyName || '',
+              category: med.category || '',
+              qty: med.qty || '',
+              rate: med.rate || '',
+              time: med.time || '',
+              mealTiming: med.mealTiming || '',
+            })
+          );
+
+        });
+      }
+    });
+  }
+
+  getPatientData() {
+    this.firebaseCollectionService.getDocuments('Doctor', 'patientlist').then((patient) => {
+      if (patient && patient.length > 0) {
+        this.patientlist = patient
+      }
+    })
+  }
+
+
+  getappointmentdata() {
+    // Check if appointmentslist is already stored in localStorage
+    const storedAppointments = localStorage.getItem('appointmentsData');
+
+    if (storedAppointments) {
+      // Parse the JSON string and assign it to appointmentslist
+      this.appointmentslist = JSON.parse(storedAppointments);
+    } else {
+      // Fetch from Firebase if not found in localStorage
+      this.firebaseCollectionService.getDocuments('Doctor', 'appointmentslist').then((appointment) => {
+        if (appointment && appointment.length > 0) {
+          this.appointmentslist = appointment;
+
+          // Store the fetched data in localStorage
+          localStorage.setItem('appointmentslist', JSON.stringify(this.appointmentslist));
+        }
+      }).catch((error) => {
+        console.error('Error fetching appointments:', error);
+      });
+    }
+  }
+
+  getStockData() {
+    this.firebaseCollectionService.getStock(this.userId, this.clinicId, this.medicalId, 'Stocklist').then((purchase) => {
+      if (purchase && purchase.length > 0) {
+        this.Stocklist = purchase
+          this.getMedicineFormArry().controls.forEach(ctrl => {
+          ctrl.get('qty')?.updateValueAndValidity();
+        });
+      }
+    })
+  }
+    
+
+
+  convertTimestamp(element: any): Date | null {
+    if (element instanceof Timestamp) {
+      return element.toDate();
+    }
+    return null;
+  }
+
+  addmedicallist() {
+    this.addmedicineForm = this.fb.group({
+      patientName: ['', Validators.required],
+      mobileNumber: ['', Validators.required],
+      medicine: this.fb.array([]),
+      paymentMethod: ['', Validators.required],
+      amount: ['', Validators.required],
+      discount: [0, Validators.required],
+      gst: [5, Validators.required],
+      netamount: ['', Validators.required],
+    })
+    this.addmedicineForm.get('discount')?.valueChanges.subscribe(() => this.updateAmount());
+    this.addmedicineForm.get('gst')?.valueChanges.subscribe(() => this.updateAmount());
+  }
+
+  getMedicineFormArry() {
+    return this.addmedicineForm.get('medicine') as FormArray
+  }
+
+
+  addMedicine(medicine?: any) {
+
+    let medicineDate: Date | string = '';
+
+    if (medicine?.date) {
+      if (medicine.date.seconds) {
+        medicineDate = new Date(medicine.date.seconds * 1000);
+      } else {
+        medicineDate = medicine.date;
+      }
+    }
+
+    const medicineGroup = this.fb.group({
+      date: [medicineDate, Validators.required],
+      medicineName: [medicine?.medicineName || '', Validators.required],
+      companyName: [medicine?.companyName || medicine?.CompanyName || '', Validators.required],
+      category: [medicine?.category || '', Validators.required],
+       qty: [
+      medicine?.qty || 0,
+      [
+        Validators.required,
+        Validators.min(1),
+        this.qtyValidator.bind(this)
+      ]
+    ],
+      // qty: [medicine?.qty || 0, Validators.required],
+      rate: [medicine?.rate || 0, Validators.required],
+      time: [medicine?.time || '', Validators.required],
+      mealTiming: [medicine?.mealTiming || '', Validators.required],
+      amount: [0],
+    });
+
+    // qty change
+    medicineGroup.get('qty')?.valueChanges.subscribe(() => {
+      this.updateAmount();
+    });
+
+    // rate change
+    medicineGroup.get('rate')?.valueChanges.subscribe(() => {
+      this.updateAmount();
+    });
+
+     medicineGroup.get('medicineName')?.valueChanges.subscribe(() => {
+  const qtyControl = medicineGroup.get('qty');
+  qtyControl?.updateValueAndValidity();
+});
+
+    this.getMedicineFormArry().push(medicineGroup);
+
+    this.updateAmount();
+  }
+
+qtyValidator = (control: any) => {
+  if (!control.parent) return null;
+
+  const qty = Number(control.value || 0);
+  const medicineName = control.parent.get('medicineName')?.value;
+
+  if (!medicineName) return null;
+
+  let availableQty = 0;
+  
+this.Stocklist.forEach((purchase: any) => {
+    if (purchase.medicineName === medicineName) {
+      availableQty += Number(purchase.qty || 0);
+    }
+
+  });
+
+
+  return qty > availableQty ? { qtyExceeded: true } : null;
+};
+
+  removemedicine(index: any) {
+    this.getMedicineFormArry().removeAt(index)
+
+    this.updateAmount();
+  }
+
+  updateAmount(): void {
+
+    let totalAmount = 0;
+
+    this.getMedicineFormArry().controls.forEach((group: any) => {
+
+      const qty = Number(group.get('qty')?.value || 0);
+
+      const rate = Number(group.get('rate')?.value || 0);
+
+      const rowAmount = qty * rate;
+
+      // set row amount
+      group.get('amount')?.setValue(rowAmount, {
+        emitEvent: false
+      });
+
+      totalAmount += rowAmount;
+    });
+
+    // discount amount
+    const discount = Number(
+      this.addmedicineForm.get('discount')?.value || 0
+    );
+
+    // gst %
+    const gst = Number(
+      this.addmedicineForm.get('gst')?.value || 0
+    );
+
+    // subtract discount
+    const subtotal = totalAmount - discount;
+
+    // gst calculate
+    const gstAmount = (subtotal * gst) / 100;
+
+    // final amount
+    const netamount = subtotal + gstAmount;
+
+    // patch values
+    this.addmedicineForm.patchValue({
+      amount: totalAmount.toFixed(2),
+      netamount: netamount.toFixed(2)
+    }, {
+      emitEvent: false
+    });
+
+  }
+
+  doAction(): void {
+    const payload = {
+      patientName: this.addmedicineForm.value.patientName,
+      medicine: this.addmedicineForm.value.medicine,
+      mobileNumber: this.addmedicineForm.value.mobileNumber,
+      paymentMethod: this.addmedicineForm.value.paymentMethod,
+      amount: this.addmedicineForm.value.amount,
+      discount: this.addmedicineForm.value.discount,
+      gst: this.addmedicineForm.value.gst,
+      netamount: this.addmedicineForm.value.netamount,
+    }
+    this.dialogRef.close({ event: this.action, data: payload });
+  }
+}

@@ -1,0 +1,143 @@
+<h2 class="f-w-500 p-b-20 b-b-1" mat-dialog-title><strong>{{action}} Medical</strong></h2>
+<mat-dialog-content class="p-t-20" *ngIf="action !== 'Delete'; else elseTemplate">
+    <form [formGroup]="addmedicalForm">
+        <div class="row">
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Medical Name</mat-label>
+                    <input type="text" formControlName="medicalName" placeholder="Enter medical name" matInput require />
+                   <mat-error class="error-message"
+                        *ngIf="addmedicalForm.get('medicalName').errors && addmedicalForm.get('medicalName').errors['required']">
+                        Medical name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Mobile Number</mat-label>
+                    <input type="number" formControlName="mobileNumber" placeholder="Enter mobile number" matInput required
+                        onKeyPress="if(this.value.length==10) return false;" matInput min="0" />
+                   <mat-error class="error-message"
+                        *ngIf="addmedicalForm.get('mobileNumber').errors && addmedicalForm.get('mobileNumber').errors['required']">
+                        Mobile number is required
+                    </mat-error>
+                   <mat-error class="error-message"
+                        *ngIf="addmedicalForm.get('mobileNumber').errors && addmedicalForm.get('mobileNumber').errors['pattern']">
+                        Please enter a valid 10-digit mobile number.
+                    </mat-error>
+                </mat-form-field>
+            </div>
+    
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>First Name </mat-label>
+                    <input type="text" formControlName="firstName" placeholder="Enter first name" matInput requir />
+                   <mat-error class="error-message"
+                        *ngIf="addmedicalForm.get('firstName').errors && addmedicalForm.get('firstName').errors['required']">
+                        First name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Middle Name</mat-label>
+                    <input type="text" formControlName="middleName" placeholder="Enter middle name" matInput requir />
+                   <mat-error class="error-message"
+                        *ngIf="addmedicalForm.get('middleName').errors && addmedicalForm.get('middleName').errors['required']">
+                        Middle name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Last Name</mat-label>
+                    <input type="text" formControlName="lastName" placeholder="Enter last name" matInput requir />
+                   <mat-error class="error-message"
+                        *ngIf="addmedicalForm.get('lastName').errors && addmedicalForm.get('lastName').errors['required']">
+                        Last name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Medical Email</mat-label>
+                    <input type="text" formControlName="middleEmail" placeholder="Enter medical email" matInput  />
+                   <mat-error class="error-message"
+                        *ngIf="addmedicalForm.get('middleEmail').errors && addmedicalForm.get('middleEmail').errors['pattern']">
+                        Please enter a valid email
+                    </mat-error>
+                </mat-form-field>
+            </div>
+      
+            <div class="col-lg-12">
+                <mat-form-field class="example-full-width w-100 m-t-10 ">
+                    <mat-label>Address</mat-label>
+                    <textarea formControlName="address" matInput placeholder="Enter address"></textarea>
+                   <mat-error class="error-message"
+                        *ngIf="addmedicalForm.get('address').errors && addmedicalForm.get('address').errors['required']">
+                        Address is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+             <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 ">User Name</mat-label>
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <input type="text" formControlName="userName" placeholder="Enter User Name" matInput require />
+                   <mat-error class="error-message" 
+                        *ngIf="addmedicalForm.get('userName').errors &&  addmedicalForm.get('userName').errors['required']">
+                        User Name is required
+                    </mat-error>
+                    <mat-error class="error-message"  *ngIf="addmedicalForm.get('userName')?.errors?.['userNameExists']">
+                        User Name already exists
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600">Password</mat-label>
+
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+
+                    <input [type]="hidePassword ? 'password' : 'text'" formControlName="password"
+                        placeholder="Enter Password" matInput required />
+
+                    <!-- Show/Hide Button -->
+                    <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+                        <mat-icon>
+                            {{ hidePassword ? 'visibility_off' : 'visibility' }}
+                        </mat-icon>
+                    </button>
+
+                   <mat-error class="error-message"  *ngIf="addmedicalForm.get('password')?.errors?.['required']">
+                        Password is required
+                    </mat-error>
+                   <mat-error class="error-message"  *ngIf="addmedicalForm.get('password')?.errors?.['passwordExists']">
+                        Password already exists
+                    </mat-error>
+
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions class="p-24 justify-content-end">
+    <button mat-stroked-button color="warn" mat-dialog-close>
+        Cancel
+    </button>
+    <button mat-flat-button (click)="doAction()" [mat-dialog-close]="true" mat-flat-button color="primary"
+        [disabled]="action !== 'Delete' && addmedicalForm.invalid">
+        {{action}}
+    </button>
+</mat-dialog-actions>
+<ng-template #elseTemplate>
+    <div class="p-x-24">
+        <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
+    </div>
+    <mat-divider></mat-divider>
+</ng-template>
