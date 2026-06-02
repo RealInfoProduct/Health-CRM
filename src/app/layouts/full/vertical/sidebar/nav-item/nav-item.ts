@@ -1,4 +1,5 @@
 export interface NavItem {
+    allowedUserTypes?: any;
     displayName?: string;
     disabled?: boolean;
     external?: boolean;

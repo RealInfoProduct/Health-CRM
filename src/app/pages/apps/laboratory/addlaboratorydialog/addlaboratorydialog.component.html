@@ -1,0 +1,144 @@
+<h2 class="f-w-500 p-b-20 b-b-1" mat-dialog-title><strong>{{action}} Laboratory</strong></h2>
+<mat-dialog-content class="p-t-20" *ngIf="action !== 'Delete'; else elseTemplate">
+    <form [formGroup]="addlaboratoryForm">
+        <div class="row">
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label >Laboratory Name</mat-label>
+                    <input type="text" formControlName="laboratoryName" placeholder="Enter laboratory name" matInput
+                        require />
+                    <mat-error class="error-message"
+                        *ngIf="addlaboratoryForm.get('laboratoryName').errors && addlaboratoryForm.get('laboratoryName').errors['required']">
+                        Laboratory name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Laboratory Mobile Number</mat-label>
+                    <input type="number" formControlName="mobileNumber" placeholder="Enter mobile number" matInput
+                        required onKeyPress="if(this.value.length==10) return false;" matInput min="0" />
+                    <mat-error class="error-message"
+                        *ngIf="addlaboratoryForm.get('mobileNumber').errors && addlaboratoryForm.get('mobileNumber').errors['required']">
+                        Mobile number is required
+                    </mat-error>
+                    <mat-error class="error-message"
+                        *ngIf="addlaboratoryForm.get('mobileNumber').errors && addlaboratoryForm.get('mobileNumber').errors['pattern']">
+                        Please enter a valid 10-digit mobile number.
+                    </mat-error>
+                </mat-form-field>
+            </div>
+       
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>First Name </mat-label>
+                    <input type="text" formControlName="firstName" placeholder="Enter first name" matInput requir />
+                    <mat-error class="error-message"
+                        *ngIf="addlaboratoryForm.get('firstName').errors && addlaboratoryForm.get('firstName').errors['required']">
+                        First name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Middle Name</mat-label>
+                    <input type="text" formControlName="middleName" placeholder="Enter middle name" matInput requir />
+                    <mat-error class="error-message"
+                        *ngIf="addlaboratoryForm.get('middleName').errors && addlaboratoryForm.get('middleName').errors['required']">
+                        Middle name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Last Name</mat-label>
+                    <input type="text" formControlName="lastName" placeholder="Enter last name" matInput requir />
+                    <mat-error class="error-message"
+                        *ngIf="addlaboratoryForm.get('lastName').errors && addlaboratoryForm.get('lastName').errors['required']">
+                        Last name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Laboratory Email</mat-label>
+                    <input type="text" formControlName="laboratoryEmail" placeholder="Enter laboratory email" matInput />
+                    <mat-error class="error-message"
+                        *ngIf="addlaboratoryForm.get('laboratoryEmail').errors && addlaboratoryForm.get('laboratoryEmail').errors['pattern']">
+                        Please enter a valid email
+                    </mat-error>
+                </mat-form-field>
+            </div>
+      
+            <div class="col-lg-12">
+                <mat-form-field class="example-full-width w-100 m-t-10">
+                    <mat-label>Address</mat-label>
+                    <textarea formControlName="address" matInput placeholder="Enter address"></textarea>
+                    <mat-error class="error-message"
+                        *ngIf="addlaboratoryForm.get('address').errors && addlaboratoryForm.get('address').errors['required']">
+                        Address is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+             <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 ">User Name</mat-label>
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <input type="text" formControlName="userName" placeholder="Enter User Name" matInput require />
+                    <mat-error  class="error-message" *ngIf="addlaboratoryForm.get('userName').errors &&  addlaboratoryForm.get('userName').errors['required']">
+                        User Name is required
+                    </mat-error>
+                      <mat-error class="error-message" *ngIf="addlaboratoryForm.get('userName')?.errors?.['userNameExists']">
+                        User Name already exists
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600">Password</mat-label>
+            
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+            
+                    <input [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="Enter Password"
+                        matInput required />
+            
+                   
+                    <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+                        <mat-icon>
+                            {{ hidePassword ? 'visibility_off' : 'visibility' }}
+                        </mat-icon>
+                    </button>
+            
+                    <mat-error class="error-message" *ngIf="addlaboratoryForm.get('password')?.errors?.['required']">
+                        Password is required
+                    </mat-error>
+                    <mat-error class="error-message" *ngIf="addlaboratoryForm.get('password')?.errors?.['passwordExists']">
+                        Password already exists
+                    </mat-error>
+            
+                </mat-form-field>
+            </div>
+        </div>
+
+    </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions class="p-24 justify-content-end">
+    <button mat-stroked-button color="warn" class="m-l-8" mat-dialog-close>
+        Cancel
+    </button>
+    <button mat-flat-button (click)="doAction()" [mat-dialog-close]="true" mat-flat-button color="primary"
+        [disabled]="action !== 'Delete' && addlaboratoryForm.invalid">
+        {{action}}
+    </button>
+</mat-dialog-actions>
+<ng-template #elseTemplate>
+    <div class="p-x-24">
+        <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
+    </div>
+    <mat-divider></mat-divider>
+</ng-template>

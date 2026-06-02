@@ -24,7 +24,7 @@
   <!-- --------------------------------------------------------------- -->
   <!--  Search -->
   <!-- --------------------------------------------------------------- -->
-  <button
+  <!-- <button
     mat-icon-button
     (click)="openDialog()"
     class="d-flex justify-content-center"
@@ -33,9 +33,7 @@
   </button>
 
   <div class="d-none d-lg-flex">
-    <!-- --------------------------------------------------------------- -->
-    <!--  Links -->
-    <!-- --------------------------------------------------------------- -->
+   
     <button
       mat-button
       [matMenuTriggerFor]="appsmenu"
@@ -113,7 +111,7 @@
     <a mat-button [routerLink]="['/apps/chat']">Chat</a>
     <a mat-button [routerLink]="['/apps/calendar']">Calendar</a>
     <a mat-button [routerLink]="['/apps/email/inbox']">Email</a>
-  </div>
+  </div> -->
 
   <span class="flex-1-auto"></span>
 
@@ -154,7 +152,7 @@
   <!-- --------------------------------------------------------------- -->
   <!-- Notification Dropdown -->
   <!-- --------------------------------------------------------------- -->
-  <button
+  <!-- <button
     mat-icon-button
     [matMenuTriggerFor]="notificationmenu"
     aria-label="Notifications"
@@ -195,7 +193,7 @@
         See all notifications
       </button>
     </div>
-  </mat-menu>
+  </mat-menu> -->
 
   <!-- --------------------------------------------------------------- -->
   <!-- profile Dropdown -->
@@ -214,28 +212,28 @@
   <mat-menu #profilemenu="matMenu" class="topbar-dd cardWithShadow">
     <ng-scrollbar
       class="position-relative"
-      style="height: 647px"
+      style="height: 190px"
     >
       <div class="p-x-32 p-y-16">
         <h6 class="f-s-16 f-w-600 m-0">User Profile</h6>
 
-        <div class="d-flex align-items-center p-b-24 b-b-1 m-t-16">
+        <div class="d-flex align-items-center p-b-24  m-t-16">
           <img
             src="/assets/images/profile/user-1.jpg"
             class="rounded-circle"
             width="95"
           />
           <div class="m-l-16">
-            <h6 class="f-s-14 f-w-600 m-0">Mathew Anderson</h6>
-            <span class="f-s-14 d-block m-b-4">Designer</span>
+            <!-- <h6 class="f-s-14 f-w-600 m-0">Mathew Anderson</h6> -->
+            <span class="f-s-14 d-block m-b-4"> {{ userType }}</span>
             <span class="d-flex align-items-center">
               <i-tabler name="mail" class="icon-15 m-r-4"></i-tabler>
-              info@Krenoz.com
+              {{ userEmail }}
             </span>
           </div>
         </div>
       </div>
-      <div class="p-x-32">
+      <!-- <div class="p-x-32">
         <a
           class="p-y-16 text-decoration-none d-block text-hover-primary"
           [routerLink]="[profile.link]"
@@ -260,7 +258,6 @@
           </div>
         </a>
 
-        <!-- upgrade -->
         <div
           class="p-24 overflow-hidden bg-light-primary rounded position-relative m-y-16"
         >
@@ -281,9 +278,9 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <div class="p-y-12 p-x-32">
+      <!-- <div class="p-y-12 p-x-32">
         <a
           [routerLink]="['/authentication/side-login']"
           mat-stroked-button
@@ -291,7 +288,7 @@
           class="w-100"
           >Logout</a
         >
-      </div>
+      </div> -->
     </ng-scrollbar>
   </mat-menu>
 </mat-toolbar>

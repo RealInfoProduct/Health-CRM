@@ -1,0 +1,207 @@
+<h2 class="f-w-500 p-b-20 b-b-1" mat-dialog-title><strong>{{action}} Appointments</strong></h2>
+<mat-dialog-content class="p-t-20" *ngIf="action !== 'Delete'; else elseTemplate">
+    <form [formGroup]="appointmentsForm">
+        <div class="row">
+
+            <div class="col-lg-2">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Token Number</mat-label>
+                    <input type="number" formControlName="tokenNumber" matInput readonly />
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-5">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>First Name</mat-label>
+            
+                    <input type="text" formControlName="firstName" placeholder="Enter first name" matInput
+                        [matAutocomplete]="auto" />
+            
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onPatientSelected($event)">
+                        <mat-option *ngFor="let patient of filteredPatients" [value]="patient.firstName">
+            
+                            {{ patient.firstName }} {{ patient.lastName }}
+                        </mat-option>
+                    </mat-autocomplete>
+            
+                    <mat-error class="error-message" class="error-message" *ngIf="appointmentsForm.get('firstName').errors &&
+                               appointmentsForm.get('firstName').errors['required']">
+                        First name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            
+            <div class="col-lg-5">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Last Name</mat-label>
+                    <input type="text" formControlName="lastName" placeholder="Enter last name" matInput />
+                    <mat-error class="error-message"
+                        *ngIf="appointmentsForm.get('lastName').errors && appointmentsForm.get('lastName').errors['required']">
+                        Last name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Doctor Name</mat-label>
+                    <mat-select #dropdown formControlName="doctorName" placeholder="Enter doctor name">
+                        <mat-option [value]="item.id" *ngFor="let item of doctorslist">{{item.doctorsName}}</mat-option>
+                    </mat-select>
+                    <mat-error class="error-message"
+                        *ngIf="appointmentsForm.get('doctorName').errors && appointmentsForm.get('doctorName').errors['required']">
+                        Doctor name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block"> Gender </mat-label>
+                <mat-radio-group aria-label="Select an option" formControlName="gender">
+                    <mat-radio-button value="male">Male </mat-radio-button>
+                    <mat-radio-button value="female">Female </mat-radio-button>
+                    <mat-error class="error-message"
+                        *ngIf="appointmentsForm.get('gender')?.invalid && appointmentsForm.get('gender')?.touched">
+                        Gender is required
+                    </mat-error>
+                </mat-radio-group>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Time</mat-label>
+                    <input type="text" matInput [ngxMatTimepicker]="timepicker" formControlName="time"
+                        placeholder="Select time" />
+                    <ngx-mat-timepicker-toggle [for]="timepicker" matSuffix></ngx-mat-timepicker-toggle>
+                    <ngx-mat-timepicker #timepicker></ngx-mat-timepicker>
+                    <mat-error class="error-message" *ngIf="appointmentsForm.get('time')?.invalid && appointmentsForm.get('time')?.touched">
+                        Time is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field class="w-100 m-t-10" appearance="outline">
+                    <mat-label>Date</mat-label>
+                    <input matInput [matDatepicker]="touchpic" placeholder="Select date" formControlName="date" />
+                    <mat-datepicker-toggle matIconSuffix [for]="touchpic"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #touchpic></mat-datepicker>
+                    <mat-error class="error-message" *ngIf="appointmentsForm.get('date')?.invalid && appointmentsForm.get('date')?.touched">
+                        Date is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Address</mat-label>
+                    <input type="text" placeholder="Enter address" formControlName="address" matInput />
+                    <mat-error class="error-message"
+                        *ngIf="appointmentsForm.get('address').errors && appointmentsForm.get('address').errors['required']">
+                        Address is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Mobile Number</mat-label>
+                    <input type="number" formControlName="mobileNumber" placeholder="Enter mobile number" matInput require
+                        onKeyPress="if(this.value.length==10) return false;" min="0" />
+                    <mat-error class="error-message"
+                        *ngIf="appointmentsForm.get('mobileNumber').errors && appointmentsForm.get('mobileNumber').errors['required']">
+                        Mobile number is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Email</mat-label>
+                    <input type="text" formControlName="email" placeholder="Enter email" matInput  />
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Blood Group</mat-label>
+                    <input type="text" placeholder="Enter blood group" formControlName="bloodGroup" matInput />
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Age</mat-label>
+                    <input type="number" placeholder="Enter age" formControlName="age" matInput />
+                    <mat-error class="error-message" *ngIf="appointmentsForm.get('age').errors && appointmentsForm.get('age').errors['required']">
+                        Age is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Weight</mat-label>
+                    <input type="number" placeholder="Enter Weight" formControlName="weight" matInput />
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Appointment Status</mat-label>
+                    <mat-select #dropdown formControlName="appointmentStatus" placeholder="Select appointment status">
+                        <mat-option [value]="item.name"
+                            *ngFor="let item of appointmentStatusList">{{item.name}}</mat-option>
+                    </mat-select>
+                    <mat-error class="error-message"
+                        *ngIf="appointmentsForm.get('appointmentStatus').errors && appointmentsForm.get('appointmentStatus').errors['required']">
+                        Appointment status is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Visit Type</mat-label>
+                    <mat-select #dropdown formControlName="visitType" placeholder="Select visit type">
+                        <mat-option [value]="item.name" *ngFor="let item of visitTypeList">{{item.name}}</mat-option>
+                    </mat-select>
+                    <mat-error class="error-message"
+                        *ngIf="appointmentsForm.get('visitType').errors && appointmentsForm.get('visitType').errors['required']">
+                        Visit type is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Payment Method</mat-label>
+                    <mat-select #dropdown formControlName="paymentMethod" placeholder="Select payment method">
+                        <mat-option [value]="item.name" *ngFor="let item of paymentMethodList">{{item.name}}</mat-option>
+                    </mat-select>
+                    <mat-error class="error-message"
+                        *ngIf="appointmentsForm.get('paymentMethod').errors && appointmentsForm.get('paymentMethod').errors['required']">
+                        Payment method is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions class="p-24 justify-content-end">
+    <button mat-stroked-button color="warn" mat-dialog-close>
+        Cancel
+    </button>
+    <button mat-flat-button (click)="doAction()" [mat-dialog-close]="true" mat-flat-button color="primary"
+        [disabled]="action !== 'Delete' && appointmentsForm.invalid">
+       {{action}}
+    </button>
+</mat-dialog-actions>
+<ng-template #elseTemplate>
+    <div class="p-x-24">
+        <p>Are you sure you want to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
+    </div>
+    <mat-divider></mat-divider>
+</ng-template>

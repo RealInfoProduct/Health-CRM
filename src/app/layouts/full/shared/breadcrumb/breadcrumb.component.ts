@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -8,7 +8,7 @@ import { filter, map, mergeMap } from 'rxjs/operators';
 @Component({
   selector: 'app-breadcrumb',
   standalone: true,
-  imports: [RouterModule, NgIf],
+  imports: [RouterModule, NgIf, NgForOf],
   templateUrl: './breadcrumb.component.html',
   styleUrls: [],
 })

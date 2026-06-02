@@ -49,6 +49,8 @@ export class AppNavItemComponent implements OnChanges {
   @HostBinding('attr.aria-expanded') ariaExpanded = this.expanded;
   @Input() item: NavItem | any;
   @Input() depth: any;
+  
+userType:any = localStorage.getItem('usertype')
 
   constructor(public navService: NavService, public router: Router) {
     if (this.depth === undefined) {
@@ -62,11 +64,83 @@ export class AppNavItemComponent implements OnChanges {
         // console.log(`Checking '/${this.item.route}' against '${url}'`);
         this.expanded = url.indexOf(`/${this.item.route}`) === 0;
         this.ariaExpanded = this.expanded;
-        //console.log(`${this.item.route} is expanded: ${this.expanded}`);
+        // console.log(`${this.item.route} is expanded: ${this.expanded}`);
       }
     });
   }
 
+  // isVisible(item: NavItem): boolean {
+  //   if (item.allowedUserTypes) {
+  //     return item.allowedUserTypes.includes(this.userType);
+  //   }
+  //   return true;
+  // }
+  
+
+  isVisible(item: any): boolean {
+    if (this.userType === 'Admin' && (
+      item.route === '/dashboards/dashboard1' ||
+      item.route === '/dashboards/dashboard2' ||
+      item.route === '/apps/clinic' 
+    )) 
+      {
+      return true; 
+    }
+     if (this.userType === 'Medical' && (
+      item.route === '/dashboards/dashboard1' ||
+      item.route === '/dashboards/dashboard2' ||
+      item.route === '/apps/medicine'||
+      item.route === '/apps/purchase'||
+      item.route === '/apps/stock'
+    )) {
+      return true; 
+    } 
+     if (this.userType === 'Receptionist' && (
+      item.route === '/dashboards/dashboard1' ||
+      item.route === '/dashboards/dashboard2' ||
+       item.route === '/apps/appointments' ||
+       item.route === '/apps/admitpatient' ||
+       item.route === '/apps/daliyRoutine' 
+      //  item.route === '/apps/bill' 
+    )) {
+      return true; 
+    } 
+     if (this.userType === 'Clinic' && (
+       item.route === '/dashboards/dashboard1' ||
+       item.route === '/dashboards/dashboard2' ||
+       item.route === '/apps/doctors' ||
+       item.route === '/apps/laboratory' ||
+       item.route === '/apps/receptionist' ||
+       item.route === '/apps/medical' 
+    )) {
+      return true; 
+    } 
+    if (this.userType === 'Laboratory' && (
+      item.route === '/dashboards/dashboard1' ||
+      item.route === '/dashboards/dashboard2' ||
+       item.route === '/apps/lab'
+    )) {
+      return true; 
+    } 
+  
+    if (this.userType === 'Doctor' && (
+      item.route === '/dashboards/dashboard1' ||
+      item.route === '/dashboards/dashboard2' ||
+      // item.route === '/apps/staff' ||
+   
+      item.route === '/apps/patient'
+     
+    
+   
+    
+    
+     )) 
+      {
+      return true; 
+    } 
+    return false; 
+  }
+  
   onItemSelected(item: NavItem) {
     if (!item.children || !item.children.length) {
       this.router.navigate([item.route]);
