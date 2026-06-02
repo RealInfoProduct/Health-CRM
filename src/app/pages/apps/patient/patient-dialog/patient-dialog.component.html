@@ -245,7 +245,7 @@
                             <mat-select formControlName="medicineName"
                                 (selectionChange)="onMedicineSelect($event.value,i)">
                                     <mat-option *ngFor="let med of uniqueMedicines" [value]="med.medicineName">
-                                        {{ med.medicineName }}
+                                        {{ med.medicineName}}
                                     </mat-option>
                             </mat-select>
                         </mat-form-field>

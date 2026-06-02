@@ -17,6 +17,7 @@ export class MedicalViewComponent implements OnInit {
      'category',
      'qty',
      'time',
+     'mealTiming',
    ];
  
     viewMedical :any = []

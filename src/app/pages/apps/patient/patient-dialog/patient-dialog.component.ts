@@ -177,15 +177,35 @@ export class PatientDialogComponent implements OnInit {
   }
 
 
+  // async loadMedicineData(medicalId: any) {
+
+  //   const userId = localStorage.getItem('userId');
+  //   const clinicId = localStorage.getItem('clinicId');
+
+  //   this.purchaselist = await this.firebaseCollectionService
+  //     .getMedicine(userId, clinicId, medicalId, 'purchaselist');
+
+  // }
+
   async loadMedicineData(medicalId: any) {
 
-    const userId = localStorage.getItem('userId');
-    const clinicId = localStorage.getItem('clinicId');
+  const userId = localStorage.getItem('userId');
+  const clinicId = localStorage.getItem('clinicId');
 
-    this.purchaselist = await this.firebaseCollectionService
-      .getMedicine(userId, clinicId, medicalId, 'purchaselist');
+  this.purchaselist = await this.firebaseCollectionService
+    .getMedicine(userId, clinicId, medicalId, 'purchaselist');
 
-  }
+  const medicines = this.purchaselist.flatMap(
+    (item: any) => item.medicine || []
+  );
+
+  this.uniqueMedicines = medicines.filter(
+    (med: any, index: number, self: any[]) =>
+      index === self.findIndex(
+        (m: any) => m.medicineName === med.medicineName
+      )
+  );
+}
 
   getdoctorsdata() {
     this.firebaseCollectionService.getDocuments('Doctor', 'doctorslist').then((doctors) => {
@@ -351,26 +371,60 @@ export class PatientDialogComponent implements OnInit {
     this.medical.push(this.createMedical());
   }
 
+  // async onMedicalChange(event: any) {
+  //   const medicalId = event.value;
+
+  //   if (medicalId) {
+
+  //     const userId = localStorage.getItem('userId');
+  //     const clinicId = localStorage.getItem('clinicId');
+  //     const medicine = await this.firebaseCollectionService
+  //       .getMedicine(userId, clinicId, medicalId, 'purchaselist');
+
+  //     this.purchaselist = medicine;
+  //     if (this.medical.length === 0) {
+  //       this.addMedicalDetail();
+  //     }
+
+  //   } else {
+  //     this.medical.clear();
+  //   }
+  // }
+
   async onMedicalChange(event: any) {
-    const medicalId = event.value;
+  const medicalId = event.value;
 
-    if (medicalId) {
+  if (medicalId) {
 
-      const userId = localStorage.getItem('userId');
-      const clinicId = localStorage.getItem('clinicId');
-      const medicine = await this.firebaseCollectionService
-        .getMedicine(userId, clinicId, medicalId, 'purchaselist');
+    const userId = localStorage.getItem('userId');
+    const clinicId = localStorage.getItem('clinicId');
 
-      this.purchaselist = medicine;
+    const medicine = await this.firebaseCollectionService
+      .getMedicine(userId, clinicId, medicalId, 'purchaselist');
 
-      if (this.medical.length === 0) {
-        this.addMedicalDetail();
-      }
+    this.purchaselist = medicine;
 
-    } else {
-      this.medical.clear();
+    // Medical પ્રમાણે Medicine List બનાવો
+    const medicines = this.purchaselist.flatMap(
+      (item: any) => item.medicine || []
+    );
+
+    this.uniqueMedicines = medicines.filter(
+      (med: any, index: number, self: any[]) =>
+        index === self.findIndex(
+          (m: any) => m.medicineName === med.medicineName
+        )
+    );
+
+    if (this.medical.length === 0) {
+      this.addMedicalDetail();
     }
+
+  } else {
+    this.medical.clear();
+    this.uniqueMedicines = [];
   }
+}
 
   onMedicineSelect(medicineName: any, index: number) {
 
