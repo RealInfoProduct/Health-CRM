@@ -106,5 +106,11 @@ export const navItems: NavItem[] = [
     route: '/apps/bill',
     // allowedUserTypes: ['Admin','Doctor', 'Patient'],
   },
+  {
+    displayName: 'Daliy Routine',
+    iconName: 'receipt-2',
+    route: '/apps/daliyRoutine',
+    // allowedUserTypes: ['Admin','Doctor', 'Patient'],
+  },
 
 ];

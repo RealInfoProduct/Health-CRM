@@ -16,6 +16,7 @@ import { ReceptionistComponent } from './receptionist/receptionist.component';
 import { PurchaseComponent } from './purchase/purchase.component';
 import { StockComponent } from './stock/stock.component';
 import { AdmitPatientComponent } from './admit-patient/admit-patient.component';
+import { DailyRoutineComponent } from './daily-routine/daily-routine.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -184,6 +185,17 @@ export const AppsRoutes: Routes = [
           urls: [
             { url:'/apps/receptionist' },
             { title: 'Receptionist' },
+          ],
+        },
+      },
+      {
+        path: 'daliyRoutine',
+        component: DailyRoutineComponent,
+        data: {
+          title: 'Daliy Routine',
+          urls: [
+            { url:'/apps/daliyRoutine' },
+            { title: 'Daliy Routine' },
           ],
         },
       },

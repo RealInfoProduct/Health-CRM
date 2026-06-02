@@ -1052,6 +1052,176 @@ export class FirebaseCollectionService {
     }
   }
 
+  // new dayilyRoutinelist
+  async adddayilyRoutinelist(adminId: string, clinicId: string, receptionistId: string, dayilyRoutineData: any) {
+    this.spinnerService.setSpinner(true);
+
+    try {
+      const dayilyRoutine = this.firestore
+        .collection('Admin')
+        .doc(adminId)
+        .collection('clinicList')
+        .doc(clinicId)
+        .collection('Receptionistlist')
+        .doc(receptionistId)
+        .collection('dayilyRoutinelist');
+      const newDoctorRef = dayilyRoutine.ref.doc();
+
+      const data = {
+        ...dayilyRoutineData,
+        id: newDoctorRef.id
+      };
+      await newDoctorRef.set(data);
+
+      this.snackBar.open('Receptionist added successfully', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+      return newDoctorRef.id;
+
+    } catch (error: any) {
+
+      console.error(error);
+
+      this.snackBar.open(`Error: ${error.message}`, 'Close');
+
+      return null;
+
+    } finally {
+
+      this.spinnerService.setSpinner(false);
+    }
+  }
+  async updatedayilyRoutineList(
+    adminId: string,
+    clinicId: string,
+    receptionistId: string,
+    appointmentId: string,
+    appointmentData: any
+  ) {
+
+    this.spinnerService.setSpinner(true);
+
+    try {
+
+      const ref = this.firestore
+        .collection('Admin')
+        .doc(adminId)
+        .collection('clinicList')
+        .doc(clinicId)
+        .collection('Receptionistlist')
+        .doc(receptionistId)
+        .collection('dayilyRoutinelist')
+        .doc(appointmentId);
+
+      await ref.update(appointmentData);
+
+      this.snackBar.open('Appointment updated successfully', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+
+    } catch (error: any) {
+
+      this.snackBar.open(
+        `Error updating appointment: ${error.message}`,
+        'Close',
+        {
+          duration: 3000,
+        }
+      );
+
+      throw error;
+
+    } finally {
+
+      this.spinnerService.setSpinner(false);
+
+    }
+  }
+
+  async deletedayilyRoutineList(
+    adminId: string,
+    clinicId: string,
+    receptionistId: string,
+    appointmentId: string
+  ) {
+
+    this.spinnerService.setSpinner(true);
+
+    try {
+
+      const ref = this.firestore
+        .collection('Admin')
+        .doc(adminId)
+        .collection('clinicList')
+        .doc(clinicId)
+        .collection('Receptionistlist')
+        .doc(receptionistId)
+        .collection('dayilyRoutinelist')
+        .doc(appointmentId);
+
+      await ref.delete();
+
+      this.snackBar.open('Appointment deleted successfully', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+
+    } catch (error: any) {
+
+      this.snackBar.open(
+        `Error deleting appointment: ${error.message}`,
+        'Close',
+        {
+          duration: 3000,
+        }
+      );
+
+      throw error;
+
+    } finally {
+
+      this.spinnerService.setSpinner(false);
+
+    }
+  }
+
+  async getdayilyRoutineList(
+    adminId: string,
+    clinicId: string,
+    receptionistId: string,
+    collectionName: string
+  ) {
+
+    this.spinnerService.setSpinner(true);
+
+    try {
+
+      const snapshot = await this.firestore
+        .collection('Admin')
+        .doc(adminId)
+        .collection('clinicList')
+        .doc(clinicId)
+        .collection('Receptionistlist')
+        .doc(receptionistId)
+        .collection(collectionName)
+        .get()
+        .toPromise();
+
+      return snapshot.docs.map((doc: any) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+    } finally {
+      this.spinnerService.setSpinner(false);
+    }
+  }
+
   // new patient
   async addpatient(adminId: string, clinicId: string, doctorId: string, patientData: any) {
     this.spinnerService.setSpinner(true);

@@ -62,6 +62,8 @@ import { StockComponent } from './stock/stock.component';
 import { AdmitPatientComponent } from './admit-patient/admit-patient.component';
 import { AdmitPatientDialogComponent } from './admit-patient/admit-patient-dialog/admit-patient-dialog.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { DailyRoutineComponent } from './daily-routine/daily-routine.component';
+import { DailyRoutineDialogComponent } from './daily-routine/daily-routine-dialog/daily-routine-dialog.component';
 
 
 
@@ -124,6 +126,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     StockComponent,
     AdmitPatientComponent,
     AdmitPatientDialogComponent,
+    DailyRoutineComponent,
+    DailyRoutineDialogComponent,
 
   ],
   providers: [  { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],

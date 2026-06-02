@@ -1,0 +1,250 @@
+<h2 class="f-w-500 p-b-20 b-b-1" mat-dialog-title><strong>{{action}} Daily Routine</strong></h2>
+<mat-dialog-content class="p-t-20" *ngIf="action !== 'Delete'; else elseTemplate">
+    <form [formGroup]="admitPatientForm">
+        <!-- Patient Information -->
+        <div class="row">
+            <div class="col-lg-12">
+                <span class="text-color">Patient Information</span>
+            </div>
+
+            <div class="col-lg-4">
+                <mat-form-field class="w-100 m-t-10" appearance="outline">
+                    <mat-label>Admit Date</mat-label>
+                    <input matInput [matDatepicker]="touchpic" placeholder="Enter Admit date"
+                        formControlName="admitDate" />
+                    <mat-datepicker-toggle matIconSuffix [for]="touchpic"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #touchpic></mat-datepicker>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Time</mat-label>
+                    <input type="text" matInput [ngxMatTimepicker]="timepicker" formControlName="time"
+                        placeholder="Select time" />
+                    <ngx-mat-timepicker-toggle [for]="timepicker" matSuffix></ngx-mat-timepicker-toggle>
+                    <ngx-mat-timepicker #timepicker></ngx-mat-timepicker>
+                    <mat-error class="error-message"
+                        *ngIf="admitPatientForm.get('time')?.invalid && admitPatientForm.get('time')?.touched">
+                        Time is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Patient Name</mat-label>
+                    <mat-select formControlName="patientName" (selectionChange)="onPatientChange($event)">
+                        <mat-option class="search-option">
+                            <div class="search-container">
+                                <input #searchInput matInput type="text" placeholder="Search..."
+                                    (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()"
+                                    (keyup)="filterPatients($event)" />
+                            </div>
+                        </mat-option>
+                        <mat-option *ngFor="let patient of filteredAppointmentsList" [value]="patient.patientName ">
+                            {{ patient.patientName }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error class="error-message" *ngIf="admitPatientForm.get('patientName')?.hasError('required')">
+                        Patient name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Mobile Number</mat-label>
+                    <input type="number" onKeyPress="if(this.value.length==10) return false;" matInput min="0"
+                        formControlName="mobileNumber" placeholder="Enter Mobile Number">
+                    <mat-error class="error-message"
+                        *ngIf="admitPatientForm.get('mobileNumber').errors && admitPatientForm.get('mobileNumber').errors['required']">
+                        Mobile number is required
+                    </mat-error>
+                    <mat-error class="error-message"
+                        *ngIf="admitPatientForm.get('mobileNumber').errors && admitPatientForm.get('mobileNumber').errors['pattern']">
+                        Please enter a valid 10-digit
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-4">
+                <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Gender</mat-label>
+                <mat-radio-group aria-label="Select an option" formControlName="gender">
+                    <mat-radio-button value="male">Male </mat-radio-button>
+                    <mat-radio-button value="female">Female </mat-radio-button>
+                    <mat-error class="error-message"
+                        *ngIf="admitPatientForm.get('gender')?.invalid && admitPatientForm.get('gender')?.touched">
+                        Gender is required
+                    </mat-error>
+                </mat-radio-group>
+            </div>
+
+            <div class="col-lg-2">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Age</mat-label>
+                    <input type="number" placeholder="Enter age" formControlName="age" matInput />
+                    <mat-error class="error-message"
+                        *ngIf="admitPatientForm.get('age').errors && admitPatientForm.get('age').errors['required']">
+                        Age is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-2">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Blood Group</mat-label>
+                    <input type="text" placeholder="Enter blood group" formControlName="bloodGroup" matInput />
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Doctor Name</mat-label>
+                    <mat-select #dropdown formControlName="doctorName" placeholder="Enter doctor name">
+                        <mat-option [value]="item.id" *ngFor="let item of doctorslist">{{item.doctorsName}}</mat-option>
+                    </mat-select>
+                    <mat-error class="error-message"
+                        *ngIf="admitPatientForm.get('doctorName').errors && admitPatientForm.get('doctorName').errors['required']">
+                        Doctor name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Department</mat-label>
+                    <input type="text" matInput placeholder="Enter Department" formControlName="department"
+                        [matAutocomplete]="departmentAuto">
+
+                    <mat-autocomplete #departmentAuto="matAutocomplete">
+                        <mat-option *ngFor="let dept of filteredDepartments" [value]="dept">
+                            {{ dept }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Ward</mat-label>
+                    <input type="text" matInput placeholder="Enter Ward" formControlName="ward"
+                        [matAutocomplete]="wardAuto">
+
+                    <mat-autocomplete #wardAuto="matAutocomplete">
+                        <mat-option *ngFor="let ward of filteredWards" [value]="ward">
+                            {{ ward }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-2">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Room Number</mat-label>
+                    <input type="text" placeholder="Enter Room Number" formControlName="roomNumber" matInput />
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-2">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Bed Number</mat-label>
+                    <input type="text" placeholder="Enter Bed Number" formControlName="bedNumber" matInput />
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 m-t-10">
+                    <mat-label>Reason for Admit</mat-label>
+                    <input type="text" placeholder="Enter Reason for Admit" formControlName="reasonforAdmit" matInput />
+                </mat-form-field>
+            </div>
+
+        </div>
+
+        <!-- Vital Signs -->
+
+        <div class="row">
+            <div class="col-lg-12">
+                <span class="text-color">Vital Signs</span>
+            </div>
+            <div class="col-12" formArrayName="heaithReports">
+                <div *ngFor="let report of getheaithReports().controls; let i = index" [formGroupName]="i" class="row">
+                    <div class="col-lg-3">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Date</mat-label>
+                            <input matInput formControlName="date" [matDatepicker]="picker" placeholder="Enter date">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Time</mat-label>
+                            <input type="text" matInput [ngxMatTimepicker]="timepickerheaith" formControlName="time"
+                                placeholder="Select time" />
+                            <ngx-mat-timepicker-toggle [for]="timepickerheaith" matSuffix></ngx-mat-timepicker-toggle>
+                            <ngx-mat-timepicker #timepickerheaith></ngx-mat-timepicker>
+                            <mat-error class="error-message"
+                                *ngIf="admitPatientForm.get('time')?.invalid && admitPatientForm.get('time')?.touched">
+                                Time is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Temperature</mat-label>
+                            <input matInput type="number" formControlName="temperature" placeholder="Enter Temperature">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Blood Pressure (BP)</mat-label>
+                            <input matInput type="text" formControlName="bloodPressure"
+                                placeholder="Enter Blood Pressure">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <mat-form-field appearance="outline" class="w-100 m-t-10">
+                            <mat-label>Oxygen Saturation (SpO₂)</mat-label>
+                            <input matInput type="number" formControlName="oxygenSaturation"
+                                placeholder="Enter Oxygen Saturation">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-1 d-flex align-items-center">
+                        <a class="m-r-10 cursor-pointer" *ngIf="getheaithReports().length > 1">
+                            <i-tabler name="trash" (click)="removeheaithReports(i)" class="icon-18"></i-tabler>
+                        </a>
+                        <a class="m-r-10 cursor-pointer">
+                            <i-tabler name="plus" (click)="addheaithReportsDetail()" class="icon-18"></i-tabler>
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions class="p-24 justify-content-end">
+    <button mat-stroked-button color="warn" mat-dialog-close>
+        Cancel
+    </button>
+    <button mat-flat-button (click)="doAction()" [mat-dialog-close]="true" mat-flat-button color="primary"
+        [disabled]="action !== 'Delete' && admitPatientForm.invalid">
+        {{action}}
+    </button>
+</mat-dialog-actions>
+<ng-template #elseTemplate>
+    <div class="p-x-24">
+        <p>Sure to delete <span class="f-w-600">{{local_data.Name}}</span> ?</p>
+    </div>
+    <mat-divider></mat-divider>
+</ng-template>
